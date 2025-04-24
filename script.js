@@ -7,10 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const totalSteps = stepSections.length;
   const glowingBall = document.querySelector('.glowing-ball');
   
-  // Auto-scroll flag - enabled by default like tomorrow-happens.studio
-  let autoScrollEnabled = true;
-  let autoScrollInterval;
-  
   // Update the total steps display
   document.getElementById('total-steps').textContent = totalSteps.toString().padStart(2, '0');
   
@@ -78,18 +74,6 @@ document.addEventListener("DOMContentLoaded", () => {
   stepsContainer.addEventListener('scroll', () => {
     if (isScrolling) return;
     
-    // Disable auto-scroll when user manually scrolls
-    if (autoScrollEnabled) {
-      stopAutoScroll();
-      
-      // Re-enable after 15 seconds of inactivity (shorter than before)
-      setTimeout(() => {
-        if (!isScrolling) {
-          startAutoScroll();
-        }
-      }, 15000);
-    }
-    
     const scrollPosition = stepsContainer.scrollTop;
     const sectionHeight = window.innerHeight;
     
@@ -106,11 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
   stepsContainer.addEventListener('wheel', (e) => {
     // Prevent default to take control of scrolling
     e.preventDefault();
-    
-    // Disable auto-scroll when user manually scrolls
-    if (autoScrollEnabled) {
-      stopAutoScroll();
-    }
     
     if (isScrolling) return;
     
@@ -140,11 +119,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Add keyboard navigation
   document.addEventListener('keydown', (e) => {
-    // Disable auto-scroll when user manually navigates
-    if (autoScrollEnabled) {
-      stopAutoScroll();
-    }
-    
     if (isScrolling) return;
     
     let targetSection = activeSection;
@@ -157,10 +131,6 @@ document.addEventListener("DOMContentLoaded", () => {
       targetSection = 1;
     } else if (e.key === 'End') {
       targetSection = totalSteps;
-    } else if (e.key === 'a') {
-      // Toggle auto-scroll with 'a' key
-      toggleAutoScroll();
-      return;
     } else {
       return; // Not a navigation key, do nothing
     }
@@ -188,11 +158,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let touchStartY = 0;
   
   stepsContainer.addEventListener('touchstart', (e) => {
-    // Disable auto-scroll when user manually scrolls
-    if (autoScrollEnabled) {
-      stopAutoScroll();
-    }
-    
     touchStartY = e.touches[0].clientY;
   }, { passive: true });
   
@@ -238,43 +203,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }, { passive: false });
   
-  // Auto-scroll functions
-  function startAutoScroll() {
-    autoScrollEnabled = true;
-    document.body.classList.add('auto-scrolling');
-    
-    // Reset the animation
-    stepsContainer.style.animation = 'none';
-    stepsContainer.offsetHeight; // Trigger reflow
-    stepsContainer.style.animation = null;
-    
-    // Set up interval to update active section during auto-scroll
-    autoScrollInterval = setInterval(() => {
-      const scrollPosition = stepsContainer.scrollTop;
-      const sectionHeight = window.innerHeight;
-      const viewportMiddle = scrollPosition + sectionHeight / 2;
-      const sectionIndex = Math.floor(viewportMiddle / sectionHeight) + 1;
-      
-      if (sectionIndex !== activeSection && sectionIndex > 0 && sectionIndex <= totalSteps) {
-        updateActiveSection(sectionIndex);
-      }
-    }, 300);
-  }
-  
-  function stopAutoScroll() {
-    autoScrollEnabled = false;
-    document.body.classList.remove('auto-scrolling');
-    clearInterval(autoScrollInterval);
-  }
-  
-  function toggleAutoScroll() {
-    if (autoScrollEnabled) {
-      stopAutoScroll();
-    } else {
-      startAutoScroll();
-    }
-  }
-  
   // Make sure all sections' content is properly initialized
   stepSections.forEach((section, index) => {
     const content = section.querySelector('.step-content');
@@ -306,7 +234,4 @@ document.addEventListener("DOMContentLoaded", () => {
       updateActiveSection(targetSection);
     });
   });
-  
-  // Initialize with auto-scroll enabled, like tomorrow-happens.studio
-  startAutoScroll();
 });
