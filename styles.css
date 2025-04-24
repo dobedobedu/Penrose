@@ -4,9 +4,12 @@
   --text-color: #ffffff;
   --muted-color: #999999;
   --accent-color: #FF6B00;
-  --step-inactive: #333333;
+  --step-inactive: #dddddd;
+  --step-active: #FF6B00;
   --structure-color: #555555;
   --section-height: 100vh;
+  --base-grey: #bbbbbb;
+  --dark-grey: #888888;
 }
 
 * {
@@ -55,17 +58,35 @@ body {
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
   font-weight: 700;
+  color: var(--accent-color);
+}
+
+.penrose-title h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
 }
 
 .penrose-title p {
   color: var(--muted-color);
   font-size: 1.1rem;
+  margin-bottom: 1rem;
+  max-width: 90%;
+  line-height: 1.5;
+}
+
+.tagline {
+  color: var(--accent-color);
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-top: 1rem;
 }
 
 #penrose-svg {
   width: 80%;
   max-width: 400px;
   height: auto;
+  margin-bottom: 2rem;
 }
 
 .step {
@@ -83,7 +104,19 @@ body {
 .structure {
   fill: none;
   stroke: var(--structure-color);
-  stroke-width: 2;
+  stroke-width: 1;
+}
+
+.structure-base {
+  fill: var(--base-grey);
+  stroke: var(--structure-color);
+  stroke-width: 1;
+}
+
+.hidden-face {
+  fill: var(--dark-grey);
+  stroke: var(--structure-color);
+  stroke-width: 1;
 }
 
 .step-indicator {
@@ -161,6 +194,14 @@ body {
   .step-content h2 {
     font-size: 2rem;
   }
+  
+  .penrose-title h1 {
+    font-size: 2.2rem;
+  }
+  
+  .penrose-title h2 {
+    font-size: 1.5rem;
+  }
 }
 
 @media (max-width: 992px) {
@@ -186,10 +227,16 @@ body {
   
   .penrose-title {
     top: 5%;
+    text-align: center;
   }
   
   .step-indicator {
     bottom: 5%;
+  }
+  
+  .penrose-title p, .tagline {
+    margin: 0 auto;
+    text-align: center;
   }
 }
 
@@ -198,11 +245,23 @@ body {
     font-size: 1.8rem;
   }
   
+  .penrose-title h2 {
+    font-size: 1.3rem;
+  }
+  
   .step-content h2 {
     font-size: 1.5rem;
   }
   
   .step-content p {
     font-size: 1rem;
+  }
+  
+  .tagline {
+    font-size: 1rem;
+  }
+  
+  .penrose-title p {
+    font-size: 0.9rem;
   }
 }
