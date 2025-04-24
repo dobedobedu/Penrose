@@ -5,7 +5,7 @@
   --muted-color: #666666;
   --accent-color: #FF6B00;
   --section-height: 100vh;
-  --ball-size: 24px;
+  --ball-size: 15px; /* Reduced from 24px to make it more proportional */
 }
 
 * {
@@ -94,6 +94,7 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
+  z-index: 10; /* Ensure the ball container is above the image */
 }
 
 .glowing-ball {
@@ -143,7 +144,7 @@ body {
   margin-left: 50%;
   height: 100vh;
   overflow-y: scroll;
-  scroll-snap-type: y proximity;
+  scroll-snap-type: y mandatory; /* Changed from proximity to mandatory for better snapping */
   -ms-overflow-style: none;  /* Hide scrollbar in IE and Edge */
   scrollbar-width: none;  /* Hide scrollbar in Firefox */
   scroll-behavior: smooth;
@@ -156,7 +157,7 @@ body {
 
 .step-section {
   height: 100vh;
-  scroll-snap-align: center;
+  scroll-snap-align: start; /* Changed from center to start for better snapping */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -244,6 +245,7 @@ body {
     position: relative;
     width: 100%;
     height: 50vh;
+    min-height: 400px; /* Add minimum height */
   }
   
   .steps-container {
@@ -254,6 +256,7 @@ body {
   
   .step-section {
     height: 50vh;
+    min-height: 400px; /* Add minimum height */
   }
   
   .penrose-title {
@@ -305,5 +308,29 @@ body {
   .penrose-image-container {
     width: 250px;
     height: 187px;
+  }
+}
+
+/* Adjust for smaller mobile screens */
+@media (max-width: 480px) {
+  .penrose-image-container {
+    width: 200px;
+    height: 150px;
+  }
+  
+  .penrose-title h1 {
+    font-size: 1.5rem;
+  }
+  
+  .penrose-title h2 {
+    font-size: 1.1rem;
+  }
+  
+  .tagline {
+    font-size: 0.9rem;
+  }
+  
+  .step-content {
+    max-width: 95%;
   }
 }
