@@ -88,11 +88,11 @@ body {
   margin-top: 1rem;
 }
 
-/* Penrose image container positioning */
+/* Penrose image container with exact dimensions */
 .penrose-image-container {
   position: relative;
-  width: 900px; /* Adjusted for the 32x40 grid */
-  height: 450px;
+  width: 500px; /* Hard-coded width as specified */
+  height: 381px; /* Hard-coded height as specified */
   margin-bottom: 2rem;
   transform-origin: center center; /* For scaling on small screens */
 }
@@ -103,7 +103,7 @@ body {
   object-fit: contain;
 }
 
-/* Glowing ball - Updated for better positioning */
+/* Glowing ball - Updated for exact positioning */
 .glowing-ball {
   position: absolute;
   width: var(--ball-size);
@@ -211,21 +211,6 @@ body {
   max-width: 90%;
 }
 
-/* Auto-scrolling animation - like tomorrow-happens.studio */
-@keyframes autoScroll {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(calc(-100vh * 13)); }
-}
-
-.auto-scrolling .steps-container {
-  animation: autoScroll 120s linear infinite;
-  scroll-snap-type: none;
-}
-
-.auto-scrolling .steps-container:hover {
-  animation-play-state: paused;
-}
-
 /* Responsive adjustments */
 @media (max-width: 1200px) {
   .step-content h2 {
@@ -240,10 +225,8 @@ body {
     font-size: 1.5rem;
   }
   
-  /* Scale image container for medium screens */
+  /* Keep exact dimensions on medium screens, just scale down */
   .penrose-image-container {
-    width: 750px;
-    height: 375px;
     transform: scale(0.9);
   }
 }
@@ -286,10 +269,8 @@ body {
     text-align: center;
   }
   
-  /* Adjust image container for tablets */
+  /* Scale down for tablets */
   .penrose-image-container {
-    width: 650px;
-    height: 325px;
     transform: scale(0.7);
     margin-top: -20px; /* Adjusts vertical positioning */
   }
@@ -298,11 +279,6 @@ body {
   .glowing-ball {
     /* Keep the ball properly positioned when container is scaled */
     transform: translate(-50%, -50%) scale(1.42857); /* 1/0.7 to counter the container scaling */
-  }
-  
-  @keyframes autoScroll {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(calc(-60vh * 13)); }
   }
 }
 
@@ -345,8 +321,6 @@ body {
   
   /* Further scale down for mobile devices */
   .penrose-image-container {
-    width: 550px;
-    height: 275px;
     transform: scale(0.55);
     margin-top: -40px;
   }
@@ -362,11 +336,6 @@ body {
   
   .step-content {
     max-width: 100%;
-  }
-  
-  @keyframes autoScroll {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(calc(-65vh * 13)); }
   }
 }
 
@@ -389,8 +358,6 @@ body {
   
   /* Adjust for smaller phones */
   .penrose-image-container {
-    width: 480px;
-    height: 240px;
     transform: scale(0.45);
     margin-top: -50px;
   }
@@ -430,10 +397,5 @@ body {
   .step-content p {
     font-size: 0.9rem;
     line-height: 1.6;
-  }
-  
-  @keyframes autoScroll {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(calc(-70vh * 13)); }
   }
 }
