@@ -87,36 +87,58 @@ body {
   max-width: 400px;
   height: auto;
   margin-bottom: 2rem;
+  transition: transform 0.6s ease-in-out;
+}
+
+.alt-perspective #penrose-svg {
+  transform: rotate(180deg);
+}
+
+.alt-perspective .hidden-face {
+  fill: transparent;
+}
+
+.alt-perspective .step {
+  stroke-width: 1.5;
 }
 
 .step {
   fill: var(--step-inactive);
   stroke: #000;
   stroke-width: 1;
-  transition: fill 0.5s ease;
+  transition: fill 0.5s ease, stroke-width 0.3s ease;
   cursor: pointer;
 }
 
 .step.active {
   fill: var(--accent-color);
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 3px rgba(255, 107, 0, 0.5));
+}
+
+.step:hover {
+  fill: #ffaa77;
 }
 
 .structure {
   fill: none;
   stroke: var(--structure-color);
   stroke-width: 1;
+  transition: stroke-width 0.3s ease;
 }
 
 .structure-base {
   fill: var(--base-grey);
   stroke: var(--structure-color);
   stroke-width: 1;
+  transition: all 0.6s ease-in-out;
 }
 
 .hidden-face {
   fill: var(--dark-grey);
   stroke: var(--structure-color);
   stroke-width: 1;
+  transition: all 0.6s ease-in-out;
 }
 
 .step-indicator {
@@ -129,6 +151,28 @@ body {
 #current-step {
   color: var(--accent-color);
   font-weight: 600;
+}
+
+/* Toggle perspective button */
+.toggle-btn {
+  position: absolute;
+  bottom: 5%;
+  padding: 8px 15px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-btn:hover {
+  background-color: #555;
+}
+
+.alt-perspective .toggle-btn {
+  background-color: var(--accent-color);
 }
 
 /* Right panel with scrollable content */
@@ -237,6 +281,10 @@ body {
   .penrose-title p, .tagline {
     margin: 0 auto;
     text-align: center;
+  }
+  
+  .toggle-btn {
+    bottom: 15%;
   }
 }
 
