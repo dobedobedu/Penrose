@@ -1,150 +1,151 @@
-<html lang=\"en\">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset=\"UTF-8\">
-  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Penrose AI Creator Senior Elective</title>
-  <link rel=\"stylesheet\" href=\"styles.css\">
-  <link rel=\"stylesheet\" href=\"https://fonts.cdnfonts.com/css/sf-pro-expanded-black\" />
-  <script src=\"script.js\" defer></script>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/sf-pro-expanded-black" />
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <div class=\"container\">
+  <div class="container">
     <!-- Left side - Fixed Penrose visualization -->
-    <div class=\"penrose-container\">
-      <div class=\"penrose-title\">
-        <a href=\"mailto:hello@fosfeen.com\" class=\"sign-up-button\">Sign up now</a>
+    <div class="penrose-container">
+      <div class="penrose-title">
+        <a href="mailto:hello@fosfeen.com" class="sign-up-button">Sign up now</a>
         <h2>Penrose AI Creator Senior Elective</h2>
-        <div class=\"tagline\">Schools build resumes. We build the future with you.</div>
+        <div class="tagline">Schools build resumes. We build the future with you.</div>
       </div>
       
-      <div class=\"penrose-image-container\">
+      <div class="penrose-image-container">
         <!-- Base image of impossible staircase -->
-        <img src=\"Impossible_staircase.svg.png\" alt=\"Penrose Staircase\" class=\"base-staircase\">
+        <img src="Impossible_staircase.svg.png" alt="Penrose Staircase" class="base-staircase">
         
         <!-- Glowing ball - Now placed directly in the image container -->
-        <div class=\"glowing-ball\"></div>
+        <div class="glowing-ball"></div>
         
         <!-- Step markers (invisible, used for positioning) -->
-        <div id=\"step-markers\">
+        <div id="step-markers">
           <!-- Adjusted position based on 40x32 grid - moved up on Y-axis -->
-          <div class=\"step-marker\" data-step=\"1\" style=\"left: 125px; top: 160px;\"></div> <!-- Step 1 -->
-          <div class=\"step-marker\" data-step=\"2\" style=\"left: 175px; top: 140px;\"></div> <!-- Step 2 -->
-          <div class=\"step-marker\" data-step=\"3\" style=\"left: 225px; top: 120px;\"></div> <!-- Step 3 -->
-          <div class=\"step-marker\" data-step=\"4\" style=\"left: 275px; top: 100px;\"></div> <!-- Step 4 -->
-          <div class=\"step-marker\" data-step=\"5\" style=\"left: 325px; top: 80px;\"></div> <!-- Step 5 -->
-          <div class=\"step-marker\" data-step=\"6\" style=\"left: 375px; top: 60px;\"></div> <!-- Step 6 -->
-          <div class=\"step-marker\" data-step=\"7\" style=\"left: 425px; top: 100px;\"></div> <!-- Step 7 -->
+          <div class="step-marker" data-step="1" style="left: 125px; top: 160px;"></div> <!-- Step 1 -->
+          <div class="step-marker" data-step="2" style="left: 175px; top: 140px;"></div> <!-- Step 2 -->
+          <div class="step-marker" data-step="3" style="left: 225px; top: 120px;"></div> <!-- Step 3 -->
+          <div class="step-marker" data-step="4" style="left: 275px; top: 100px;"></div> <!-- Step 4 -->
+          <div class="step-marker" data-step="5" style="left: 325px; top: 80px;"></div> <!-- Step 5 -->
+          <div class="step-marker" data-step="6" style="left: 375px; top: 60px;"></div> <!-- Step 6 -->
+          <div class="step-marker" data-step="7" style="left: 425px; top: 100px;"></div> <!-- Step 7 -->
           <!-- Fixed direction for steps 8-14 -->
-          <div class=\"step-marker\" data-step=\"8\" style=\"left: 375px; top: 140px;\"></div> <!-- Step 8 -->
-          <div class=\"step-marker\" data-step=\"9\" style=\"left: 325px; top: 160px;\"></div> <!-- Step 9 -->
-          <div class=\"step-marker\" data-step=\"10\" style=\"left: 275px; top: 180px;\"></div> <!-- Step 10 -->
-          <div class=\"step-marker\" data-step=\"11\" style=\"left: 225px; top: 200px;\"></div> <!-- Step 11 -->
-          <div class=\"step-marker\" data-step=\"12\" style=\"left: 175px; top: 220px;\"></div> <!-- Step 12 -->
-          <div class=\"step-marker\" data-step=\"13\" style=\"left: 125px; top: 200px;\"></div> <!-- Step 13 -->
-          <div class=\"step-marker\" data-step=\"14\" style=\"left: 125px; top: 180px;\"></div> <!-- Step 14 -->
+          <div class="step-marker" data-step="8" style="left: 375px; top: 140px;"></div> <!-- Step 8 -->
+          <div class="step-marker" data-step="9" style="left: 325px; top: 160px;"></div> <!-- Step 9 -->
+          <div class="step-marker" data-step="10" style="left: 275px; top: 180px;"></div> <!-- Step 10 -->
+          <div class="step-marker" data-step="11" style="left: 225px; top: 200px;"></div> <!-- Step 11 -->
+          <div class="step-marker" data-step="12" style="left: 175px; top: 220px;"></div> <!-- Step 12 -->
+          <div class="step-marker" data-step="13" style="left: 125px; top: 200px;"></div> <!-- Step 13 -->
+          <div class="step-marker" data-step="14" style="left: 125px; top: 180px;"></div> <!-- Step 14 -->
         </div>
       </div>
       
-      <div class=\"step-indicator\">
-        <span id=\"current-step\">01</span>/<span id=\"total-steps\" class=\"clickable-reset\">14</span>
+      <div class="step-indicator">
+        <span id="current-step">01</span>/<span id="total-steps" class="clickable-reset">14</span>
       </div>
     </div>
     
     <!-- Right side - Scrollable steps content -->
-    <div class=\"steps-container\">
-      <section class=\"step-section\" id=\"section-1\" data-step=\"1\">
-        <div class=\"step-content\">
+    <div class="steps-container">
+      <section class="step-section" id="section-1" data-step="1">
+        <div class="step-content">
           <h2>Get Inspired and Disciplined</h2>
           <p>Begin your journey by finding inspiration and developing the discipline needed to see your project through to completion. Nurture your creative mindset while establishing structured approaches to innovation.</p>
         </div>
       </section>
       
-      <section class=\"step-section\" id=\"section-2\" data-step=\"2\">
-        <div class=\"step-content\">
+      <section class="step-section" id="section-2" data-step="2">
+        <div class="step-content">
           <h2>Problem Exploring</h2>
           <p>Investigate the problem space by observing, questioning, and researching. Uncover the underlying issues and opportunities without rushing to solutions. Dive deep into understanding what truly matters.</p>
         </div>
       </section>
       
-      <section class=\"step-section\" id=\"section-3\" data-step=\"3\">
-        <div class=\"step-content\">
+      <section class="step-section" id="section-3" data-step="3">
+        <div class="step-content">
           <h2>Problem Framing</h2>
           <p>Articulate your challenge in a clear, actionable way. Frame the problem to reveal new perspectives and establish a solid foundation for innovative solutions. The right problem statement opens doors to creativity.</p>
         </div>
       </section>
       
-      <section class=\"step-section\" id=\"section-4\" data-step=\"4\">
-        <div class=\"step-content\">
+      <section class="step-section" id="section-4" data-step="4">
+        <div class="step-content">
           <h2>User Research</h2>
           <p>Understand your users deeply through interviews, observations, and empathy. Learn their needs, desires, and pain points to ground your innovations in real human experiences. Let their stories guide your process.</p>
         </div>
       </section>
       
-      <section class=\"step-section\" id=\"section-5\" data-step=\"5\">
-        <div class=\"step-content\">
+      <section class="step-section" id="section-5" data-step="5">
+        <div class="step-content">
           <h2>Ideation</h2>
           <p>Generate a wide range of potential solutions through brainstorming and creative thinking techniques. Focus on quantity over quality initially, allowing wild ideas to emerge before filtering for feasibility.</p>
         </div>
       </section>
       
-      <section class=\"step-section\" id=\"section-6\" data-step=\"6\">
-        <div class=\"step-content\">
+      <section class="step-section" id="section-6" data-step="6">
+        <div class="step-content">
           <h2>Prototyping</h2>
           <p>Create tangible representations of your ideas quickly and cheaply. Build to think, transforming abstract concepts into something you can test. Low-fidelity prototypes help visualize potential solutions early.</p>
         </div>
       </section>
       
-      <section class=\"step-section\" id=\"section-7\" data-step=\"7\">
-        <div class=\"step-content\">
+      <section class="step-section" id="section-7" data-step="7">
+        <div class="step-content">
           <h2>Testing</h2>
           <p>Put your prototypes in front of real users to gather genuine feedback. Observe what works, what doesn't, and why. Create a safe space for honest critique that will strengthen your solution.</p>
         </div>
       </section>
       
-      <section class=\"step-section\" id=\"section-8\" data-step=\"8\">
-        <div class=\"step-content\">
+      <section class="step-section" id="section-8" data-step="8">
+        <div class="step-content">
           <h2>Prototyping (Iterate)</h2>
           <p>Refine your solution based on testing insights. Embrace an iterative mindset, understanding that each cycle brings you closer to an optimal outcome. Continuously improve through cycles of making and testing.</p>
         </div>
       </section>
       
-      <section class=\"step-section\" id=\"section-9\" data-step=\"9\">
-        <div class=\"step-content\">
+      <section class="step-section" id="section-9" data-step="9">
+        <div class="step-content">
           <h2>MVP</h2>
           <p>Develop your Minimum Viable Product with just enough features to satisfy early users. Focus on core functionality that delivers value while minimizing resources spent. Create something that can be shipped and validated.</p>
         </div>
       </section>
       
-      <section class=\"step-section\" id=\"section-10\" data-step=\"10\">
-        <div class=\"step-content\">
+      <section class="step-section" id="section-10" data-step="10">
+        <div class="step-content">
           <h2>Business Model Development</h2>
           <p>Design a viable, sustainable business model around your solution. Define how your innovation will create, deliver, and capture value. Ensure your great idea has a path to financial sustainability.</p>
         </div>
       </section>
       
-      <section class=\"step-section\" id=\"section-11\" data-step=\"11\">
-        <div class=\"step-content\">
+      <section class="step-section" id="section-11" data-step="11">
+        <div class="step-content">
           <h2>Go to Market</h2>
           <p>Launch your solution and introduce it to the world. Develop strategies for reaching your target users and customers. Craft compelling messaging that resonates with your audience's needs and aspirations.</p>
         </div>
       </section>
       
-      <section class=\"step-section\" id=\"section-12\" data-step=\"12\">
-        <div class=\"step-content\">
+      <section class="step-section" id="section-12" data-step="12">
+        <div class="step-content">
           <h2>Growth Strategy</h2>
           <p>Plan for expansion and scaling your solution. Identify opportunities to reach more users, enhance offerings, and develop your innovation's full potential. Balance short-term wins with long-term vision.</p>
         </div>
       </section>
       
-      <section class=\"step-section\" id=\"section-13\" data-step=\"13\">
-        <div class=\"step-content\">
+      <section class="step-section" id="section-13" data-step="13">
+        <div class="step-content">
           <h2>Demo Day</h2>
           <p>Present your solution to stakeholders, investors, or the wider community. Craft a compelling narrative about your journey and the value your innovation brings. Showcase both the solution and the thinking behind it.</p>
         </div>
       </section>
       
-      <section class=\"step-section\" id=\"section-14\" data-step=\"14\">
-        <div class=\"step-content\">
+      <section class="step-section" id="section-14" data-step="14">
+        <div class="step-content">
           <h2>Feedback Collection, Reflect and Connect the Dots</h2>
           <p>Gather comprehensive feedback, reflect on your entire journey, and identify connections between stages. Analyze successes and failures to extract valuable lessons. Prepare to begin a new cycle of innovation with deeper wisdom.</p>
         </div>
@@ -152,4 +153,4 @@
     </div>
   </div>
 </body>
-</html>`
+</html>
