@@ -1,10 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
   // Get all elements we need to work with
   const stepSections = document.querySelectorAll('.step-section');
-  const penroseSteps = document.querySelectorAll('.step');
+  const stepMarkers = document.querySelectorAll('.step-marker');
   const stepsContainer = document.querySelector('.steps-container');
   const currentStepElem = document.getElementById('current-step');
   const totalSteps = stepSections.length;
+  const glowingBall = document.querySelector('.glowing-ball');
+  
+  // Auto-scroll flag
+  let autoScrollEnabled = true;
+  let autoScrollInterval;
   
   // Update the total steps display
   document.getElementById('total-steps').textContent = totalSteps.toString().padStart(2, '0');
@@ -12,25 +17,47 @@ document.addEventListener("DOMContentLoaded", () => {
   // Track which section is currently active
   let activeSection = 1;
   
+  // Start auto-scroll
+  startAutoScroll();
+  
+  // Function to move the glowing ball to a step marker
+  function moveGlowingBall(index) {
+    const marker = stepMarkers[index - 1];
+    const markerRect = marker.getBoundingClientRect();
+    const containerRect = marker.parentElement.getBoundingClientRect();
+    
+    // Get position from the marker's style (more precise)
+    const left = parseFloat(marker.style.left) || 0;
+    const top = parseFloat(marker.style.top) || 0;
+    
+    // Position the ball at the marker
+    glowingBall.style.left = `${left}px`;
+    glowingBall.style.top = `${top}px`;
+  }
+  
   // Function to update UI based on current active section
   function updateActiveSection(index) {
     // Don't update if it's the same section
     if (index === activeSection) return;
     
-    // Remove active class from all sections
-    stepSections.forEach(section => section.classList.remove('active'));
+    // Remove active and adjacent classes from all sections
+    stepSections.forEach(section => {
+      section.classList.remove('active', 'adjacent');
+    });
     
-    // Add active class to current section and corresponding step
+    // Add active class to current section
     stepSections[index - 1].classList.add('active');
     
-    // Update Penrose stairs visualization - progressive activation
-    penroseSteps.forEach((step, stepIndex) => {
-      if (stepIndex < index) {
-        step.classList.add('active');
-      } else {
-        step.classList.remove('active');
-      }
-    });
+    // Add adjacent class to sections before and after
+    if (index > 1) {
+      stepSections[index - 2].classList.add('adjacent');
+    }
+    if (index < totalSteps) {
+      stepSections[index].classList.add('adjacent');
+    }
+    
+    // Move the glowing ball
+    moveGlowingBall(index);
     
     // Update step indicator
     currentStepElem.textContent = index.toString().padStart(2, '0');
@@ -42,49 +69,44 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize by setting the first section as active
   updateActiveSection(1);
   stepSections[0].classList.add('active');
-  penroseSteps[0].classList.add('active');
+  if (stepSections[1]) {
+    stepSections[1].classList.add('adjacent');
+  }
   
   // Handle scroll events on the steps container to detect current section
   let isScrolling = false;
   stepsContainer.addEventListener('scroll', () => {
     if (isScrolling) return;
     
+    // Disable auto-scroll when user manually scrolls
+    if (autoScrollEnabled) {
+      stopAutoScroll();
+      // Re-enable after 30 seconds of inactivity
+      setTimeout(() => {
+        if (!isScrolling) {
+          startAutoScroll();
+        }
+      }, 30000);
+    }
+    
     const scrollPosition = stepsContainer.scrollTop;
     const sectionHeight = window.innerHeight;
     
     // Calculate which section is currently in view
-    const currentSection = Math.floor(scrollPosition / sectionHeight) + 1;
+    const viewportMiddle = scrollPosition + sectionHeight / 2;
+    const sectionIndex = Math.floor(viewportMiddle / sectionHeight) + 1;
     
-    if (currentSection !== activeSection && currentSection > 0 && currentSection <= totalSteps) {
-      updateActiveSection(currentSection);
+    if (sectionIndex !== activeSection && sectionIndex > 0 && sectionIndex <= totalSteps) {
+      updateActiveSection(sectionIndex);
     }
   });
   
-  // Add click events to Penrose steps to navigate to corresponding section
-  penroseSteps.forEach((step, index) => {
-    step.addEventListener('click', () => {
-      const targetSection = index + 1;
-      
-      // Smooth scroll to the selected section
-      isScrolling = true;
-      stepsContainer.scrollTo({
-        top: (targetSection - 1) * window.innerHeight,
-        behavior: 'smooth'
-      });
-      
-      // Update active section
-      updateActiveSection(targetSection);
-      
-      // Reset scrolling flag after animation completes
-      setTimeout(() => {
-        isScrolling = false;
-      }, 1000);
-    });
-  });
-  
-  // Add wheel event listener to implement custom smooth scrolling with snapping
+  // Add wheel event listener to implement custom smooth scrolling
   stepsContainer.addEventListener('wheel', (e) => {
-    e.preventDefault();
+    // Disable auto-scroll when user manually scrolls
+    if (autoScrollEnabled) {
+      stopAutoScroll();
+    }
     
     if (isScrolling) return;
     
@@ -114,6 +136,11 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Add keyboard navigation
   document.addEventListener('keydown', (e) => {
+    // Disable auto-scroll when user manually navigates
+    if (autoScrollEnabled) {
+      stopAutoScroll();
+    }
+    
     if (isScrolling) return;
     
     let targetSection = activeSection;
@@ -126,6 +153,10 @@ document.addEventListener("DOMContentLoaded", () => {
       targetSection = 1;
     } else if (e.key === 'End') {
       targetSection = totalSteps;
+    } else if (e.key === 'a') {
+      // Toggle auto-scroll with 'a' key
+      toggleAutoScroll();
+      return;
     } else {
       return; // Not a navigation key, do nothing
     }
@@ -153,6 +184,11 @@ document.addEventListener("DOMContentLoaded", () => {
   let touchStartY = 0;
   
   stepsContainer.addEventListener('touchstart', (e) => {
+    // Disable auto-scroll when user manually scrolls
+    if (autoScrollEnabled) {
+      stopAutoScroll();
+    }
+    
     touchStartY = e.touches[0].clientY;
   }, { passive: true });
   
@@ -198,9 +234,47 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }, { passive: false });
   
+  // Auto-scroll functions
+  function startAutoScroll() {
+    autoScrollEnabled = true;
+    document.body.classList.add('auto-scrolling');
+    
+    // Reset the animation
+    stepsContainer.style.animation = 'none';
+    stepsContainer.offsetHeight; // Trigger reflow
+    stepsContainer.style.animation = null;
+    
+    // Set up interval to update active section during auto-scroll
+    autoScrollInterval = setInterval(() => {
+      const scrollPosition = stepsContainer.scrollTop;
+      const sectionHeight = window.innerHeight;
+      const viewportMiddle = scrollPosition + sectionHeight / 2;
+      const sectionIndex = Math.floor(viewportMiddle / sectionHeight) + 1;
+      
+      if (sectionIndex !== activeSection && sectionIndex > 0 && sectionIndex <= totalSteps) {
+        updateActiveSection(sectionIndex);
+      }
+    }, 300);
+  }
+  
+  function stopAutoScroll() {
+    autoScrollEnabled = false;
+    document.body.classList.remove('auto-scrolling');
+    clearInterval(autoScrollInterval);
+  }
+  
+  function toggleAutoScroll() {
+    if (autoScrollEnabled) {
+      stopAutoScroll();
+    } else {
+      startAutoScroll();
+    }
+  }
+  
   // Make sure the first section content is visible
   setTimeout(() => {
     stepSections[0].querySelector('.step-content').style.opacity = 1;
     stepSections[0].querySelector('.step-content').style.transform = 'translateY(0)';
+    moveGlowingBall(1);
   }, 300);
 });
