@@ -103,17 +103,7 @@ body {
   object-fit: contain;
 }
 
-/* Glowing ball */
-#ball-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 10;
-}
-
+/* Glowing ball - Updated for better positioning */
 .glowing-ball {
   position: absolute;
   width: var(--ball-size);
@@ -124,6 +114,9 @@ body {
   transform: translate(-50%, -50%);
   transition: left 0.8s ease, top 0.8s ease;
   z-index: 10;
+  pointer-events: none;
+  left: 125px; /* Initial position matching first step marker */
+  top: 210px;
 }
 
 /* Step markers (invisible, used for positioning) */
@@ -302,8 +295,9 @@ body {
   }
   
   /* Preserve ball positions on smaller screens */
-  #ball-container {
-    transform: scale(0.7);
+  .glowing-ball {
+    /* Keep the ball properly positioned when container is scaled */
+    transform: translate(-50%, -50%) scale(1.42857); /* 1/0.7 to counter the container scaling */
   }
   
   @keyframes autoScroll {
@@ -357,8 +351,8 @@ body {
     margin-top: -40px;
   }
   
-  #ball-container {
-    transform: scale(0.55);
+  .glowing-ball {
+    transform: translate(-50%, -50%) scale(1.81818); /* 1/0.55 to counter the container scaling */
   }
   
   /* Adjust ball size for mobile */
@@ -401,8 +395,8 @@ body {
     margin-top: -50px;
   }
   
-  #ball-container {
-    transform: scale(0.45);
+  .glowing-ball {
+    transform: translate(-50%, -50%) scale(2.22222); /* 1/0.45 to counter the container scaling */
   }
   
   /* Smaller ball for very small screens */
