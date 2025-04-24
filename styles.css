@@ -5,7 +5,14 @@
   --muted-color: #666666;
   --accent-color: #FF6B00;
   --section-height: 100vh;
-  --ball-size: 15px; /* Reduced from 24px to make it more proportional */
+  --ball-size: 15px; /* Reduced size to make it more proportional */
+}
+
+@font-face {
+  font-family: 'SF Pro Expanded Black';
+  src: url('https://fonts.cdnfonts.com/css/sf-pro-expanded-black') format('woff2');
+  font-weight: 900;
+  font-style: normal;
 }
 
 * {
@@ -51,22 +58,31 @@ body {
   width: 80%;
 }
 
-.penrose-title h1 {
+.sign-up-button {
+  display: inline-block;
+  font-family: 'SF Pro Expanded Black', 'Helvetica Neue', Arial, sans-serif;
   font-size: 2.5rem;
+  font-weight: 900;
   margin-bottom: 0.5rem;
-  font-weight: 700;
-  color: var( --muted-color);
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.sign-up-button:hover {
+  transform: translateY(-3px);
+  opacity: 0.9;
 }
 
 .penrose-title h2 {
   font-size: 1.8rem;
   margin-bottom: 1rem;
   font-weight: 500;
-  color: var(--accent-color);
+  color: var(--text-color);
 }
 
 .tagline {
-  color: var(--text-color);
+  color: var(--muted-color);
   font-size: 1.2rem;
   font-weight: 500;
   margin-top: 1rem;
@@ -75,8 +91,8 @@ body {
 /* Penrose image container positioning */
 .penrose-image-container {
   position: relative;
-  width: 400px;
-  height: 300px;
+  width: 900px; /* Adjusted to match the 32x40 grid approach */
+  height: 450px; /* Adjusted for proper aspect ratio */
   margin-bottom: 2rem;
 }
 
@@ -144,7 +160,7 @@ body {
   margin-left: 50%;
   height: 100vh;
   overflow-y: scroll;
-  scroll-snap-type: y mandatory; /* Changed from proximity to mandatory for better snapping */
+  scroll-snap-type: y mandatory; /* For better snapping */
   -ms-overflow-style: none;  /* Hide scrollbar in IE and Edge */
   scrollbar-width: none;  /* Hide scrollbar in Firefox */
   scroll-behavior: smooth;
@@ -157,7 +173,7 @@ body {
 
 .step-section {
   height: 100vh;
-  scroll-snap-align: start; /* Changed from center to start for better snapping */
+  scroll-snap-align: start; /* Ensures sections snap at the start */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -201,14 +217,14 @@ body {
   max-width: 90%;
 }
 
-/* Auto-scrolling animation */
+/* Auto-scrolling animation - like tomorrow-happens.studio */
 @keyframes autoScroll {
   0% { transform: translateY(0); }
   100% { transform: translateY(calc(-100vh * 13)); }
 }
 
 .auto-scrolling .steps-container {
-  animation: autoScroll 180s linear infinite;
+  animation: autoScroll 120s linear infinite; /* 120s is faster than before */
   scroll-snap-type: none;
 }
 
@@ -222,7 +238,7 @@ body {
     font-size: 2rem;
   }
   
-  .penrose-title h1 {
+  .sign-up-button {
     font-size: 2.2rem;
   }
   
@@ -231,8 +247,8 @@ body {
   }
   
   .penrose-image-container {
-    width: 350px;
-    height: 260px;
+    width: 700px;
+    height: 350px;
   }
 }
 
@@ -244,19 +260,20 @@ body {
   .penrose-container {
     position: relative;
     width: 100%;
-    height: 50vh;
-    min-height: 400px; /* Add minimum height */
+    height: 40vh; /* Reduced from 50vh */
+    min-height: 300px; /* Reduced minimum height */
   }
   
   .steps-container {
     width: 100%;
     margin-left: 0;
-    height: 50vh;
+    height: 60vh; /* Increased from 50vh for more space */
   }
   
   .step-section {
-    height: 50vh;
-    min-height: 400px; /* Add minimum height */
+    height: 60vh; /* Match container height */
+    min-height: 300px; /* Reduced height */
+    padding: 1rem; /* Reduced padding */
   }
   
   .penrose-title {
@@ -274,18 +291,34 @@ body {
   }
   
   .penrose-image-container {
-    width: 300px;
-    height: 225px;
+    width: 90%;
+    height: 200px;
+    max-width: 500px;
   }
   
   @keyframes autoScroll {
     0% { transform: translateY(0); }
-    100% { transform: translateY(calc(-50vh * 13)); }
+    100% { transform: translateY(calc(-60vh * 13)); }
   }
 }
 
 @media (max-width: 768px) {
-  .penrose-title h1 {
+  .penrose-container {
+    height: 35vh; /* Even smaller on mobile */
+    min-height: 250px;
+  }
+  
+  .steps-container {
+    height: 65vh; /* More space for content */
+  }
+  
+  .step-section {
+    height: 65vh;
+    min-height: 250px;
+    padding: 1rem 0.75rem;
+  }
+  
+  .sign-up-button {
     font-size: 1.8rem;
   }
   
@@ -295,6 +328,7 @@ body {
   
   .step-content h2 {
     font-size: 1.5rem;
+    margin-bottom: 1rem;
   }
   
   .step-content p {
@@ -302,35 +336,80 @@ body {
   }
   
   .tagline {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
   
   .penrose-image-container {
-    width: 250px;
-    height: 187px;
+    width: 90%;
+    height: 150px;
+  }
+  
+  .step-content {
+    max-width: 100%; /* Full width on mobile */
+  }
+  
+  @keyframes autoScroll {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(calc(-65vh * 13)); }
   }
 }
 
 /* Adjust for smaller mobile screens */
 @media (max-width: 480px) {
-  .penrose-image-container {
-    width: 200px;
-    height: 150px;
+  .penrose-container {
+    height: 30vh;
+    min-height: 200px;
   }
   
-  .penrose-title h1 {
+  .steps-container {
+    height: 70vh;
+  }
+  
+  .step-section {
+    height: 70vh;
+    min-height: 200px;
+    padding: 0.75rem;
+  }
+  
+  .penrose-image-container {
+    width: 90%;
+    height: 120px;
+  }
+  
+  .sign-up-button {
     font-size: 1.5rem;
   }
   
   .penrose-title h2 {
     font-size: 1.1rem;
+    margin-bottom: 0.5rem;
   }
   
   .tagline {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
   }
   
   .step-content {
-    max-width: 95%;
+    max-width: 100%;
+  }
+  
+  .step-content h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .step-content p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  
+  #ball-container {
+    transform: scale(0.8);
+  }
+  
+  @keyframes autoScroll {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(calc(-70vh * 13)); }
   }
 }
