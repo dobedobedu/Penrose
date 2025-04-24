@@ -1,0 +1,12 @@
+Please upload an image named "Impossible_staircase.svg.png" to your repository.
+
+The image should be a clear representation of a Penrose staircase (impossible staircase).
+You can find suitable images by searching for "Penrose stairs" or "Impossible staircase" online.
+
+For best results, use an image with:
+- A clear view of all 14 steps
+- Good contrast
+- Minimal background
+- Preferably top-down isometric view similar to the diagram in your earlier message
+
+The implementation is designed to overlay orange highlights on each step as the user scrolls.
