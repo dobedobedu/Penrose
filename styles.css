@@ -5,7 +5,7 @@
   --muted-color: #666666;
   --accent-color: #FF6B00;
   --section-height: 100vh;
-  --ball-size: 12px; /* Reduced size for better proportional appearance */
+  --ball-size: 18px; /* Increased size for better visibility */
 }
 
 @font-face {
@@ -103,20 +103,20 @@ body {
   object-fit: contain;
 }
 
-/* Glowing ball - Updated for exact positioning */
+/* Glowing ball - Updated for exact positioning and larger size */
 .glowing-ball {
   position: absolute;
   width: var(--ball-size);
   height: var(--ball-size);
   border-radius: 50%;
   background-color: var(--accent-color);
-  box-shadow: 0 0 12px 4px rgba(255, 107, 0, 0.7); /* Enhanced glow effect */
+  box-shadow: 0 0 18px 6px rgba(255, 107, 0, 0.7); /* Enhanced glow effect */
   transform: translate(-50%, -50%);
   transition: left 0.8s ease, top 0.8s ease;
   z-index: 10;
   pointer-events: none;
   left: 125px; /* Initial position matching first step marker */
-  top: 210px;
+  top: 160px; /* Updated to match the new Y-axis position */
 }
 
 /* Step markers (invisible, used for positioning) */
@@ -135,6 +135,7 @@ body {
   opacity: 0;
 }
 
+/* Step indicator with clickable reset */
 .step-indicator {
   position: absolute;
   bottom: 10%;
@@ -146,6 +147,16 @@ body {
 #current-step {
   color: var(--accent-color);
   font-weight: 600;
+}
+
+.clickable-reset {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.clickable-reset:hover {
+  color: var(--accent-color);
+  text-decoration: underline;
 }
 
 /* Right panel with scrollable content */
@@ -331,7 +342,7 @@ body {
   
   /* Adjust ball size for mobile */
   :root {
-    --ball-size: 10px;
+    --ball-size: 14px; /* Adjusted for mobile but still larger than before */
   }
   
   .step-content {
@@ -368,7 +379,7 @@ body {
   
   /* Smaller ball for very small screens */
   :root {
-    --ball-size: 8px;
+    --ball-size: 12px; /* Still larger than original size */
   }
   
   .sign-up-button {
