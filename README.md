@@ -1,23 +1,39 @@
-# Penrose
-All year long asynchronous program roadmap
+# Penrose Staircase Animation
 
-## 3D Penrose Staircase Implementation
+A 2D SVG implementation of the famous Penrose staircase (impossible staircase) with scroll-based step highlighting.
 
-This repository contains a CSS/JS implementation of the famous Penrose staircase (impossible staircase) with scroll-based animation.
+## Features
 
-### Features:
-- 3D staircase built entirely with CSS transforms
-- Lighting up steps as the user scrolls down the page
-- Perspective toggle to view the staircase from different angles
-- Keyboard, touch, and scroll navigation
+- SVG-based implementation of the impossible staircase illusion
+- Interactive step highlighting synchronized with scroll position
+- Two perspective views (toggle between them)
+- Responsive design works on desktop and mobile devices
+- Keyboard navigation and touch swipe support
 
-### Files:
-- **penrose-3d.html**: HTML structure for the 3D staircase
-- **penrose-3d.css**: CSS styling and 3D transforms
-- **penrose-3d.js**: JavaScript for scroll interaction and step highlighting
+## How It Works
 
-### How to Use:
-1. Open the `penrose-3d.html` file in your browser
-2. Scroll down to see each step light up in sequence
-3. Click the "Toggle Perspective" button to view the staircase from a different angle
-4. Use arrow keys to navigate between steps
+The Penrose staircase is an optical illusion that appears to be a continuous staircase that loops back on itself in an impossible way. This implementation uses SVG to create the illusion from a specific perspective.
+
+The key features of this implementation:
+
+1. **SVG Structure**: The staircase is built using SVG paths to create the illusion of depth
+2. **Progressive Highlighting**: As you scroll, steps light up sequentially to guide the user through the impossible loop
+3. **Perspective Toggle**: Switch between views to better understand how the illusion works
+
+## Files
+
+- `index.html` - HTML structure with SVG staircase implementation
+- `styles.css` - Styling and animations
+- `script.js` - JavaScript for scroll interaction and step highlighting
+
+## Implementation Notes
+
+Creating an effective Penrose staircase is challenging because the illusion relies on forced perspective and visual ambiguity. Key implementation techniques used:
+
+- Strategic placement of visual elements to create impossible connections
+- Careful coloring and shading for a sense of depth
+- SVG structure that maintains the illusion from specific viewpoints
+
+## Inspired By
+
+The implementation is inspired by the mathematical concept invented by Lionel and Roger Penrose, and famously depicted in the works of M.C. Escher.
