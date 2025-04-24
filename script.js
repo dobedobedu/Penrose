@@ -4,11 +4,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const stepMarkers = document.querySelectorAll('.step-marker');
   const stepsContainer = document.querySelector('.steps-container');
   const currentStepElem = document.getElementById('current-step');
+  const totalStepsElem = document.getElementById('total-steps');
   const totalSteps = stepSections.length;
   const glowingBall = document.querySelector('.glowing-ball');
   
   // Update the total steps display
-  document.getElementById('total-steps').textContent = totalSteps.toString().padStart(2, '0');
+  totalStepsElem.textContent = totalSteps.toString().padStart(2, '0');
   
   // Track which section is currently active
   let activeSection = 1;
@@ -233,5 +234,17 @@ document.addEventListener("DOMContentLoaded", () => {
       // Update active section
       updateActiveSection(targetSection);
     });
+  });
+  
+  // Add click handler for total-steps to reset to first step
+  totalStepsElem.addEventListener('click', () => {
+    // Scroll to first section
+    stepsContainer.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+    
+    // Update active section
+    updateActiveSection(1);
   });
 });
