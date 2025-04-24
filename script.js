@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const totalSteps = stepSections.length;
   const glowingBall = document.querySelector('.glowing-ball');
   
-  // Auto-scroll flag
-  let autoScrollEnabled = false; // Disabled by default to fix scrolling issue
+  // Auto-scroll flag - enabled by default like tomorrow-happens.studio
+  let autoScrollEnabled = true;
   let autoScrollInterval;
   
   // Update the total steps display
@@ -81,6 +81,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // Disable auto-scroll when user manually scrolls
     if (autoScrollEnabled) {
       stopAutoScroll();
+      
+      // Re-enable after 15 seconds of inactivity (shorter than before)
+      setTimeout(() => {
+        if (!isScrolling) {
+          startAutoScroll();
+        }
+      }, 15000);
     }
     
     const scrollPosition = stepsContainer.scrollTop;
@@ -284,7 +291,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize the glowing ball position
   moveGlowingBall(1);
   
-  // Add a click event to step indicators to allow direct navigation
+  // Add a click event to step markers to allow direct navigation
   document.querySelectorAll('.step-marker').forEach((marker, index) => {
     marker.addEventListener('click', () => {
       const targetSection = index + 1;
@@ -299,4 +306,7 @@ document.addEventListener("DOMContentLoaded", () => {
       updateActiveSection(targetSection);
     });
   });
+  
+  // Initialize with auto-scroll enabled, like tomorrow-happens.studio
+  startAutoScroll();
 });
