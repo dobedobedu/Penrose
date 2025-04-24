@@ -3,37 +3,180 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LEAP Preview - Future You</title>
+  <title>Penrose Steps - Design Thinking Journey</title>
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
 </head>
 <body>
-  <header>
-    <h1>The Future You</h1>
-    <p>Scroll down to navigate through your 14 steps of success!</p>
-  </header>
-
-  <main>
-    <div id="stairs" class="penrose-stairs">
-      <!-- Penrose Stairs visualization -->
+  <div class="container">
+    <!-- Left side - Fixed Penrose visualization -->
+    <div class="penrose-container">
+      <div class="penrose-title">
+        <h1>The Penrose Process</h1>
+        <p>14 steps to innovation success</p>
+      </div>
+      
+      <svg id="penrose-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <!-- Step 1 -->
+        <path id="step-1" class="step" d="M 160,260 L 160,240 L 240,240 L 240,260 Z" />
+        
+        <!-- Step 2 -->
+        <path id="step-2" class="step" d="M 240,240 L 240,220 L 260,220 L 260,240 Z" />
+        
+        <!-- Step 3 -->
+        <path id="step-3" class="step" d="M 260,220 L 260,140 L 280,140 L 280,220 Z" />
+        
+        <!-- Step 4 -->
+        <path id="step-4" class="step" d="M 280,140 L 280,120 L 200,120 L 200,140 Z" />
+        
+        <!-- Step 5 -->
+        <path id="step-5" class="step" d="M 200,120 L 200,140 L 180,140 L 180,120 Z" />
+        
+        <!-- Step 6 -->
+        <path id="step-6" class="step" d="M 180,140 L 180,220 L 160,220 L 160,140 Z" />
+        
+        <!-- Step 7 -->
+        <path id="step-7" class="step" d="M 160,220 L 160,240 L 180,240 L 180,220 Z" />
+        
+        <!-- Step 8 -->
+        <path id="step-8" class="step" d="M 180,240 L 180,260 L 160,260 L 160,240 Z" />
+        
+        <!-- Step 9 -->
+        <path id="step-9" class="step" d="M 240,260 L 180,260 L 180,280 L 240,280 Z" />
+        
+        <!-- Step 10 -->
+        <path id="step-10" class="step" d="M 240,280 L 260,280 L 260,260 L 240,260 Z" />
+        
+        <!-- Step 11 -->
+        <path id="step-11" class="step" d="M 260,260 L 260,180 L 280,180 L 280,260 Z" />
+        
+        <!-- Step 12 -->
+        <path id="step-12" class="step" d="M 280,180 L 280,160 L 220,160 L 220,180 Z" />
+        
+        <!-- Step 13 -->
+        <path id="step-13" class="step" d="M 220,160 L 220,180 L 200,180 L 200,160 Z" />
+        
+        <!-- Step 14 -->
+        <path id="step-14" class="step" d="M 200,180 L 200,260 L 180,260 L 180,180 Z" />
+        
+        <!-- Structure lines -->
+        <path class="structure" d="M 160,260 L 160,140 L 180,120 L 280,120 L 280,260 L 260,280 L 160,280 L 160,260 Z" />
+        <path class="structure" d="M 180,140 L 280,140" />
+        <path class="structure" d="M 200,120 L 200,280" />
+        <path class="structure" d="M 220,160 L 220,280" />
+        <path class="structure" d="M 240,240 L 240,280" />
+        <path class="structure" d="M 260,220 L 260,280" />
+        <path class="structure" d="M 160,180 L 280,180" />
+        <path class="structure" d="M 160,220 L 280,220" />
+        <path class="structure" d="M 160,240 L 260,240" />
+        <path class="structure" d="M 160,260 L 280,260" />
+      </svg>
+      
+      <div class="step-indicator">
+        <span id="current-step">01</span>/<span id="total-steps">14</span>
+      </div>
     </div>
-
-    <section id="milestones">
-      <div class="milestone" id="step-1">
-        <h2>Step 1: Introduction to Design Thinking</h2>
-        <p>Learn the fundamentals of Design Thinking.</p>
-      </div>
-      <div class="milestone" id="step-2">
-        <h2>Step 2: Empathy and User Research</h2>
-        <p>Understand the importance of empathy in designing solutions.</p>
-      </div>
-      <!-- Repeat for steps 3-13 -->
-
-      <div class="milestone" id="step-14">
-        <h2>Step 14: Product to Market Strategy</h2>
-        <p>Take your project to market with a full strategy.</p>
-      </div>
-    </section>
-  </main>
+    
+    <!-- Right side - Scrollable steps content -->
+    <div class="steps-container">
+      <section class="step-section" id="section-1" data-step="1">
+        <div class="step-content">
+          <h2>Get Inspired and Disciplined</h2>
+          <p>Begin your journey by finding inspiration and developing the discipline needed to see your project through to completion. Nurture your creative mindset while establishing structured approaches to innovation.</p>
+        </div>
+      </section>
+      
+      <section class="step-section" id="section-2" data-step="2">
+        <div class="step-content">
+          <h2>Problem Exploring</h2>
+          <p>Investigate the problem space by observing, questioning, and researching. Uncover the underlying issues and opportunities without rushing to solutions. Dive deep into understanding what truly matters.</p>
+        </div>
+      </section>
+      
+      <section class="step-section" id="section-3" data-step="3">
+        <div class="step-content">
+          <h2>Problem Framing</h2>
+          <p>Articulate your challenge in a clear, actionable way. Frame the problem to reveal new perspectives and establish a solid foundation for innovative solutions. The right problem statement opens doors to creativity.</p>
+        </div>
+      </section>
+      
+      <section class="step-section" id="section-4" data-step="4">
+        <div class="step-content">
+          <h2>User Research</h2>
+          <p>Understand your users deeply through interviews, observations, and empathy. Learn their needs, desires, and pain points to ground your innovations in real human experiences. Let their stories guide your process.</p>
+        </div>
+      </section>
+      
+      <section class="step-section" id="section-5" data-step="5">
+        <div class="step-content">
+          <h2>Ideation</h2>
+          <p>Generate a wide range of potential solutions through brainstorming and creative thinking techniques. Focus on quantity over quality initially, allowing wild ideas to emerge before filtering for feasibility.</p>
+        </div>
+      </section>
+      
+      <section class="step-section" id="section-6" data-step="6">
+        <div class="step-content">
+          <h2>Prototyping</h2>
+          <p>Create tangible representations of your ideas quickly and cheaply. Build to think, transforming abstract concepts into something you can test. Low-fidelity prototypes help visualize potential solutions early.</p>
+        </div>
+      </section>
+      
+      <section class="step-section" id="section-7" data-step="7">
+        <div class="step-content">
+          <h2>Testing</h2>
+          <p>Put your prototypes in front of real users to gather genuine feedback. Observe what works, what doesn't, and why. Create a safe space for honest critique that will strengthen your solution.</p>
+        </div>
+      </section>
+      
+      <section class="step-section" id="section-8" data-step="8">
+        <div class="step-content">
+          <h2>Prototyping (Iterate)</h2>
+          <p>Refine your solution based on testing insights. Embrace an iterative mindset, understanding that each cycle brings you closer to an optimal outcome. Continuously improve through cycles of making and testing.</p>
+        </div>
+      </section>
+      
+      <section class="step-section" id="section-9" data-step="9">
+        <div class="step-content">
+          <h2>MVP</h2>
+          <p>Develop your Minimum Viable Product with just enough features to satisfy early users. Focus on core functionality that delivers value while minimizing resources spent. Create something that can be shipped and validated.</p>
+        </div>
+      </section>
+      
+      <section class="step-section" id="section-10" data-step="10">
+        <div class="step-content">
+          <h2>Business Model Development</h2>
+          <p>Design a viable, sustainable business model around your solution. Define how your innovation will create, deliver, and capture value. Ensure your great idea has a path to financial sustainability.</p>
+        </div>
+      </section>
+      
+      <section class="step-section" id="section-11" data-step="11">
+        <div class="step-content">
+          <h2>Go to Market</h2>
+          <p>Launch your solution and introduce it to the world. Develop strategies for reaching your target users and customers. Craft compelling messaging that resonates with your audience's needs and aspirations.</p>
+        </div>
+      </section>
+      
+      <section class="step-section" id="section-12" data-step="12">
+        <div class="step-content">
+          <h2>Growth Strategy</h2>
+          <p>Plan for expansion and scaling your solution. Identify opportunities to reach more users, enhance offerings, and develop your innovation's full potential. Balance short-term wins with long-term vision.</p>
+        </div>
+      </section>
+      
+      <section class="step-section" id="section-13" data-step="13">
+        <div class="step-content">
+          <h2>Demo Day</h2>
+          <p>Present your solution to stakeholders, investors, or the wider community. Craft a compelling narrative about your journey and the value your innovation brings. Showcase both the solution and the thinking behind it.</p>
+        </div>
+      </section>
+      
+      <section class="step-section" id="section-14" data-step="14">
+        <div class="step-content">
+          <h2>Feedback Collection, Reflect and Connect the Dots</h2>
+          <p>Gather comprehensive feedback, reflect on your entire journey, and identify connections between stages. Analyze successes and failures to extract valuable lessons. Prepare to begin a new cycle of innovation with deeper wisdom.</p>
+        </div>
+      </section>
+    </div>
+  </div>
 </body>
 </html>
