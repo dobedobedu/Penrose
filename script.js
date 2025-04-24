@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const glowingBall = document.querySelector('.glowing-ball');
   
   // Auto-scroll flag
-  let autoScrollEnabled = true;
+  let autoScrollEnabled = false; // Disabled by default to fix scrolling issue
   let autoScrollInterval;
   
   // Update the total steps display
@@ -16,15 +16,12 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Track which section is currently active
   let activeSection = 1;
-  
-  // Start auto-scroll
-  startAutoScroll();
+  let isScrolling = false;
   
   // Function to move the glowing ball to a step marker
   function moveGlowingBall(index) {
     const marker = stepMarkers[index - 1];
-    const markerRect = marker.getBoundingClientRect();
-    const containerRect = marker.parentElement.getBoundingClientRect();
+    if (!marker) return; // Exit if marker doesn't exist
     
     // Get position from the marker's style (more precise)
     const left = parseFloat(marker.style.left) || 0;
@@ -39,6 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateActiveSection(index) {
     // Don't update if it's the same section
     if (index === activeSection) return;
+    
+    // Ensure index is within bounds
+    if (index < 1 || index > totalSteps) return;
     
     // Remove active and adjacent classes from all sections
     stepSections.forEach(section => {
@@ -64,29 +64,23 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Update active section tracker
     activeSection = index;
+    
+    // Make sure the step content is visible
+    const activeContent = stepSections[index - 1].querySelector('.step-content');
+    activeContent.style.opacity = 1;
+    activeContent.style.transform = 'translateY(0)';
   }
 
   // Initialize by setting the first section as active
   updateActiveSection(1);
-  stepSections[0].classList.add('active');
-  if (stepSections[1]) {
-    stepSections[1].classList.add('adjacent');
-  }
   
   // Handle scroll events on the steps container to detect current section
-  let isScrolling = false;
   stepsContainer.addEventListener('scroll', () => {
     if (isScrolling) return;
     
     // Disable auto-scroll when user manually scrolls
     if (autoScrollEnabled) {
       stopAutoScroll();
-      // Re-enable after 30 seconds of inactivity
-      setTimeout(() => {
-        if (!isScrolling) {
-          startAutoScroll();
-        }
-      }, 30000);
     }
     
     const scrollPosition = stepsContainer.scrollTop;
@@ -103,6 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Add wheel event listener to implement custom smooth scrolling
   stepsContainer.addEventListener('wheel', (e) => {
+    // Prevent default to take control of scrolling
+    e.preventDefault();
+    
     // Disable auto-scroll when user manually scrolls
     if (autoScrollEnabled) {
       stopAutoScroll();
@@ -271,10 +268,35 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
   
-  // Make sure the first section content is visible
-  setTimeout(() => {
-    stepSections[0].querySelector('.step-content').style.opacity = 1;
-    stepSections[0].querySelector('.step-content').style.transform = 'translateY(0)';
-    moveGlowingBall(1);
-  }, 300);
+  // Make sure all sections' content is properly initialized
+  stepSections.forEach((section, index) => {
+    const content = section.querySelector('.step-content');
+    if (index === 0) {
+      // First section is active initially
+      content.style.opacity = 1;
+      content.style.transform = 'translateY(0)';
+    } else {
+      content.style.opacity = 0;
+      content.style.transform = 'translateY(20px)';
+    }
+  });
+  
+  // Initialize the glowing ball position
+  moveGlowingBall(1);
+  
+  // Add a click event to step indicators to allow direct navigation
+  document.querySelectorAll('.step-marker').forEach((marker, index) => {
+    marker.addEventListener('click', () => {
+      const targetSection = index + 1;
+      
+      // Scroll to that section
+      stepsContainer.scrollTo({
+        top: (targetSection - 1) * window.innerHeight,
+        behavior: 'smooth'
+      });
+      
+      // Update active section
+      updateActiveSection(targetSection);
+    });
+  });
 });
