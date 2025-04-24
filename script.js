@@ -5,8 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const stepsContainer = document.querySelector('.steps-container');
   const currentStepElem = document.getElementById('current-step');
   const totalSteps = stepSections.length;
-  const toggleBtn = document.getElementById('perspective-toggle');
-  const body = document.body;
   
   // Update the total steps display
   document.getElementById('total-steps').textContent = totalSteps.toString().padStart(2, '0');
@@ -14,25 +12,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // Track which section is currently active
   let activeSection = 1;
   
-  // Toggle perspective view
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', () => {
-      body.classList.toggle('alt-perspective');
-      
-      if (body.classList.contains('alt-perspective')) {
-        toggleBtn.textContent = 'Original View';
-      } else {
-        toggleBtn.textContent = 'Toggle Perspective';
-      }
-    });
-  }
-  
   // Function to update UI based on current active section
   function updateActiveSection(index) {
     // Don't update if it's the same section
     if (index === activeSection) return;
     
-    // Remove active class from all sections and steps
+    // Remove active class from all sections
     stepSections.forEach(section => section.classList.remove('active'));
     
     // Add active class to current section and corresponding step
