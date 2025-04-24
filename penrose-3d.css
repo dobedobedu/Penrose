@@ -1,0 +1,152 @@
+:root {
+    --sq-size: 50px;
+    --x-spaces: 6;
+    --y-spaces: 6;
+    --step-color-inactive: #888;
+    --step-color-active: #ff5555;
+    --step-color-top: #fff;
+    --step-color-side: #555;
+    --first-step-h: 2;
+    --step-inc: 0.25;
+}
+
+body {
+    background: #000;
+    font-size: var(--sq-size);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300vh; /* Long page for scrolling */
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    perspective: 1200px;
+}
+
+.container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(1em * var(--x-spaces));
+    height: calc(1em * var(--y-spaces) + 0.3em);
+    transform-style: preserve-3d;
+}
+
+.surface {
+    width: calc(1em * var(--x-spaces));
+    height: calc(1em * var(--y-spaces));
+    margin: auto;
+    transform-style: preserve-3d;
+    transform: rotateX(60deg) rotateZ(45deg);
+    transition: transform 0.6s linear;
+}
+
+.step {
+    transform-style: preserve-3d;
+    position: absolute;
+}
+
+.step-inner {
+    position: relative;
+    width: 1em;
+    transform-style: preserve-3d;
+    transform: rotateX(-90deg) translateZ(1em);
+}
+
+.step-inner div {
+    position: absolute;
+    width: 1em;
+    height: 1em;
+    transition: background 0.3s ease-out;
+}
+
+.back { transform: translateZ(-1em) rotateY(180deg); }
+.right { 
+    transform: rotateY(-270deg) translateX(1em);
+    transform-origin: top right;
+}
+.left { 
+    transform: rotateY(270deg) translateX(-1em);
+    transform-origin: center left;
+}
+.top { 
+    transform: rotateX(-90deg) translateY(0);
+    transform-origin: top center;
+    background: var(--step-color-top);
+}
+.front { 
+    transform: translateZ(0);
+    background: var(--step-color-inactive);
+}
+
+.left, .right {
+    background: var(--step-color-side);
+}
+
+/* Step positions */
+.s1 { transform: translate3d(1em*0, 1em*0, 1em*(var(--first-step-h) - 1)); }
+.s2 { transform: translate3d(1em*0, 1em*1, 1em*(var(--first-step-h) + var(--step-inc)*1 - 1)); }
+.s3 { transform: translate3d(1em*0, 1em*2, 1em*(var(--first-step-h) + var(--step-inc)*2 - 1)); }
+.s4 { transform: translate3d(1em*0, 1em*3, 1em*(var(--first-step-h) + var(--step-inc)*3 - 1)); }
+.s5 { transform: translate3d(1em*0, 1em*4, 1em*(var(--first-step-h) + var(--step-inc)*4 - 1)); }
+.s6 { transform: translate3d(1em*0, 1em*5, 1em*(var(--first-step-h) + var(--step-inc)*5 - 1)); }
+.s7 { transform: translate3d(1em*1, 1em*5, 1em*(var(--first-step-h) + var(--step-inc)*6 - 1)); }
+.s8 { transform: translate3d(1em*2, 1em*5, 1em*(var(--first-step-h) + var(--step-inc)*7 - 1)); }
+.s9 { transform: translate3d(1em*3, 1em*5, 1em*(var(--first-step-h) + var(--step-inc)*8 - 1)); }
+.s10 { transform: translate3d(1em*4, 1em*5, 1em*(var(--first-step-h) + var(--step-inc)*9 - 1)); }
+.s11 { transform: translate3d(1em*5, 1em*5, 1em*(var(--first-step-h) + var(--step-inc)*10 - 1)); }
+.s12 { transform: translate3d(1em*5, 1em*4, 1em*(var(--first-step-h) + var(--step-inc)*11 - 1)); }
+.s13 { transform: translate3d(1em*5, 1em*3, 1em*(var(--first-step-h) + var(--step-inc)*12 - 1)); }
+.s14 { transform: translate3d(1em*4, 1em*3, 1em*(var(--first-step-h) + var(--step-inc)*13 - 1)); }
+
+/* Step heights */
+.s1 .step-inner div.front, .s1 .step-inner div.left, .s1 .step-inner div.right { height: calc(1em * var(--first-step-h)); }
+.s2 .step-inner div.front, .s2 .step-inner div.left, .s2 .step-inner div.right { height: calc(1em * (var(--first-step-h) + var(--step-inc)*1)); }
+.s3 .step-inner div.front, .s3 .step-inner div.left, .s3 .step-inner div.right { height: calc(1em * (var(--first-step-h) + var(--step-inc)*2)); }
+.s4 .step-inner div.front, .s4 .step-inner div.left, .s4 .step-inner div.right { height: calc(1em * (var(--first-step-h) + var(--step-inc)*3)); }
+.s5 .step-inner div.front, .s5 .step-inner div.left, .s5 .step-inner div.right { height: calc(1em * (var(--first-step-h) + var(--step-inc)*4)); }
+.s6 .step-inner div.front, .s6 .step-inner div.left, .s6 .step-inner div.right { height: calc(1em * (var(--first-step-h) + var(--step-inc)*5)); }
+.s7 .step-inner div.front, .s7 .step-inner div.left, .s7 .step-inner div.right { height: calc(1em * (var(--first-step-h) + var(--step-inc)*6)); }
+.s8 .step-inner div.front, .s8 .step-inner div.left, .s8 .step-inner div.right { height: calc(1em * (var(--first-step-h) + var(--step-inc)*7)); }
+.s9 .step-inner div.front, .s9 .step-inner div.left, .s9 .step-inner div.right { height: calc(1em * (var(--first-step-h) + var(--step-inc)*8)); }
+.s10 .step-inner div.front, .s10 .step-inner div.left, .s10 .step-inner div.right { height: calc(1em * (var(--first-step-h) + var(--step-inc)*9)); }
+.s11 .step-inner div.front, .s11 .step-inner div.left, .s11 .step-inner div.right { height: calc(1em * (var(--first-step-h) + var(--step-inc)*10)); }
+.s12 .step-inner div.front, .s12 .step-inner div.left, .s12 .step-inner div.right { height: calc(1em * (var(--first-step-h) + var(--step-inc)*11)); }
+.s13 .step-inner div.front, .s13 .step-inner div.left, .s13 .step-inner div.right { height: calc(1em * (var(--first-step-h) + var(--step-inc)*12)); }
+.s14 .step-inner div.front, .s14 .step-inner div.left, .s14 .step-inner div.right { height: calc(1em * (var(--first-step-h) + var(--step-inc)*13)); }
+
+/* Active step styles */
+.step.active .step-inner div.front { background: var(--step-color-active); }
+
+/* Perspective toggle button */
+.perspective-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+    background: #333;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* Alternative view */
+.alt-view .surface {
+    transform: rotateX(60deg) rotateZ(-45deg);
+}
+
+.alt-view .step-inner div.front {
+    background: var(--step-color-side);
+}
+
+.alt-view .step-inner div.left, 
+.alt-view .step-inner div.right {
+    background: var(--step-color-inactive);
+}
+
+.alt-view .step.active .step-inner div.front {
+    background: var(--step-color-active);
+}
