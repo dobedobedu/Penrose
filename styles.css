@@ -1,12 +1,11 @@
 /* Base styling and variables */
 :root {
-  --background-color: #000000;
-  --text-color: #ffffff;
-  --muted-color: #999999;
+  --background-color: #ffffff;
+  --text-color: #333333;
+  --muted-color: #666666;
   --accent-color: #FF6B00;
-  --step-inactive: transparent;
-  --step-active: #FF6B00;
   --section-height: 100vh;
+  --ball-size: 24px;
 }
 
 * {
@@ -42,6 +41,7 @@ body {
   justify-content: center;
   align-items: center;
   padding: 2rem;
+  background-color: var(--background-color);
 }
 
 .penrose-title {
@@ -62,14 +62,7 @@ body {
   font-size: 1.8rem;
   margin-bottom: 1rem;
   font-weight: 500;
-}
-
-.penrose-title p {
-  color: var(--muted-color);
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
-  max-width: 90%;
-  line-height: 1.5;
+  color: var(--text-color);
 }
 
 .tagline {
@@ -93,7 +86,8 @@ body {
   object-fit: contain;
 }
 
-#penrose-svg {
+/* Glowing ball */
+#ball-container {
   position: absolute;
   top: 0;
   left: 0;
@@ -102,18 +96,32 @@ body {
   pointer-events: none;
 }
 
-.step {
-  fill: var(--step-inactive);
-  stroke: var(--step-active);
-  stroke-width: 0;
-  transition: fill 0.5s ease, stroke-width 0.3s ease;
-  opacity: 0.7;
+.glowing-ball {
+  position: absolute;
+  width: var(--ball-size);
+  height: var(--ball-size);
+  border-radius: 50%;
+  background-color: var(--accent-color);
+  box-shadow: 0 0 15px 5px rgba(255, 107, 0, 0.6);
+  transform: translate(-50%, -50%);
+  transition: left 0.8s ease, top 0.8s ease;
+  z-index: 10;
 }
 
-.step.active {
-  fill: var(--accent-color);
-  stroke-width: 1;
-  filter: drop-shadow(0 0 3px rgba(255, 107, 0, 0.5));
+/* Step markers (invisible, used for positioning) */
+#step-markers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.step-marker {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
 }
 
 .step-indicator {
@@ -121,6 +129,7 @@ body {
   bottom: 10%;
   font-size: 1.5rem;
   font-weight: 300;
+  color: var(--text-color);
 }
 
 #current-step {
@@ -134,9 +143,10 @@ body {
   margin-left: 50%;
   height: 100vh;
   overflow-y: scroll;
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
   -ms-overflow-style: none;  /* Hide scrollbar in IE and Edge */
   scrollbar-width: none;  /* Hide scrollbar in Firefox */
+  scroll-behavior: smooth;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -146,18 +156,22 @@ body {
 
 .step-section {
   height: 100vh;
-  scroll-snap-align: start;
+  scroll-snap-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 2rem;
   position: relative;
   transition: opacity 0.5s ease;
-  opacity: 0.4;
+  opacity: 0.15;
 }
 
 .step-section.active {
   opacity: 1;
+}
+
+.step-section.adjacent {
+  opacity: 0.35;
 }
 
 .step-content {
@@ -184,6 +198,21 @@ body {
   line-height: 1.8;
   color: var(--muted-color);
   max-width: 90%;
+}
+
+/* Auto-scrolling animation */
+@keyframes autoScroll {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(calc(-100vh * 13)); }
+}
+
+.auto-scrolling .steps-container {
+  animation: autoScroll 180s linear infinite;
+  scroll-snap-type: none;
+}
+
+.auto-scrolling .steps-container:hover {
+  animation-play-state: paused;
 }
 
 /* Responsive adjustments */
@@ -245,6 +274,11 @@ body {
     width: 300px;
     height: 225px;
   }
+  
+  @keyframes autoScroll {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(calc(-50vh * 13)); }
+  }
 }
 
 @media (max-width: 768px) {
@@ -266,10 +300,6 @@ body {
   
   .tagline {
     font-size: 1rem;
-  }
-  
-  .penrose-title p {
-    font-size: 0.9rem;
   }
   
   .penrose-image-container {
