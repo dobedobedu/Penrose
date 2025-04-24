@@ -5,12 +5,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const stepsContainer = document.querySelector('.steps-container');
   const currentStepElem = document.getElementById('current-step');
   const totalSteps = stepSections.length;
+  const toggleBtn = document.getElementById('perspective-toggle');
+  const body = document.body;
   
   // Update the total steps display
   document.getElementById('total-steps').textContent = totalSteps.toString().padStart(2, '0');
   
   // Track which section is currently active
   let activeSection = 1;
+  
+  // Toggle perspective view
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      body.classList.toggle('alt-perspective');
+      
+      if (body.classList.contains('alt-perspective')) {
+        toggleBtn.textContent = 'Original View';
+      } else {
+        toggleBtn.textContent = 'Toggle Perspective';
+      }
+    });
+  }
   
   // Function to update UI based on current active section
   function updateActiveSection(index) {
@@ -19,11 +34,18 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Remove active class from all sections and steps
     stepSections.forEach(section => section.classList.remove('active'));
-    penroseSteps.forEach(step => step.classList.remove('active'));
     
     // Add active class to current section and corresponding step
     stepSections[index - 1].classList.add('active');
-    penroseSteps[index - 1].classList.add('active');
+    
+    // Update Penrose stairs visualization - progressive activation
+    penroseSteps.forEach((step, stepIndex) => {
+      if (stepIndex < index) {
+        step.classList.add('active');
+      } else {
+        step.classList.remove('active');
+      }
+    });
     
     // Update step indicator
     currentStepElem.textContent = index.toString().padStart(2, '0');
