@@ -5,7 +5,7 @@
   --muted-color: #666666;
   --accent-color: #FF6B00;
   --section-height: 100vh;
-  --ball-size: 15px; /* Reduced size to make it more proportional */
+  --ball-size: 12px; /* Reduced size for better proportional appearance */
 }
 
 @font-face {
@@ -91,9 +91,10 @@ body {
 /* Penrose image container positioning */
 .penrose-image-container {
   position: relative;
-  width: 900px; /* Adjusted to match the 32x40 grid approach */
-  height: 450px; /* Adjusted for proper aspect ratio */
+  width: 900px; /* Adjusted for the 32x40 grid */
+  height: 450px;
   margin-bottom: 2rem;
+  transform-origin: center center; /* For scaling on small screens */
 }
 
 .base-staircase {
@@ -110,7 +111,7 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 10; /* Ensure the ball container is above the image */
+  z-index: 10;
 }
 
 .glowing-ball {
@@ -119,7 +120,7 @@ body {
   height: var(--ball-size);
   border-radius: 50%;
   background-color: var(--accent-color);
-  box-shadow: 0 0 15px 5px rgba(255, 107, 0, 0.6);
+  box-shadow: 0 0 12px 4px rgba(255, 107, 0, 0.7); /* Enhanced glow effect */
   transform: translate(-50%, -50%);
   transition: left 0.8s ease, top 0.8s ease;
   z-index: 10;
@@ -160,9 +161,9 @@ body {
   margin-left: 50%;
   height: 100vh;
   overflow-y: scroll;
-  scroll-snap-type: y mandatory; /* For better snapping */
-  -ms-overflow-style: none;  /* Hide scrollbar in IE and Edge */
-  scrollbar-width: none;  /* Hide scrollbar in Firefox */
+  scroll-snap-type: y mandatory;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   scroll-behavior: smooth;
 }
 
@@ -173,7 +174,7 @@ body {
 
 .step-section {
   height: 100vh;
-  scroll-snap-align: start; /* Ensures sections snap at the start */
+  scroll-snap-align: start;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -224,7 +225,7 @@ body {
 }
 
 .auto-scrolling .steps-container {
-  animation: autoScroll 120s linear infinite; /* 120s is faster than before */
+  animation: autoScroll 120s linear infinite;
   scroll-snap-type: none;
 }
 
@@ -246,9 +247,11 @@ body {
     font-size: 1.5rem;
   }
   
+  /* Scale image container for medium screens */
   .penrose-image-container {
-    width: 700px;
-    height: 350px;
+    width: 750px;
+    height: 375px;
+    transform: scale(0.9);
   }
 }
 
@@ -260,20 +263,20 @@ body {
   .penrose-container {
     position: relative;
     width: 100%;
-    height: 40vh; /* Reduced from 50vh */
-    min-height: 300px; /* Reduced minimum height */
+    height: 40vh;
+    min-height: 300px;
   }
   
   .steps-container {
     width: 100%;
     margin-left: 0;
-    height: 60vh; /* Increased from 50vh for more space */
+    height: 60vh;
   }
   
   .step-section {
-    height: 60vh; /* Match container height */
-    min-height: 300px; /* Reduced height */
-    padding: 1rem; /* Reduced padding */
+    height: 60vh;
+    min-height: 300px;
+    padding: 1rem;
   }
   
   .penrose-title {
@@ -290,10 +293,17 @@ body {
     text-align: center;
   }
   
+  /* Adjust image container for tablets */
   .penrose-image-container {
-    width: 90%;
-    height: 200px;
-    max-width: 500px;
+    width: 650px;
+    height: 325px;
+    transform: scale(0.7);
+    margin-top: -20px; /* Adjusts vertical positioning */
+  }
+  
+  /* Preserve ball positions on smaller screens */
+  #ball-container {
+    transform: scale(0.7);
   }
   
   @keyframes autoScroll {
@@ -304,12 +314,12 @@ body {
 
 @media (max-width: 768px) {
   .penrose-container {
-    height: 35vh; /* Even smaller on mobile */
+    height: 35vh;
     min-height: 250px;
   }
   
   .steps-container {
-    height: 65vh; /* More space for content */
+    height: 65vh;
   }
   
   .step-section {
@@ -339,13 +349,25 @@ body {
     font-size: 0.9rem;
   }
   
+  /* Further scale down for mobile devices */
   .penrose-image-container {
-    width: 90%;
-    height: 150px;
+    width: 550px;
+    height: 275px;
+    transform: scale(0.55);
+    margin-top: -40px;
+  }
+  
+  #ball-container {
+    transform: scale(0.55);
+  }
+  
+  /* Adjust ball size for mobile */
+  :root {
+    --ball-size: 10px;
   }
   
   .step-content {
-    max-width: 100%; /* Full width on mobile */
+    max-width: 100%;
   }
   
   @keyframes autoScroll {
@@ -371,9 +393,21 @@ body {
     padding: 0.75rem;
   }
   
+  /* Adjust for smaller phones */
   .penrose-image-container {
-    width: 90%;
-    height: 120px;
+    width: 480px;
+    height: 240px;
+    transform: scale(0.45);
+    margin-top: -50px;
+  }
+  
+  #ball-container {
+    transform: scale(0.45);
+  }
+  
+  /* Smaller ball for very small screens */
+  :root {
+    --ball-size: 8px;
   }
   
   .sign-up-button {
@@ -402,10 +436,6 @@ body {
   .step-content p {
     font-size: 0.9rem;
     line-height: 1.6;
-  }
-  
-  #ball-container {
-    transform: scale(0.8);
   }
   
   @keyframes autoScroll {
