@@ -1,39 +1,35 @@
-# Penrose Staircase Animation
+# Penrose AI Creator Senior Elective
 
-A 2D SVG implementation of the famous Penrose staircase (impossible staircase) with scroll-based step highlighting.
+An interactive scrollable experience featuring the famous Penrose staircase illusion with a glowing ball that tracks your progress through the course journey.
 
 ## Features
 
-- SVG-based implementation of the impossible staircase illusion
-- Interactive step highlighting synchronized with scroll position
-- Two perspective views (toggle between them)
-- Responsive design works on desktop and mobile devices
-- Keyboard navigation and touch swipe support
+- **Impossible Staircase Visualization**: Displays the famous Penrose staircase with a glowing orange ball that traverses the steps
+- **Auto-Scrolling Content**: Right panel automatically scrolls through the course journey steps
+- **Interactive Navigation**: Control your journey with keyboard, mouse, or touch
+- **Responsive Design**: Works on desktop and mobile devices
 
-## How It Works
+## Setup Instructions
 
-The Penrose staircase is an optical illusion that appears to be a continuous staircase that loops back on itself in an impossible way. This implementation uses SVG to create the illusion from a specific perspective.
+1. Upload the `Impossible_staircase.svg.png` image to the repository root
+2. Open the `index.html` file in a browser
 
-The key features of this implementation:
+## Interaction Controls
 
-1. **SVG Structure**: The staircase is built using SVG paths to create the illusion of depth
-2. **Progressive Highlighting**: As you scroll, steps light up sequentially to guide the user through the impossible loop
-3. **Perspective Toggle**: Switch between views to better understand how the illusion works
+- **Auto-scroll**: Content scrolls automatically by default
+- **Manual Navigation**:
+  - Mouse wheel to scroll
+  - Arrow Up/Down keys to navigate between steps
+  - Touch swipe on mobile
+  - Press 'A' key to toggle auto-scroll
+- **Step Indication**: The glowing ball shows your current position on the staircase
 
-## Files
+## Technology
 
-- `index.html` - HTML structure with SVG staircase implementation
-- `styles.css` - Styling and animations
-- `script.js` - JavaScript for scroll interaction and step highlighting
+- Pure HTML, CSS, and JavaScript
+- No external libraries or dependencies required
 
-## Implementation Notes
+## Inspiration
 
-Creating an effective Penrose staircase is challenging because the illusion relies on forced perspective and visual ambiguity. Key implementation techniques used:
-
-- Strategic placement of visual elements to create impossible connections
-- Careful coloring and shading for a sense of depth
-- SVG structure that maintains the illusion from specific viewpoints
-
-## Inspired By
-
-The implementation is inspired by the mathematical concept invented by Lionel and Roger Penrose, and famously depicted in the works of M.C. Escher.
+- Design inspired by OpenAI and tomorrow-happens.studio
+- Staircase visualization concept inspired by Penrose's impossible staircase
