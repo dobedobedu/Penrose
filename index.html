@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Penrose AI Creator Selective</title>
+  <title>Penrose AI Creator Senior Elective</title>
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
 </head>
@@ -13,8 +13,7 @@
     <div class="penrose-container">
       <div class="penrose-title">
         <h1>Sign up now</h1>
-        <h2>Penrose AI Creator Selective</h2>
-        <p>As AI accelerates, we need to deepen our knowledge of humanities and liberal arts to shape a meaningful future.</p>
+        <h2>Penrose AI Creator Senior Elective</h2>
         <div class="tagline">Schools build resumes. We build the future with you.</div>
       </div>
       
@@ -22,50 +21,28 @@
         <!-- Base image of impossible staircase -->
         <img src="Impossible_staircase.svg.png" alt="Penrose Staircase" class="base-staircase">
         
-        <!-- SVG overlay with step highlights -->
-        <svg id="penrose-svg" viewBox="0 0 512 384" xmlns="http://www.w3.org/2000/svg">
-          <!-- Step 1 -->
-          <path id="step-1" class="step" d="M 120,165 L 145,145 L 145,155 L 120,175 Z" />
-          
-          <!-- Step 2 -->
-          <path id="step-2" class="step" d="M 145,145 L 170,125 L 170,135 L 145,155 Z" />
-          
-          <!-- Step 3 -->
-          <path id="step-3" class="step" d="M 170,125 L 195,105 L 195,115 L 170,135 Z" />
-          
-          <!-- Step 4 -->
-          <path id="step-4" class="step" d="M 195,105 L 220,85 L 220,95 L 195,115 Z" />
-          
-          <!-- Step 5 -->
-          <path id="step-5" class="step" d="M 220,85 L 245,65 L 245,75 L 220,95 Z" />
-          
-          <!-- Step 6 -->
-          <path id="step-6" class="step" d="M 245,65 L 270,65 L 270,75 L 245,75 Z" />
-          
-          <!-- Step 7 -->
-          <path id="step-7" class="step" d="M 270,65 L 295,65 L 295,75 L 270,75 Z" />
-          
-          <!-- Step 8 -->
-          <path id="step-8" class="step" d="M 295,65 L 320,65 L 320,75 L 295,75 Z" />
-          
-          <!-- Step 9 -->
-          <path id="step-9" class="step" d="M 320,65 L 345,65 L 345,75 L 320,75 Z" />
-          
-          <!-- Step 10 -->
-          <path id="step-10" class="step" d="M 345,65 L 370,85 L 370,95 L 345,75 Z" />
-          
-          <!-- Step 11 -->
-          <path id="step-11" class="step" d="M 370,85 L 370,105 L 345,125 L 345,105 Z" />
-          
-          <!-- Step 12 -->
-          <path id="step-12" class="step" d="M 345,125 L 345,145 L 320,165 L 320,145 Z" />
-          
-          <!-- Step 13 -->
-          <path id="step-13" class="step" d="M 320,165 L 320,185 L 170,185 L 170,175 Z" />
-          
-          <!-- Step 14 -->
-          <path id="step-14" class="step" d="M 170,185 L 170,195 L 120,175 L 120,165 Z" />
-        </svg>
+        <!-- Glowing ball -->
+        <div id="ball-container">
+          <div class="glowing-ball"></div>
+        </div>
+        
+        <!-- Step markers (invisible, used for positioning) -->
+        <div id="step-markers">
+          <div class="step-marker" data-step="1" style="left: 120px; top: 165px;"></div>
+          <div class="step-marker" data-step="2" style="left: 145px; top: 145px;"></div>
+          <div class="step-marker" data-step="3" style="left: 170px; top: 125px;"></div>
+          <div class="step-marker" data-step="4" style="left: 195px; top: 105px;"></div>
+          <div class="step-marker" data-step="5" style="left: 220px; top: 85px;"></div>
+          <div class="step-marker" data-step="6" style="left: 245px; top: 65px;"></div>
+          <div class="step-marker" data-step="7" style="left: 275px; top: 65px;"></div>
+          <div class="step-marker" data-step="8" style="left: 305px; top: 65px;"></div>
+          <div class="step-marker" data-step="9" style="left: 335px; top: 65px;"></div>
+          <div class="step-marker" data-step="10" style="left: 365px; top: 85px;"></div>
+          <div class="step-marker" data-step="11" style="left: 365px; top: 105px;"></div>
+          <div class="step-marker" data-step="12" style="left: 335px; top: 135px;"></div>
+          <div class="step-marker" data-step="13" style="left: 305px; top: 165px;"></div>
+          <div class="step-marker" data-step="14" style="left: 170px; top: 185px;"></div>
+        </div>
       </div>
       
       <div class="step-indicator">
