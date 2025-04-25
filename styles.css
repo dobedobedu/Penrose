@@ -313,11 +313,12 @@ body {
   
   .step-content h2 {
     font-size: 1.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
   }
   
   .step-content p {
     font-size: 1rem;
+    line-height: 1.6;
   }
   
   .tagline {
@@ -334,19 +335,22 @@ body {
 /* Adjust for smaller mobile screens */
 @media (max-width: 480px) {
   .penrose-container {
-    height: 30vh;
-    min-height: 220px;
-    padding: 0.75rem;
+    height: 40vh; /* Increased height for better visualization */
+    min-height: 200px;
+    padding: 0.5rem;
   }
   
   .steps-container {
-    height: 70vh;
+    height: 60vh; /* Reduced height to minimize gap */
   }
   
   .step-section {
-    height: 70vh;
-    min-height: 220px;
+    height: 60vh; /* Match container height */
+    min-height: 200px;
     padding: 0.75rem;
+    /* Adjust vertical positioning of content */
+    justify-content: flex-start;
+    padding-top: 1.5rem;
   }
   
   /* Adjust for smaller phones */
@@ -385,6 +389,7 @@ body {
   
   .step-content p {
     font-size: 0.9rem;
-    line-height: 1.6;
+    line-height: 1.5;
+    margin-bottom: 0; /* Remove extra bottom margin */
   }
 }
