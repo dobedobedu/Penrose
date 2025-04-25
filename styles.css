@@ -382,7 +382,7 @@ body {
     height: auto;
     scroll-snap-align: start;
     padding: 0.5rem 1rem 2rem 1rem; /* Reduced padding */
-    padding-top: 5vh; /* REDUCED: Push content closer to the Penrose header */
+    padding-top: 2vh; /* REDUCED: Push content closer to the Penrose header */
     display: flex;
     flex-direction: column;
     justify-content: flex-start; /* Start alignment for better spacing */
@@ -523,7 +523,7 @@ body {
   
   /* Adjust mobile sections for smaller screens */
   .step-section {
-    padding-top: 2vh; /* REDUCED: Even less padding on smaller screens */
+    padding-top: 1vh; /* REDUCED: Even less padding on smaller screens */
     min-height: 50vh; /* Reduced section height */
   }
 }
