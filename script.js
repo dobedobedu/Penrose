@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   
-  // Function to scroll to a specific section
+  // Function to scroll to a specific section with improved behavior
   function scrollToSection(index) {
     if (isScrolling || index < 1 || index > totalSteps) return;
     
@@ -74,11 +74,20 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const targetSection = document.querySelector(`.step-section[data-step="${index}"]`);
     if (targetSection) {
-      const offset = targetSection.offsetTop;
-      stepsContainer.scrollTo({
-        top: offset,
-        behavior: 'smooth'
-      });
+      // On mobile, use scrollIntoView which works better with snap points
+      if (isMobile) {
+        targetSection.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      } else {
+        // On desktop, use scrollTo which is more precise
+        const offset = targetSection.offsetTop;
+        stepsContainer.scrollTo({
+          top: offset,
+          behavior: 'smooth'
+        });
+      }
     }
     
     setTimeout(() => {
@@ -100,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to update navigation arrows visibility
   function updateNavigationArrows() {
-    if (isMobile) return;
+    if (isMobile || !navUp || !navDown) return;
     
     navUp.classList.toggle('disabled', activeSection === 1);
     navDown.classList.toggle('disabled', activeSection === totalSteps);
@@ -179,6 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Enhanced touch handling for mobile
   let touchStartY = 0;
   let touchEndY = 0;
+  let lastSwipeTime = 0;
   
   stepsContainer.addEventListener('touchstart', (e) => {
     touchStartY = e.touches[0].clientY;
@@ -187,15 +197,28 @@ document.addEventListener("DOMContentLoaded", () => {
   stepsContainer.addEventListener('touchend', (e) => {
     touchEndY = e.changedTouches[0].clientY;
     
+    // Calculate swipe distance and direction
     const touchDistance = touchStartY - touchEndY;
+    const now = new Date().getTime();
     
-    if (Math.abs(touchDistance) > 50) {
-      const direction = touchDistance > 0 ? 1 : -1;
+    // Only process swipes that are significant enough
+    if (Math.abs(touchDistance) > 30) { // Reduced threshold for easier detection
+      const direction = touchDistance > 0 ? 1 : -1; // 1 = up, -1 = down
       
-      setTimeout(() => {
-        const mostVisibleSection = getMostVisibleSection();
-        updateActiveSection(mostVisibleSection);
-      }, 100);
+      // If swiping up, go to next step; if swiping down, go to previous step
+      // This makes the navigation more intuitive and responsive
+      if (direction === 1 && activeSection < totalSteps) {
+        // Only if sufficient time has passed since last swipe (300ms)
+        if (now - lastSwipeTime > 300) {
+          lastSwipeTime = now;
+          scrollToSection(activeSection + 1);
+        }
+      } else if (direction === -1 && activeSection > 1) {
+        if (now - lastSwipeTime > 300) {
+          lastSwipeTime = now;
+          scrollToSection(activeSection - 1);
+        }
+      }
     }
   }, { passive: true });
   
@@ -249,7 +272,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (isScrolling) return;
       
       entries.forEach(entry => {
-        if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+        // Lower threshold for better reactivity
+        if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
           const section = entry.target;
           const sectionIndex = parseInt(section.dataset.step);
           
@@ -260,7 +284,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }, {
       root: stepsContainer,
-      threshold: 0.5
+      threshold: [0.3, 0.5, 0.7] // Multiple thresholds for better detection
     });
     
     stepSections.forEach(section => {
