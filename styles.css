@@ -248,31 +248,31 @@ body {
   .penrose-container {
     position: relative;
     width: 100%;
-    height: 40vh;
-    min-height: 300px;
+    height: 45vh; /* Increased for better visualization */
+    min-height: 320px;
     padding: 1rem;
   }
   
   .steps-container {
     width: 100%;
     margin-left: 0;
-    height: 60vh;
+    height: 55vh; /* Reduced to minimize space between sections */
   }
   
   .step-section {
-    height: 60vh;
+    height: 55vh;
     min-height: 300px;
     padding: 1rem;
   }
   
   .penrose-title {
-    top: 5%;
+    top: 2%; /* Moved up to save space */
     text-align: center;
     width: 100%;
   }
   
   .step-indicator {
-    bottom: 5%;
+    bottom: 2%; /* Moved down to save space */
   }
   
   .penrose-title p, .tagline {
@@ -283,32 +283,37 @@ body {
   /* Scale down for tablets */
   .penrose-image-container {
     transform: scale(0.75);
-    margin-top: 0; /* Adjusted vertical positioning */
+    margin-top: 5px; /* Adjusted vertical positioning */
   }
 }
 
 @media (max-width: 768px) {
   .penrose-container {
-    height: 35vh;
+    height: 42vh;
     min-height: 250px;
   }
   
   .steps-container {
-    height: 65vh;
+    height: 58vh;
   }
   
   .step-section {
-    height: 65vh;
+    height: 58vh;
     min-height: 250px;
     padding: 1rem 0.75rem;
+    /* Center content vertically */
+    justify-content: flex-start;
+    padding-top: 1.5rem;
   }
   
   .sign-up-button {
     font-size: 1.8rem;
+    margin-bottom: 0.25rem;
   }
   
   .penrose-title h2 {
     font-size: 1.3rem;
+    margin-bottom: 0.5rem;
   }
   
   .step-content h2 {
@@ -318,45 +323,47 @@ body {
   
   .step-content p {
     font-size: 1rem;
-    line-height: 1.6;
+    line-height: 1.5;
   }
   
   .tagline {
     font-size: 0.9rem;
+    margin-top: 0.5rem;
   }
   
   /* Further scale down for mobile devices */
   .penrose-image-container {
-    transform: scale(0.6);
-    margin-top: -10px;
+    transform: scale(0.65);
+    margin-top: 15px;
   }
 }
 
 /* Adjust for smaller mobile screens */
 @media (max-width: 480px) {
   .penrose-container {
-    height: 40vh; /* Increased height for better visualization */
-    min-height: 200px;
+    height: 38vh; /* Optimized height */
+    min-height: 220px;
     padding: 0.5rem;
+    justify-content: flex-start;
+    padding-top: 3rem;
   }
   
   .steps-container {
-    height: 60vh; /* Reduced height to minimize gap */
+    height: 62vh; /* Complementary to Penrose container */
   }
   
   .step-section {
-    height: 60vh; /* Match container height */
-    min-height: 200px;
+    height: 62vh;
+    min-height: 220px;
     padding: 0.75rem;
-    /* Adjust vertical positioning of content */
-    justify-content: flex-start;
-    padding-top: 1.5rem;
+    /* Better vertical alignment */
+    justify-content: center;
   }
   
   /* Adjust for smaller phones */
   .penrose-image-container {
-    transform: scale(0.5);
-    margin-top: -15px;
+    transform: scale(0.55);
+    margin-top: 20px;
   }
   
   /* Smaller ball for very small screens */
@@ -370,12 +377,12 @@ body {
   
   .penrose-title h2 {
     font-size: 1.1rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
   }
   
   .tagline {
     font-size: 0.8rem;
-    margin-top: 0.5rem;
+    margin-top: 0.3rem;
   }
   
   .step-content {
@@ -384,12 +391,12 @@ body {
   
   .step-content h2 {
     font-size: 1.3rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
   }
   
   .step-content p {
     font-size: 0.9rem;
-    line-height: 1.5;
+    line-height: 1.4;
     margin-bottom: 0; /* Remove extra bottom margin */
   }
 }
