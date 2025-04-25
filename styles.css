@@ -6,7 +6,7 @@
   --accent-color: #FF6B00;
   --section-height: 100vh;
   --ball-size: 16px; /* Adjusted size to match screenshot */
-  --mobile-header-height: 20vh; /* Centralized variable for mobile header height */
+  --mobile-header-height: 35vh; /* Increased mobile header height to create more space */
 }
 
 @font-face {
@@ -344,13 +344,13 @@ body {
     display: none;
   }
 
-  /* Make the Penrose container sticky at the top with reduced height */
+  /* Make the Penrose container sticky at the top with increased height */
   .penrose-container {
     position: sticky;
     top: 0;
     width: 100%;
-    height: var(--mobile-header-height);
-    min-height: 130px; /* Reduced min-height */
+    height: var(--mobile-header-height); /* INCREASED to give more room for staircase */
+    min-height: 220px; /* Increased min-height to ensure staircase is fully visible */
     z-index: 10;
     padding: 0.5rem;
     background-color: var(--background-color);
@@ -382,7 +382,8 @@ body {
     height: auto;
     scroll-snap-align: start;
     padding: 0.5rem 1rem 2rem 1rem; /* Reduced padding */
-    padding-top: 15vh; /* ADDED 15vh spacing to push content below staircase */
+    padding-top: 5vh; /* Space from the top edge of the content area */
+    margin-top: 0; /* Remove top margin */
     display: flex;
     flex-direction: column;
     justify-content: flex-start; /* Start alignment for better spacing */
@@ -438,10 +439,10 @@ body {
     text-align: left; /* Left-align on mobile */
   }
   
-  /* Further scale down for mobile devices */
+  /* Further scale down for mobile devices but position in more space */
   .penrose-image-container {
     transform: scale(0.4); /* Smaller scale */
-    margin-top: 20px; /* Reduced top margin */
+    margin-top: 45px; /* Increased top margin to position staircase higher */
     margin-left: -40px; /* Adjust horizontal position */
   }
   
@@ -469,18 +470,18 @@ body {
 /* Adjust for smaller mobile screens */
 @media (max-width: 480px) {
   :root {
-    --mobile-header-height: 18vh; /* Reduced for smaller screens */
+    --mobile-header-height: 38vh; /* INCREASED for smaller screens to show full staircase */
   }
   
   .penrose-container {
     height: var(--mobile-header-height);
-    min-height: 110px; /* Further reduced min-height */
+    min-height: 240px; /* Further increased min-height */
   }
   
   /* Adjust for smaller phones */
   .penrose-image-container {
     transform: scale(0.35); /* Even smaller scale */
-    margin-top: 15px; /* Reduced top margin further */
+    margin-top: 50px; /* Increased top margin further */
     margin-left: -50px; /* More left offset to ensure visibility */
   }
   
@@ -523,7 +524,7 @@ body {
   
   /* Adjust mobile sections for smaller screens */
   .step-section {
-    padding-top: 15vh; /* Keep 15vh spacing consistent */
+    padding-top: 5vh; /* Keep consistent spacing */
     min-height: 50vh; /* Reduced section height */
   }
 }
