@@ -180,6 +180,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding-top: 2rem;
   padding-bottom: 4rem;
   position: relative;
   transition: opacity 0.3s ease;
