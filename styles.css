@@ -5,7 +5,7 @@
   --muted-color: #666666;
   --accent-color: #FF6B00;
   --section-height: 100vh;
-  --ball-size: 18px; /* Increased size for better visibility */
+  --ball-size: 16px; /* Adjusted size to match screenshot */
 }
 
 @font-face {
@@ -110,7 +110,7 @@ body {
   height: var(--ball-size);
   border-radius: 50%;
   background-color: var(--accent-color);
-  box-shadow: 0 0 18px 6px rgba(255, 107, 0, 0.7); /* Enhanced glow effect */
+  box-shadow: 0 0 15px 4px rgba(255, 107, 0, 0.7); /* Adjusted glow effect */
   transform: translate(-50%, -50%);
   transition: left 0.8s ease, top 0.8s ease;
   z-index: 10;
@@ -357,7 +357,7 @@ body {
   
   /* Smaller ball for very small screens */
   :root {
-    --ball-size: 14px; /* Still larger than original size but better for mobile */
+    --ball-size: 14px; /* Adjusted for mobile */
   }
   
   .sign-up-button {
