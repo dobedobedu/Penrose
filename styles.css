@@ -8,7 +8,6 @@
   --ball-size: 16px;
   --step-indicator-height: 3.5rem; /* Height of the step indicator */
   --step-bottom-margin: 6rem; /* Increased margin for better spacing on mobile */
-  --blur-background: rgba(255, 255, 255, 0.8);
   --content-padding: 2rem;
 }
 
@@ -49,16 +48,14 @@
   scroll-snap-align: start;
 }
 
-/* Step content with glassmorphism */
+/* Step content - removed glassmorphism */
 .step-content {
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
-  background: var(--blur-background);
-  backdrop-filter: blur(10px);
+  background: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.5s ease-out;
@@ -69,7 +66,7 @@
   transform: translateY(0);
 }
 
-/* Navigation arrows for desktop */
+/* Navigation arrows for desktop - will be hidden for mobile */
 .navigation-arrows {
   position: fixed;
   right: 2rem;
@@ -85,18 +82,17 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--blur-background);
-  backdrop-filter: blur(5px);
+  background: rgba(255, 255, 255, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .nav-arrow:hover {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 1);
   transform: scale(1.1);
 }
 
@@ -109,18 +105,18 @@
   .penrose-container {
     position: relative;
     height: auto;
-    min-height: 50vh;
+    min-height: 40vh; /* Reduced to give more space to content */
     padding: 1rem;
   }
 
   .steps-container {
     margin-left: 0;
-    height: 50vh;
+    height: 60vh; /* Increased to give more space to content */
     scroll-snap-type: y mandatory; /* Make snap stricter on mobile */
   }
 
   .step-section {
-    min-height: 75vh; /* Reduced height to fit better on mobile */
+    min-height: 60vh; /* Adjusted to match container height */
     padding: 1.5rem;
     padding-bottom: calc(1.5rem + var(--step-bottom-margin)); /* Add bottom padding to clear step indicator */
     justify-content: flex-start;
@@ -145,24 +141,23 @@
     width: 100%;
     height: var(--step-indicator-height);
     text-align: center;
-    background: var(--blur-background);
-    backdrop-filter: blur(5px);
+    background: #ffffff;
     padding: 0.8rem 0;
     z-index: 20;
     font-size: 1.2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
   }
 }
 
 /* Small mobile adjustments */
 @media (max-width: 480px) {
   .step-section {
-    min-height: 80vh;
+    min-height: 60vh;
     padding: 1rem;
-    /* The scroll snap has to be adjusted for the keyboard */
     scroll-snap-align: start;
     padding-bottom: calc(1rem + var(--step-bottom-margin)); /* Ensure enough bottom padding */
   }
