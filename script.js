@@ -47,8 +47,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const left = parseFloat(marker.style.left) || 0;
     const top = parseFloat(marker.style.top) || 0;
     
-    // Position the ball at the marker with a gentle transition
-    glowingBall.style.transition = 'left 0.6s ease-out, top 0.6s ease-out';
+    // Position the ball at the marker with a faster transition for mobile
+    const transitionSpeed = isMobile ? '0.4s' : '0.6s';
+    glowingBall.style.transition = `left ${transitionSpeed} ease-out, top ${transitionSpeed} ease-out`;
     glowingBall.style.left = `${left}px`;
     glowingBall.style.top = `${top}px`;
     
@@ -86,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Re-enable transitions
     setTimeout(() => {
-      glowingBall.style.transition = 'left 0.6s ease-out, top 0.6s ease-out';
+      glowingBall.style.transition = isMobile ? 'left 0.4s ease-out, top 0.4s ease-out' : 'left 0.6s ease-out, top 0.6s ease-out';
       updateActiveSection(1);
     }, 50);
   }, 100);
@@ -125,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
       clearTimeout(scrollTimeout);
     }
     
-    // Set a new timeout
+    // Set a new timeout - FASTER on mobile
     scrollTimeout = setTimeout(() => {
       if (isScrolling) return;
       
@@ -136,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (mostVisibleSection !== activeSection) {
         updateActiveSection(mostVisibleSection);
       }
-    }, isMobile ? 50 : 100); // Shorter timeout for mobile
+    }, isMobile ? 30 : 100); // Reduced timeout for more responsive mobile experience
   }, { passive: true });
   
   // Enhanced touch handling for mobile
@@ -163,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
         const mostVisibleSection = getMostVisibleSection();
         updateActiveSection(mostVisibleSection);
-      }, 100);
+      }, 50); // Reduced from 100 to 50 for faster mobile response
     }
   }, { passive: true });
   
@@ -194,7 +195,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Re-enable transitions after a short delay
     setTimeout(() => {
-      glowingBall.style.transition = 'left 0.6s ease-out, top 0.6s ease-out';
+      const transitionSpeed = isNowMobile ? '0.4s' : '0.6s';
+      glowingBall.style.transition = `left ${transitionSpeed} ease-out, top ${transitionSpeed} ease-out`;
     }, 50);
   });
   
@@ -257,10 +259,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
       
-      // Reset scrolling flag after animation completes
+      // Reset scrolling flag after animation completes - faster on mobile
       setTimeout(() => {
         isScrolling = false;
-      }, 600);
+      }, isMobile ? 400 : 600); // Reduced timeout for mobile
     }
   });
 });
