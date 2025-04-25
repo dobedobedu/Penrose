@@ -6,8 +6,8 @@
   --accent-color: #FF6B00;
   --section-height: 100vh;
   --ball-size: 16px;
-  --mobile-header-height: 320px; /* Further increased height */
-  --mobile-footer-height: 40px; /* For step indicator */
+  --mobile-header-height: 320px;
+  --mobile-footer-height: 40px;
 }
 
 @font-face {
@@ -372,11 +372,18 @@ body {
     z-index: 100;
   }
   
-  /* Position staircase in the header */
+  /* Larger staircase for mobile */
   .penrose-image-container {
-    transform: scale(0.4);
-    margin-top: 60px; /* Higher position */
+    transform: scale(0.5); /* Increased from 0.4 */
+    margin-top: 60px;
     margin-left: -30px;
+  }
+  
+  /* Larger orange ball */
+  .glowing-ball {
+    width: 18px; /* Increased from 12px */
+    height: 18px; /* Increased from 12px */
+    box-shadow: 0 0 25px 8px rgba(255, 107, 0, 0.8); /* Enhanced glow */
   }
   
   /* Fixed footer for step indicator */
@@ -394,7 +401,7 @@ body {
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   }
   
-  /* Scrollable content area */
+  /* Scrollable content area - CHANGED to improve scrolling sensitivity */
   .steps-container {
     position: fixed;
     top: var(--mobile-header-height);
@@ -404,22 +411,31 @@ body {
     margin: 0;
     padding: 0;
     overflow-y: auto;
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y proximity; /* CHANGED from mandatory to proximity for easier scrolling */
     scroll-behavior: smooth;
     z-index: 1;
+    touch-action: pan-y; /* Explicit touch handling */
   }
   
-  /* Each section takes exactly one viewport height minus header and footer */
+  /* Each section minimized for easier scrolling */
   .step-section {
-    height: calc(100vh - var(--mobile-header-height) - var(--mobile-footer-height));
-    min-height: calc(100vh - var(--mobile-header-height) - var(--mobile-footer-height));
+    height: 85%; /* REDUCED to make scrolling easier - no longer 100% height */
+    min-height: 350px; /* Minimum fixed height instead of viewport-relative */
     scroll-snap-align: start;
-    scroll-snap-stop: always;
-    padding: 30px 20px;
-    margin: 0;
+    scroll-snap-stop: normal; /* CHANGED from always to allow easier scrolling */
+    padding: 25px 20px;
+    margin-bottom: 15px; /* Added space between sections */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+  }
+  
+  /* Special case for last section */
+  .step-section[data-step="14"] {
+    margin-bottom: 60px; /* Extra space at bottom for last section */
+    height: auto; /* Auto height for final section */
+    min-height: 400px; /* Ensure enough space */
+    padding-bottom: 100px; /* Extra padding to ensure visibility */
   }
   
   /* Hide navigation arrows */
@@ -467,23 +483,17 @@ body {
     margin-top: 0.3rem;
     text-align: left;
   }
-  
-  .glowing-ball {
-    width: 12px;
-    height: 12px;
-    box-shadow: 0 0 20px 6px rgba(255, 107, 0, 0.8);
-  }
 }
 
 @media (max-width: 480px) {
   :root {
-    --mobile-header-height: 340px; /* Even taller for smaller screens */
+    --mobile-header-height: 340px;
   }
   
   /* Adjust for smaller phones */
   .penrose-image-container {
-    transform: scale(0.35);
-    margin-top: 70px; /* Even higher position */
+    transform: scale(0.45); /* Slightly smaller but still larger than before */
+    margin-top: 70px;
     margin-left: -40px;
   }
   
