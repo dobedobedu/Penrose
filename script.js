@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Mobile detection
   let isMobile = window.innerWidth <= 768;
+  let isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
   
   // Update the total steps display
   totalStepsElem.textContent = totalSteps.toString().padStart(2, '0');
@@ -65,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   
-  // Function to scroll to a specific section with improved behavior
+  // Function to scroll to a specific section with improved behavior for iOS
   function scrollToSection(index) {
     if (isScrolling || index < 1 || index > totalSteps) return;
     
@@ -74,25 +75,44 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const targetSection = document.querySelector(`.step-section[data-step="${index}"]`);
     if (targetSection) {
-      // On mobile, use scrollIntoView which works better with snap points
-      if (isMobile) {
+      if (isIOS) {
+        // iOS-specific scroll handling - use a more direct approach
+        const offset = targetSection.offsetTop;
+        stepsContainer.scrollTo({
+          top: offset,
+          behavior: 'auto' // Use 'auto' instead of 'smooth' for iOS
+        });
+        
+        // Force a reflow to ensure the scroll completes
+        stepsContainer.offsetHeight;
+        
+        // Set a flag to prevent other scrolling during this operation
+        setTimeout(() => {
+          isScrolling = false;
+        }, 300); // Shorter timeout for iOS
+      } else if (isMobile) {
+        // For non-iOS mobile devices
         targetSection.scrollIntoView({
           behavior: 'smooth',
           block: 'start'
         });
+        
+        setTimeout(() => {
+          isScrolling = false;
+        }, 600);
       } else {
-        // On desktop, use scrollTo which is more precise
+        // Desktop behavior
         const offset = targetSection.offsetTop;
         stepsContainer.scrollTo({
           top: offset,
           behavior: 'smooth'
         });
+        
+        setTimeout(() => {
+          isScrolling = false;
+        }, 600);
       }
     }
-    
-    setTimeout(() => {
-      isScrolling = false;
-    }, 600);
   }
   
   // Function to update UI based on current active section
@@ -195,6 +215,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { passive: true });
   
   stepsContainer.addEventListener('touchend', (e) => {
+    if (isIOS && isScrolling) return; // Prevent handling during animation on iOS
+    
     touchEndY = e.changedTouches[0].clientY;
     
     // Calculate swipe distance and direction
@@ -206,7 +228,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const direction = touchDistance > 0 ? 1 : -1; // 1 = up, -1 = down
       
       // If swiping up, go to next step; if swiping down, go to previous step
-      // This makes the navigation more intuitive and responsive
       if (direction === 1 && activeSection < totalSteps) {
         // Only if sufficient time has passed since last swipe (300ms)
         if (now - lastSwipeTime > 300) {
