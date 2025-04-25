@@ -265,6 +265,8 @@ body {
     margin-left: 0;
     height: auto;
     min-height: 55vh;
+    /* Disable inertial scrolling to prevent overshoot */
+    -webkit-overflow-scrolling: auto;
   }
   
   .step-section {
@@ -320,8 +322,14 @@ body {
     height: auto;
     overflow-y: auto;
     padding-bottom: 60px; /* Add padding at the bottom for better scrolling */
-    scroll-behavior: smooth;
-    scroll-snap-type: y proximity; /* Changed from mandatory to proximity for better experience */
+    /* Important for mobile: disable native smooth scrolling */
+    scroll-behavior: auto;
+    /* Change to proximity for better control */
+    scroll-snap-type: y proximity;
+    /* Disable inertial scrolling to prevent overshoot */
+    -webkit-overflow-scrolling: auto;
+    /* Remove touch-action to ensure our JS handles all touch events */
+    touch-action: pan-y;
   }
   
   /* Make each step section taller to prevent skipping */
@@ -334,7 +342,7 @@ body {
     justify-content: flex-end; /* Changed from center to flex-end to align content to bottom */
     position: relative;
     scroll-margin-top: 40vh; /* Offset for sticky header */
-    scroll-snap-align: end; /* Changed from start to end to snap to bottom */
+    scroll-snap-align: start; /* Changed back to start with the new touch handlers */
     scroll-snap-stop: always; /* Force stopping at each section */
   }
   
@@ -422,7 +430,7 @@ body {
     min-height: 65vh;
     padding: 1.5rem 0.75rem 7rem 0.75rem; /* More bottom padding - increased to 7rem */
     justify-content: flex-end; /* Ensure text content aligns to bottom only */
-    scroll-snap-align: end; /* Force snap to bottom only */
+    scroll-snap-align: start; /* Force snap to one direction */
     scroll-snap-stop: always; /* Ensure it always stops at each section */
     display: flex;
     align-items: flex-start; /* Align content to left */
