@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const totalStepsElem = document.getElementById('total-steps');
   const totalSteps = stepSections.length;
   const glowingBall = document.querySelector('.glowing-ball');
+  const penroseContainer = document.querySelector('.penrose-image-container');
   
   // Update the total steps display
   totalStepsElem.textContent = totalSteps.toString().padStart(2, '0');
@@ -23,6 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Get position from the marker's style (more precise)
     const left = parseFloat(marker.style.left) || 0;
     const top = parseFloat(marker.style.top) || 0;
+    
+    // Make sure transition is enabled
+    glowingBall.style.transition = 'left 0.8s ease, top 0.8s ease';
     
     // Position the ball at the marker with a smooth transition
     glowingBall.style.left = `${left}px`;
@@ -69,7 +73,21 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Initialize by setting the first section as active
-  updateActiveSection(1);
+  // Short timeout to ensure everything is loaded
+  setTimeout(() => {
+    // Initial ball positioning without transition
+    glowingBall.style.transition = 'none';
+    moveGlowingBall(1);
+    
+    // Force reflow
+    penroseContainer.offsetWidth;
+    
+    // Re-enable transitions
+    setTimeout(() => {
+      glowingBall.style.transition = 'left 0.8s ease, top 0.8s ease';
+      updateActiveSection(1);
+    }, 50);
+  }, 100);
   
   // Handle scroll events on the steps container to detect current section
   stepsContainer.addEventListener('scroll', () => {
@@ -217,10 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
   
-  // Initialize the glowing ball position
-  moveGlowingBall(1);
-  
-  // Add a click event to step markers to allow direct navigation
+  // Add a click event to step markers to allow direct navigation (for development)
   document.querySelectorAll('.step-marker').forEach((marker, index) => {
     marker.addEventListener('click', () => {
       const targetSection = index + 1;
@@ -246,5 +261,20 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Update active section
     updateActiveSection(1);
+  });
+  
+  // Handle window resize events to ensure the ball stays properly positioned
+  window.addEventListener('resize', () => {
+    // Immediately update the ball position without animation
+    glowingBall.style.transition = 'none';
+    moveGlowingBall(activeSection);
+    
+    // Force reflow
+    penroseContainer.offsetWidth;
+    
+    // Re-enable transitions after a short delay
+    setTimeout(() => {
+      glowingBall.style.transition = 'left 0.8s ease, top 0.8s ease';
+    }, 50);
   });
 });
