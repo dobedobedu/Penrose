@@ -31,6 +31,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Position the ball at the marker with a smooth transition
     glowingBall.style.left = `${left}px`;
     glowingBall.style.top = `${top}px`;
+    
+    // Update step indicator
+    currentStepElem.textContent = index.toString().padStart(2, '0');
   }
   
   // Function to update UI based on current active section
@@ -41,35 +44,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // Ensure index is within bounds
     if (index < 1 || index > totalSteps) return;
     
-    // Remove active and adjacent classes from all sections
-    stepSections.forEach(section => {
-      section.classList.remove('active', 'adjacent');
-    });
-    
-    // Add active class to current section
-    stepSections[index - 1].classList.add('active');
-    
-    // Add adjacent class to sections before and after
-    if (index > 1) {
-      stepSections[index - 2].classList.add('adjacent');
-    }
-    if (index < totalSteps) {
-      stepSections[index].classList.add('adjacent');
-    }
-    
-    // Move the glowing ball
+    // Move the glowing ball right away
     moveGlowingBall(index);
-    
-    // Update step indicator
-    currentStepElem.textContent = index.toString().padStart(2, '0');
     
     // Update active section tracker
     activeSection = index;
-    
-    // Make sure the step content is visible
-    const activeContent = stepSections[index - 1].querySelector('.step-content');
-    activeContent.style.opacity = 1;
-    activeContent.style.transform = 'translateY(0)';
   }
 
   // Initialize by setting the first section as active
@@ -127,13 +106,13 @@ document.addEventListener("DOMContentLoaded", () => {
       behavior: 'smooth'
     });
     
-    // Update active section
+    // Update active section immediately
     updateActiveSection(targetSection);
     
     // Reset scrolling flag after animation completes
     setTimeout(() => {
       isScrolling = false;
-    }, 1000);
+    }, 800); // Shorter time for better interactivity
   }, { passive: false });
   
   // Add keyboard navigation
@@ -163,26 +142,27 @@ document.addEventListener("DOMContentLoaded", () => {
         behavior: 'smooth'
       });
       
-      // Update active section
+      // Update active section immediately
       updateActiveSection(targetSection);
       
       // Reset scrolling flag after animation completes
       setTimeout(() => {
         isScrolling = false;
-      }, 1000);
+      }, 800);
     }
   });
   
   // Add touch swipe handling for mobile devices
   let touchStartY = 0;
+  let isTouching = false;
   
   stepsContainer.addEventListener('touchstart', (e) => {
     touchStartY = e.touches[0].clientY;
+    isTouching = true;
   }, { passive: true });
   
   stepsContainer.addEventListener('touchmove', (e) => {
-    if (isScrolling) {
-      e.preventDefault();
+    if (!isTouching || isScrolling) {
       return;
     }
     
@@ -190,13 +170,52 @@ document.addEventListener("DOMContentLoaded", () => {
     const diff = touchStartY - touchY;
     
     // If significant swipe detected
-    if (Math.abs(diff) > 50) {
+    if (Math.abs(diff) > 30) { // Reduced threshold for better response
       e.preventDefault();
       
       const direction = diff > 0 ? 1 : -1;
       let targetSection = activeSection + direction;
       
       // Ensure target section is within bounds
+      targetSection = Math.max(1, Math.min(targetSection, totalSteps));
+      
+      if (targetSection !== activeSection) {
+        isScrolling = true;
+        isTouching = false;
+        
+        // Smooth scroll to target section
+        stepsContainer.scrollTo({
+          top: (targetSection - 1) * window.innerHeight,
+          behavior: 'smooth'
+        });
+        
+        // Update active section immediately
+        updateActiveSection(targetSection);
+        
+        // Reset scrolling flag after animation completes
+        setTimeout(() => {
+          isScrolling = false;
+        }, 800);
+      }
+    }
+  }, { passive: false });
+  
+  stepsContainer.addEventListener('touchend', () => {
+    isTouching = false;
+  }, { passive: true });
+  
+  // Add direct click navigation by clicking on steps (for mobile especially)
+  Array.from(stepSections).forEach((section, index) => {
+    section.addEventListener('click', () => {
+      if (isScrolling) return;
+      
+      // Determine if we should go to the next or previous section
+      const rect = section.getBoundingClientRect();
+      const clickY = rect.top + (rect.height / 2);
+      const windowMiddle = window.innerHeight / 2;
+      const direction = clickY > windowMiddle ? -1 : 1;
+      
+      let targetSection = activeSection + direction;
       targetSection = Math.max(1, Math.min(targetSection, totalSteps));
       
       if (targetSection !== activeSection) {
@@ -208,46 +227,14 @@ document.addEventListener("DOMContentLoaded", () => {
           behavior: 'smooth'
         });
         
-        // Update active section
+        // Update active section immediately
         updateActiveSection(targetSection);
         
         // Reset scrolling flag after animation completes
         setTimeout(() => {
           isScrolling = false;
-        }, 1000);
-        
-        // Update touch start for continued swiping
-        touchStartY = touchY;
+        }, 800);
       }
-    }
-  }, { passive: false });
-  
-  // Make sure all sections' content is properly initialized
-  stepSections.forEach((section, index) => {
-    const content = section.querySelector('.step-content');
-    if (index === 0) {
-      // First section is active initially
-      content.style.opacity = 1;
-      content.style.transform = 'translateY(0)';
-    } else {
-      content.style.opacity = 0;
-      content.style.transform = 'translateY(20px)';
-    }
-  });
-  
-  // Add a click event to step markers to allow direct navigation (for development)
-  document.querySelectorAll('.step-marker').forEach((marker, index) => {
-    marker.addEventListener('click', () => {
-      const targetSection = index + 1;
-      
-      // Scroll to that section
-      stepsContainer.scrollTo({
-        top: (targetSection - 1) * window.innerHeight,
-        behavior: 'smooth'
-      });
-      
-      // Update active section
-      updateActiveSection(targetSection);
     });
   });
   
@@ -277,4 +264,21 @@ document.addEventListener("DOMContentLoaded", () => {
       glowingBall.style.transition = 'left 0.8s ease, top 0.8s ease';
     }, 50);
   });
+  
+  // For mobile: ensure ball position stays synced with text content
+  function checkVisibleSection() {
+    if (window.innerWidth <= 768) {
+      const scrollPosition = stepsContainer.scrollTop;
+      const sectionHeight = window.innerHeight;
+      const viewportMiddle = scrollPosition + sectionHeight / 2;
+      const sectionIndex = Math.floor(viewportMiddle / sectionHeight) + 1;
+      
+      if (sectionIndex !== activeSection && sectionIndex > 0 && sectionIndex <= totalSteps) {
+        updateActiveSection(sectionIndex);
+      }
+    }
+  }
+  
+  // Run the check periodically on mobile to ensure synchronization
+  setInterval(checkVisibleSection, 500);
 });
