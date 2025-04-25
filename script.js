@@ -15,6 +15,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let isMobile = window.innerWidth <= 768;
   let isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream || /MacIntel/.test(navigator.platform) && navigator.maxTouchPoints > 1;
   
+  // Set mobile-view class on body immediately if on mobile
+  if (isMobile) {
+    document.body.classList.add('mobile-view');
+  } else {
+    document.body.classList.remove('mobile-view');
+  }
+  
   // Update the total steps display
   totalStepsElem.textContent = totalSteps.toString().padStart(2, '0');
   
@@ -40,6 +47,40 @@ document.addEventListener("DOMContentLoaded", () => {
     "Demo Day",
     "Feedback Collection, Reflect and Connect the Dots"
   ];
+  
+  // Function to ensure all step content is visible for mobile
+  function forceContentVisibility() {
+    // Only needed on mobile
+    if (!isMobile) return;
+    
+    // Make all sections visible
+    stepSections.forEach(section => {
+      section.style.display = "block";
+      section.style.visibility = "visible";
+      section.style.opacity = "1";
+      
+      // Make the content inside visible too
+      const content = section.querySelector('.step-content');
+      if (content) {
+        content.style.display = "block";
+        content.style.visibility = "visible";
+        content.style.opacity = "1";
+        content.style.transform = "none";
+      }
+    });
+  }
+  
+  // Ensure the Penrose container is properly sized for mobile
+  function adjustPenroseContainerForMobile() {
+    if (!isMobile) return;
+    
+    const containerElement = document.querySelector('.penrose-container');
+    if (containerElement) {
+      // Set mobile-friendly height
+      containerElement.style.height = window.innerWidth <= 480 ? '20vh' : '23vh';
+      containerElement.style.minHeight = window.innerWidth <= 480 ? '130px' : '150px';
+    }
+  }
   
   // Function to move the glowing ball to a step marker with verification
   function moveGlowingBall(index) {
@@ -74,28 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
         section.classList.add('active');
       } else {
         section.classList.remove('active');
-      }
-    });
-  }
-  
-  // Function to ensure all step content is visible for mobile
-  function forceContentVisibility() {
-    // Only needed on mobile
-    if (!isMobile) return;
-    
-    // Make all sections visible
-    stepSections.forEach(section => {
-      section.style.display = "block";
-      section.style.visibility = "visible";
-      section.style.opacity = "1";
-      
-      // Make the content inside visible too
-      const content = section.querySelector('.step-content');
-      if (content) {
-        content.style.display = "block";
-        content.style.visibility = "visible";
-        content.style.opacity = "1";
-        content.style.transform = "none";
       }
     });
   }
@@ -232,15 +251,11 @@ document.addEventListener("DOMContentLoaded", () => {
       // Force all content to be immediately visible
       forceContentVisibility();
       
-      // Add special styling to fix the layout for mobile
+      // Add mobile class to body
       document.body.classList.add('mobile-view');
       
-      // Reduce the height of the Penrose container to show more content
-      const penroseContainerElement = document.querySelector('.penrose-container');
-      if (penroseContainerElement) {
-        penroseContainerElement.style.height = isIOS ? '20vh' : '25vh';
-        penroseContainerElement.style.minHeight = isIOS ? '150px' : '180px';
-      }
+      // Adjust Penrose container size
+      adjustPenroseContainerForMobile();
     }
     
     penroseContainer.offsetWidth; // Force reflow
@@ -404,11 +419,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Adjust the Penrose container if on mobile
     if (isMobile) {
-      const penroseContainerElement = document.querySelector('.penrose-container');
-      if (penroseContainerElement) {
-        penroseContainerElement.style.height = isIOS ? '20vh' : '25vh';
-        penroseContainerElement.style.minHeight = isIOS ? '150px' : '180px';
-      }
+      adjustPenroseContainerForMobile();
       
       // Force content visibility if switching to mobile
       if (!wasMobile) {
@@ -461,7 +472,7 @@ document.addEventListener("DOMContentLoaded", () => {
       
       entries.forEach(entry => {
         // Use lower threshold values for easier scrolling detection
-        const threshold = isMobile ? 0.15 : 0.3;
+        const threshold = isMobile ? 0.1 : 0.3;
         
         if (entry.isIntersecting && entry.intersectionRatio > threshold) {
           const section = entry.target;
@@ -474,7 +485,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }, {
       root: stepsContainer,
-      threshold: isMobile ? [0.1, 0.15, 0.2] : [0.3, 0.5, 0.7] // Lower thresholds for mobile for easier detection
+      threshold: isMobile ? [0.05, 0.1, 0.2] : [0.3, 0.5, 0.7] // Lower thresholds for mobile for easier detection
     });
     
     stepSections.forEach(section => {
@@ -482,28 +493,37 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   
-  // Fix for iOS scroll issue - ensure content is visible
-  if (isIOS) {
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        // Force all content to be immediately visible
-        forceContentVisibility();
-        
-        // Force step 1 to be visible on iOS
-        const firstSection = document.querySelector('.step-section[data-step="1"]');
-        if (firstSection) {
+  // Handle document load event to ensure all content is visible after full page load
+  window.addEventListener('load', () => {
+    if (isMobile) {
+      // Force all sections to be visible
+      forceContentVisibility();
+      
+      // Add special mobile class
+      document.body.classList.add('mobile-view');
+      
+      // Adjust container height
+      adjustPenroseContainerForMobile();
+      
+      // Fix specific issues with Safari/iOS
+      if (isIOS) {
+        setTimeout(() => {
           // Reset scroll position
           stepsContainer.scrollTop = 0;
           
-          // After a short delay, scroll to first section
-          setTimeout(() => {
+          // Force visibility of all sections
+          forceContentVisibility();
+          
+          // First section special handling
+          const firstSection = document.querySelector('.step-section[data-step="1"]');
+          if (firstSection) {
             firstSection.scrollIntoView({
               block: 'start',
               behavior: 'auto'
             });
-          }, 50);
-        }
-      }, 300);
-    });
-  }
+          }
+        }, 300);
+      }
+    }
+  });
 });
