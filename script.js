@@ -8,9 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const totalSteps = stepSections.length;
   const glowingBall = document.querySelector('.glowing-ball');
   const penroseContainer = document.querySelector('.penrose-image-container');
+  const navUp = document.querySelector('.nav-up');
+  const navDown = document.querySelector('.nav-down');
   
   // Mobile detection
-  const isMobile = window.innerWidth <= 768;
+  let isMobile = window.innerWidth <= 768;
   
   // Update the total steps display
   totalStepsElem.textContent = totalSteps.toString().padStart(2, '0');
@@ -41,13 +43,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // Function to move the glowing ball to a step marker
   function moveGlowingBall(index) {
     const marker = stepMarkers[index - 1];
-    if (!marker) return; // Exit if marker doesn't exist
+    if (!marker) return;
     
-    // Get position from the marker's style (more precise)
     const left = parseFloat(marker.style.left) || 0;
     const top = parseFloat(marker.style.top) || 0;
     
-    // Position the ball at the marker with a gentle transition
     glowingBall.style.transition = 'left 0.6s ease-out, top 0.6s ease-out';
     glowingBall.style.left = `${left}px`;
     glowingBall.style.top = `${top}px`;
@@ -55,42 +55,57 @@ document.addEventListener("DOMContentLoaded", () => {
     // Update step indicator
     currentStepElem.textContent = index.toString().padStart(2, '0');
     
-    // Log for debugging
-    console.log(`Moving to step ${index}: ${stepTitles[index-1]}`);
+    // Add active class to current section and remove from others
+    stepSections.forEach((section, i) => {
+      if (i + 1 === index) {
+        section.classList.add('active');
+      } else {
+        section.classList.remove('active');
+      }
+    });
+  }
+  
+  // Function to scroll to a specific section
+  function scrollToSection(index) {
+    if (isScrolling || index < 1 || index > totalSteps) return;
+    
+    isScrolling = true;
+    updateActiveSection(index);
+    
+    const targetSection = document.querySelector(`.step-section[data-step="${index}"]`);
+    if (targetSection) {
+      const offset = targetSection.offsetTop;
+      stepsContainer.scrollTo({
+        top: offset,
+        behavior: 'smooth'
+      });
+    }
+    
+    setTimeout(() => {
+      isScrolling = false;
+    }, 600);
   }
   
   // Function to update UI based on current active section
   function updateActiveSection(index) {
-    // Don't update if it's the same section
     if (index === activeSection) return;
-    
-    // Ensure index is within bounds
     if (index < 1 || index > totalSteps) return;
     
-    // Move the glowing ball immediately
     moveGlowingBall(index);
-    
-    // Update active section tracker
     activeSection = index;
+    
+    // Update navigation arrows state
+    updateNavigationArrows();
   }
 
-  // Initialize by setting the first section as active
-  // Short timeout to ensure everything is loaded
-  setTimeout(() => {
-    // Initial ball positioning without transition
-    glowingBall.style.transition = 'none';
-    moveGlowingBall(1);
+  // Function to update navigation arrows visibility
+  function updateNavigationArrows() {
+    if (isMobile) return;
     
-    // Force reflow
-    penroseContainer.offsetWidth;
-    
-    // Re-enable transitions
-    setTimeout(() => {
-      glowingBall.style.transition = 'left 0.6s ease-out, top 0.6s ease-out';
-      updateActiveSection(1);
-    }, 50);
-  }, 100);
-  
+    navUp.classList.toggle('disabled', activeSection === 1);
+    navDown.classList.toggle('disabled', activeSection === totalSteps);
+  }
+
   // Function to get the most visible section
   function getMostVisibleSection() {
     let maxVisibility = 0;
@@ -100,15 +115,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const rect = section.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
       
-      // Calculate how much of the section is visible
       const visibleTop = Math.max(0, rect.top);
       const visibleBottom = Math.min(viewportHeight, rect.bottom);
       const visibleHeight = Math.max(0, visibleBottom - visibleTop);
       
-      // Calculate visibility as a percentage of the section's height
       const visibility = visibleHeight / rect.height;
       
-      // Update most visible section if this one is more visible
       if (visibility > maxVisibility) {
         maxVisibility = visibility;
         mostVisibleIndex = index + 1;
@@ -118,48 +130,68 @@ document.addEventListener("DOMContentLoaded", () => {
     return mostVisibleIndex;
   }
   
+  // Initialize
+  setTimeout(() => {
+    glowingBall.style.transition = 'none';
+    moveGlowingBall(1);
+    
+    penroseContainer.offsetWidth; // Force reflow
+    
+    setTimeout(() => {
+      glowingBall.style.transition = 'left 0.6s ease-out, top 0.6s ease-out';
+      updateActiveSection(1);
+      updateNavigationArrows();
+    }, 50);
+  }, 100);
+  
+  // Event Listeners
+  
+  // Navigation arrows click handlers
+  navUp?.addEventListener('click', () => {
+    if (activeSection > 1) {
+      scrollToSection(activeSection - 1);
+    }
+  });
+  
+  navDown?.addEventListener('click', () => {
+    if (activeSection < totalSteps) {
+      scrollToSection(activeSection + 1);
+    }
+  });
+
   // Improved scroll handler with debouncing
   stepsContainer.addEventListener('scroll', () => {
-    // Clear existing timeout
     if (scrollTimeout) {
       clearTimeout(scrollTimeout);
     }
     
-    // Set a new timeout
     scrollTimeout = setTimeout(() => {
       if (isScrolling) return;
       
-      // Get most visible section
       const mostVisibleSection = getMostVisibleSection();
       
-      // Update active section if different
       if (mostVisibleSection !== activeSection) {
         updateActiveSection(mostVisibleSection);
       }
-    }, isMobile ? 50 : 100); // Shorter timeout for mobile
+    }, isMobile ? 50 : 100);
   }, { passive: true });
   
   // Enhanced touch handling for mobile
   let touchStartY = 0;
   let touchEndY = 0;
   
-  // Detect touch start
   stepsContainer.addEventListener('touchstart', (e) => {
     touchStartY = e.touches[0].clientY;
   }, { passive: true });
   
-  // Handle touch end
   stepsContainer.addEventListener('touchend', (e) => {
     touchEndY = e.changedTouches[0].clientY;
     
-    // Check if we should detect this as a swipe
     const touchDistance = touchStartY - touchEndY;
     
-    // Only use swipe detection for long swipes
     if (Math.abs(touchDistance) > 50) {
       const direction = touchDistance > 0 ? 1 : -1;
       
-      // On mobile, immediately update the visible section after a swipe
       setTimeout(() => {
         const mostVisibleSection = getMostVisibleSection();
         updateActiveSection(mostVisibleSection);
@@ -167,63 +199,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }, { passive: true });
   
-  // Add click handler for total-steps to reset to first step
+  // Reset to first step when clicking total steps
   totalStepsElem.addEventListener('click', () => {
-    // Update active section
-    updateActiveSection(1);
-    
-    // Scroll to first section
-    stepsContainer.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+    scrollToSection(1);
   });
   
-  // Handle window resize events
+  // Handle window resize
   window.addEventListener('resize', () => {
-    // Update mobile detection
     const wasJustMobile = isMobile;
-    const isNowMobile = window.innerWidth <= 768;
+    isMobile = window.innerWidth <= 768;
     
-    // Immediately update the ball position without animation
     glowingBall.style.transition = 'none';
     moveGlowingBall(activeSection);
     
-    // Force reflow
     penroseContainer.offsetWidth;
     
-    // Re-enable transitions after a short delay
     setTimeout(() => {
       glowingBall.style.transition = 'left 0.6s ease-out, top 0.6s ease-out';
+      updateNavigationArrows();
     }, 50);
   });
-  
-  // Add IntersectionObserver for better section detection on mobile
-  if ('IntersectionObserver' in window) {
-    const sectionObserver = new IntersectionObserver((entries) => {
-      // Don't react during programmatic scrolling
-      if (isScrolling) return;
-      
-      entries.forEach(entry => {
-        if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-          const section = entry.target;
-          const sectionIndex = parseInt(section.dataset.step);
-          
-          if (sectionIndex !== activeSection) {
-            updateActiveSection(sectionIndex);
-          }
-        }
-      });
-    }, {
-      root: stepsContainer,
-      threshold: 0.5 // Trigger when section is 50% visible
-    });
-    
-    // Observe all step sections
-    stepSections.forEach(section => {
-      sectionObserver.observe(section);
-    });
-  }
   
   // Keyboard navigation
   document.addEventListener('keydown', (e) => {
@@ -240,27 +235,36 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (e.key === 'End') {
       targetSection = totalSteps;
     } else {
-      return; // Not a navigation key, do nothing
+      return;
     }
     
     if (targetSection !== activeSection) {
-      isScrolling = true;
-      
-      // Update active section immediately for smoother experience
-      updateActiveSection(targetSection);
-      
-      // Then scroll to section
-      const targetElement = document.querySelector(`.step-section[data-step="${targetSection}"]`);
-      if (targetElement) {
-        targetElement.scrollIntoView({
-          behavior: 'smooth'
-        });
-      }
-      
-      // Reset scrolling flag after animation completes
-      setTimeout(() => {
-        isScrolling = false;
-      }, 600);
+      scrollToSection(targetSection);
     }
   });
+
+  // Add IntersectionObserver for better section detection
+  if ('IntersectionObserver' in window) {
+    const sectionObserver = new IntersectionObserver((entries) => {
+      if (isScrolling) return;
+      
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+          const section = entry.target;
+          const sectionIndex = parseInt(section.dataset.step);
+          
+          if (sectionIndex !== activeSection) {
+            updateActiveSection(sectionIndex);
+          }
+        }
+      });
+    }, {
+      root: stepsContainer,
+      threshold: 0.5
+    });
+    
+    stepSections.forEach(section => {
+      sectionObserver.observe(section);
+    });
+  }
 });
