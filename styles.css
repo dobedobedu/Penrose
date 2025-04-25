@@ -163,7 +163,7 @@ body {
   margin-left: 50%;
   height: 100vh;
   overflow-y: scroll;
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y mandatory !important;
   -ms-overflow-style: none;
   scrollbar-width: none;
   scroll-behavior: smooth;
@@ -267,7 +267,8 @@ body {
     height: auto;
     padding: 1.5rem 1rem;
     scroll-snap-align: start;
-    scroll-margin-top: 45vh; /* Add margin to prevent overlap */
+    scroll-margin-top: 55vh; /* Add margin to prevent overlap */
+    padding-bottom: 4rem:
   }
   
   .penrose-title {
