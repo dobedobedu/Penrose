@@ -337,10 +337,11 @@ body {
   .step-section {
     min-height: 70vh; /* Taller sections ensure more precise scrolling */
     height: auto;
-    padding: 2rem 1rem 6rem 1rem; /* Increased bottom padding to 6rem */
+    /* Adjust padding to push content below stairs */
+    padding: 270px 1rem 6rem 1rem; /* Added top padding of 270px to push content below stairs */
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; /* Changed from center to flex-end to align content to bottom */
+    justify-content: flex-start; /* Changed to flex-start to align from top with our new top padding */
     position: relative;
     scroll-margin-top: 40vh; /* Offset for sticky header */
     scroll-snap-align: start; /* Changed back to start with the new touch handlers */
@@ -354,7 +355,7 @@ body {
     transform: none !important; /* No transform */
     transition: none !important; /* No transitions */
     padding-bottom: 3rem; /* More padding to prevent content being cut off */
-    margin-top: auto; /* Push content to the bottom */
+    margin-top: 0; /* Reset margin-top to 0 since we're using padding-top on section */
   }
   
   .sign-up-button {
@@ -429,8 +430,9 @@ body {
   
   .step-section {
     min-height: 65vh;
-    padding: 1.5rem 0.75rem 7rem 0.75rem; /* More bottom padding - increased to 7rem */
-    justify-content: flex-end; /* Ensure text content aligns to bottom only */
+    /* Adjust padding to push content below stairs on smaller screens */
+    padding: 240px 0.75rem 7rem 0.75rem; /* Adjusted top padding for smaller screens */
+    justify-content: flex-start; /* Ensure text content starts from top */
     scroll-snap-align: start; /* Force snap to one direction */
     scroll-snap-stop: always; /* Ensure it always stops at each section */
     display: flex;
@@ -472,7 +474,7 @@ body {
   .step-content {
     max-width: 100%;
     margin-bottom: 0; /* Remove bottom margin */
-    margin-top: auto; /* Push content to bottom */
+    margin-top: 0; /* Reset margin */
     padding-bottom: 1rem; /* Add padding instead */
   }
   
