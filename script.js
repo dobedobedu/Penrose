@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const viewportHeight = window.innerHeight;
     const scrollTop = stepsContainer.scrollTop;
     
-    stepSections.forEach((section, index) => {
+    stepSections.forEach((section) => {
       const rect = section.getBoundingClientRect();
       const sectionStep = parseInt(section.dataset.step, 10);
       
@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // On mobile, adjust calculations to account for the sticky header
       if (isMobile) {
         // For iOS and small mobile screens, require more visibility to consider a section active
-        const headerHeight = isIOS ? viewportHeight * 0.4 : viewportHeight * 0.38; // Reduced threshold for easier scrolling
+        const headerHeight = isMobile ? viewportHeight * 0.3 : 0; // Reduced threshold for easier scrolling
         visibleTop = Math.max(headerHeight, rect.top);
         
         // Special case for step 1 on iOS for immediate visibility on load
@@ -352,7 +352,7 @@ document.addEventListener("DOMContentLoaded", () => {
       
       entries.forEach(entry => {
         // Use lower threshold values for easier scrolling detection
-        const threshold = isMobile ? (isIOS ? 0.2 : 0.25) : 0.3;
+        const threshold = isMobile ? (isIOS ? 0.15 : 0.2) : 0.3;
         
         if (entry.isIntersecting && entry.intersectionRatio > threshold) {
           const section = entry.target;
@@ -365,7 +365,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }, {
       root: stepsContainer,
-      threshold: isMobile ? [0.2, 0.3, 0.4] : [0.3, 0.5, 0.7] // Lower thresholds for mobile for easier detection
+      threshold: isMobile ? [0.15, 0.2, 0.3] : [0.3, 0.5, 0.7] // Lower thresholds for mobile for easier detection
     });
     
     stepSections.forEach(section => {
@@ -373,7 +373,35 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   
-  // Fix for iOS scroll issue on page load - ensure content is visible
+  // Make content initially visible on mobile
+  if (isMobile) {
+    setTimeout(() => {
+      // Force step content to be visible on mobile devices
+      document.querySelectorAll('.step-content').forEach(content => {
+        content.style.opacity = "1";
+        content.style.transform = "none";
+      });
+      
+      // First section specific handling
+      const firstSection = document.querySelector('.step-section[data-step="1"]');
+      if (firstSection) {
+        // Reset scroll position and ensure first step is visible
+        stepsContainer.scrollTop = 0;
+        
+        setTimeout(() => {
+          firstSection.scrollIntoView({
+            block: 'start',
+            behavior: 'auto'
+          });
+          
+          // Make sure step 1 is active
+          updateActiveSection(1);
+        }, 150);
+      }
+    }, 300);
+  }
+  
+  // Fix for iOS scroll issue - ensure content is visible
   if (isIOS) {
     window.addEventListener('load', () => {
       setTimeout(() => {
@@ -389,9 +417,19 @@ document.addEventListener("DOMContentLoaded", () => {
               block: 'start',
               behavior: 'auto'
             });
+            
+            // Update active section after scrolling
+            updateActiveSection(1);
           }, 50);
         }
       }, 300);
     });
   }
+  
+  // Add direct click support for mobile - allows tapping on step indicator to reset
+  currentStepElem.addEventListener('click', () => {
+    if (activeSection > 1) {
+      scrollToSection(activeSection - 1);
+    }
+  });
 });
