@@ -221,6 +221,42 @@ body {
   max-width: 90%;
 }
 
+/* Navigation arrows for desktop */
+.navigation-arrows {
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.nav-arrow {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.nav-arrow:hover {
+  background-color: var(--accent-color);
+  color: white;
+  transform: scale(1.1);
+}
+
+.nav-arrow.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1200px) {
   .step-content h2 {
@@ -302,6 +338,11 @@ body {
 }
 
 @media (max-width: 768px) {
+  /* Hide navigation arrows on mobile */
+  .navigation-arrows {
+    display: none;
+  }
+
   /* Make the Penrose container sticky at the top */
   .penrose-container {
     position: sticky;
@@ -324,7 +365,7 @@ body {
     overflow-y: auto;
     padding-bottom: 60px; /* Add padding at the bottom for better scrolling */
     scroll-behavior: smooth;
-    scroll-snap-type: y proximity; /* Changed from mandatory to proximity for better experience */
+    scroll-snap-type: y proximity; /* Changed to proximity for easier scrolling */
   }
   
   /* Ensure the step content is always visible */
@@ -398,10 +439,11 @@ body {
   
   /* Position all sections for iOS to avoid text overlap with stairs */
   .step-section {
-    padding-top: 55vh; /* Add significant top padding to push content below staircase */
+    padding-top: 45vh; /* Reduced top padding to make content more visible */
     justify-content: flex-start; /* Align content to start (top) after padding */
     min-height: 100vh; /* Full viewport height */
     padding-bottom: 8rem; /* More bottom padding */
+    scroll-snap-stop: normal; /* Make scrolling less rigid */
   }
 }
 
@@ -418,10 +460,10 @@ body {
   
   .step-section {
     min-height: 100vh;
-    padding: 50vh 0.75rem 8rem 0.75rem; /* Significant top padding to push content below staircase */
+    padding: 40vh 0.75rem 8rem 0.75rem; /* Reduced top padding to show content better */
     justify-content: flex-start; /* Align to top of available area after padding */
     scroll-snap-align: start; /* Snap to start */
-    scroll-snap-stop: always;
+    scroll-snap-stop: normal; /* Make scrolling less rigid for easier navigation */
     display: flex;
     align-items: flex-start;
   }

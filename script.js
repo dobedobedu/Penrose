@@ -41,10 +41,19 @@ document.addEventListener("DOMContentLoaded", () => {
     "Feedback Collection, Reflect and Connect the Dots"
   ];
   
-  // Function to move the glowing ball to a step marker
+  // Function to move the glowing ball to a step marker with verification
   function moveGlowingBall(index) {
+    // Ensure index is valid
+    if (index < 1 || index > totalSteps) {
+      console.warn(`Invalid step index: ${index}`);
+      return;
+    }
+    
     const marker = stepMarkers[index - 1];
-    if (!marker) return;
+    if (!marker) {
+      console.warn(`Step marker not found for index: ${index}`);
+      return;
+    }
     
     const left = parseFloat(marker.style.left) || 0;
     const top = parseFloat(marker.style.top) || 0;
@@ -60,7 +69,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Add active class to current section and remove from others
     stepSections.forEach((section, i) => {
-      if (i + 1 === index) {
+      const sectionStep = parseInt(section.dataset.step, 10);
+      if (sectionStep === index) {
         section.classList.add('active');
       } else {
         section.classList.remove('active');
@@ -78,16 +88,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const targetSection = document.querySelector(`.step-section[data-step="${index}"]`);
     if (targetSection) {
       if (isIOS) {
-        // iOS-specific scroll handling with smoother behavior
-        const offset = targetSection.offsetTop;
-        
-        // For iOS, use smooth scrolling with specific offset adjustment for better positioning
-        // This helps ensure content is not hidden behind the stairs
-        const scrollTopValue = offset - (window.innerHeight * 0.05);
-        
-        stepsContainer.scrollTo({
-          top: scrollTopValue,
-          behavior: 'smooth'
+        // iOS-specific scroll handling with easier scrolling
+        // Use a more direct approach for iOS to ensure content is visible
+        targetSection.scrollIntoView({
+          behavior: 'auto', // Use 'auto' instead of 'smooth' for more reliable iOS behavior
+          block: 'start'
         });
         
         // Force a reflow to ensure the scroll completes
@@ -96,9 +101,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // Set a flag to prevent other scrolling during this operation
         setTimeout(() => {
           isScrolling = false;
-        }, 500); // Slightly longer timeout for iOS
+        }, 200); // Shorter timeout for iOS for better responsiveness
       } else if (isMobile) {
-        // For non-iOS mobile devices - optimized approach
+        // For non-iOS mobile devices - optimized approach with easier scrolling
         targetSection.scrollIntoView({
           behavior: 'smooth',
           block: 'start'
@@ -130,13 +135,15 @@ document.addEventListener("DOMContentLoaded", () => {
     moveGlowingBall(index);
     activeSection = index;
     
-    // Update navigation arrows state
-    updateNavigationArrows();
+    // Update navigation arrows state - only for desktop
+    if (!isMobile) {
+      updateNavigationArrows();
+    }
   }
 
   // Function to update navigation arrows visibility
   function updateNavigationArrows() {
-    if (isMobile || !navUp || !navDown) return;
+    if (!navUp || !navDown) return;
     
     navUp.classList.toggle('disabled', activeSection === 1);
     navDown.classList.toggle('disabled', activeSection === totalSteps);
@@ -153,6 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     stepSections.forEach((section, index) => {
       const rect = section.getBoundingClientRect();
+      const sectionStep = parseInt(section.dataset.step, 10);
       
       // Calculate visibility with viewport adjustment for mobile
       let visibleTop = Math.max(0, rect.top);
@@ -161,11 +169,11 @@ document.addEventListener("DOMContentLoaded", () => {
       // On mobile, adjust calculations to account for the sticky header
       if (isMobile) {
         // For iOS and small mobile screens, require more visibility to consider a section active
-        const headerHeight = isIOS ? viewportHeight * 0.5 : viewportHeight * 0.45;
+        const headerHeight = isIOS ? viewportHeight * 0.4 : viewportHeight * 0.38; // Reduced threshold for easier scrolling
         visibleTop = Math.max(headerHeight, rect.top);
         
-        // If this is step 1 and we're on iOS, always consider it more visible initially
-        if (index === 0 && isIOS && scrollTop < viewportHeight) {
+        // Special case for step 1 on iOS for immediate visibility on load
+        if (sectionStep === 1 && isIOS && scrollTop < 50) {
           return mostVisibleIndex = 1;
         }
       }
@@ -175,7 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
       
       if (visibility > maxVisibility) {
         maxVisibility = visibility;
-        mostVisibleIndex = index + 1;
+        mostVisibleIndex = sectionStep; // Use the actual step number from dataset
       }
     });
     
@@ -194,22 +202,20 @@ document.addEventListener("DOMContentLoaded", () => {
       glowingBall.style.transition = isMobile ? 'left 0.4s ease-out, top 0.4s ease-out' : 'left 0.6s ease-out, top 0.6s ease-out';
       updateActiveSection(1);
       
-      // Adjust first section position on mobile
+      // Force step 1 to be visible on page load for mobile
       if (isMobile) {
-        // Force step 1 to be visible on load for mobile
         const firstSection = document.querySelector('.step-section[data-step="1"]');
         if (firstSection) {
-          stepsContainer.scrollTop = 0; // Reset scroll position
+          // Reset scroll position first
+          stepsContainer.scrollTop = 0;
           
-          // For iOS, ensure proper initial positioning
-          if (isIOS) {
-            setTimeout(() => {
-              firstSection.scrollIntoView({
-                block: 'start',
-                behavior: 'auto'
-              });
-            }, 100);
-          }
+          // Ensure first step is visible
+          setTimeout(() => {
+            firstSection.scrollIntoView({
+              block: 'start',
+              behavior: 'auto'
+            });
+          }, 100);
         }
       }
     }, 50);
@@ -217,18 +223,20 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Event Listeners
   
-  // Navigation arrows click handlers
-  navUp?.addEventListener('click', () => {
-    if (activeSection > 1) {
-      scrollToSection(activeSection - 1);
-    }
-  });
-  
-  navDown?.addEventListener('click', () => {
-    if (activeSection < totalSteps) {
-      scrollToSection(activeSection + 1);
-    }
-  });
+  // Navigation arrows click handlers - Desktop only
+  if (navUp && navDown && !isMobile) {
+    navUp.addEventListener('click', () => {
+      if (activeSection > 1) {
+        scrollToSection(activeSection - 1);
+      }
+    });
+    
+    navDown.addEventListener('click', () => {
+      if (activeSection < totalSteps) {
+        scrollToSection(activeSection + 1);
+      }
+    });
+  }
 
   // Improved scroll handler with debouncing
   stepsContainer.addEventListener('scroll', () => {
@@ -248,7 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, isMobile ? 30 : 100); // Reduced timeout for more responsive mobile experience
   }, { passive: true });
   
-  // Enhanced touch handling for mobile
+  // Enhanced touch handling for mobile with reduced sensitivity for easier scrolling
   let touchStartY = 0;
   let touchEndY = 0;
   let lastSwipeTime = 0;
@@ -258,7 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { passive: true });
   
   stepsContainer.addEventListener('touchend', (e) => {
-    if (isIOS && isScrolling) return; // Prevent handling during animation on iOS
+    if (isScrolling) return; // Prevent handling during animation
     
     touchEndY = e.changedTouches[0].clientY;
     
@@ -266,30 +274,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const touchDistance = touchStartY - touchEndY;
     const now = new Date().getTime();
     
-    // Only process swipes that are significant enough
-    if (Math.abs(touchDistance) > 30) { // Reduced threshold for easier detection
+    // Only process swipes that are significant enough but with lower threshold for easier navigation
+    if (Math.abs(touchDistance) > 50) { // Increased threshold to make it less sensitive
       const direction = touchDistance > 0 ? 1 : -1; // 1 = up, -1 = down
       
-      // If swiping up, go to next step; if swiping down, go to previous step
-      if (direction === 1 && activeSection < totalSteps) {
-        // Only if sufficient time has passed since last swipe (300ms)
-        if (now - lastSwipeTime > 300) {
-          lastSwipeTime = now;
+      // Only navigate if sufficient time has passed since last swipe to prevent accidental triggers
+      if (now - lastSwipeTime > 400) { // Increased delay between swipes
+        lastSwipeTime = now;
+        
+        // If swiping up, go to next step; if swiping down, go to previous step
+        if (direction === 1 && activeSection < totalSteps) {
           scrollToSection(activeSection + 1);
-        }
-      } else if (direction === -1 && activeSection > 1) {
-        if (now - lastSwipeTime > 300) {
-          lastSwipeTime = now;
+        } else if (direction === -1 && activeSection > 1) {
           scrollToSection(activeSection - 1);
         }
       }
     }
     
-    // On mobile, immediately update the visible section after a swipe
+    // Update the visible section after a swipe
     setTimeout(() => {
       const mostVisibleSection = getMostVisibleSection();
       updateActiveSection(mostVisibleSection);
-    }, 50); // Reduced from 100 to 50 for faster mobile response
+    }, 100);
   }, { passive: true });
   
   // Reset to first step when clicking total steps
@@ -299,7 +305,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Handle window resize with improved iOS detection
   window.addEventListener('resize', () => {
-    const wasJustMobile = isMobile;
     isMobile = window.innerWidth <= 768;
     isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream || /MacIntel/.test(navigator.platform) && navigator.maxTouchPoints > 1;
     
@@ -315,41 +320,43 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 50);
   });
   
-  // Keyboard navigation
-  document.addEventListener('keydown', (e) => {
-    if (isScrolling) return;
-    
-    let targetSection = activeSection;
-    
-    if (e.key === 'ArrowDown' || e.key === 'PageDown') {
-      targetSection = Math.min(activeSection + 1, totalSteps);
-    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-      targetSection = Math.max(activeSection - 1, 1);
-    } else if (e.key === 'Home') {
-      targetSection = 1;
-    } else if (e.key === 'End') {
-      targetSection = totalSteps;
-    } else {
-      return;
-    }
-    
-    if (targetSection !== activeSection) {
-      scrollToSection(targetSection);
-    }
-  });
+  // Keyboard navigation for desktop only
+  if (!isMobile) {
+    document.addEventListener('keydown', (e) => {
+      if (isScrolling) return;
+      
+      let targetSection = activeSection;
+      
+      if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+        targetSection = Math.min(activeSection + 1, totalSteps);
+      } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+        targetSection = Math.max(activeSection - 1, 1);
+      } else if (e.key === 'Home') {
+        targetSection = 1;
+      } else if (e.key === 'End') {
+        targetSection = totalSteps;
+      } else {
+        return;
+      }
+      
+      if (targetSection !== activeSection) {
+        scrollToSection(targetSection);
+      }
+    });
+  }
 
-  // Add IntersectionObserver for better section detection
+  // Add IntersectionObserver for better section detection with less strict thresholds
   if ('IntersectionObserver' in window) {
     const sectionObserver = new IntersectionObserver((entries) => {
       if (isScrolling) return;
       
       entries.forEach(entry => {
-        // Better threshold adjustment for mobile vs desktop
-        const threshold = isMobile ? (isIOS ? 0.4 : 0.3) : 0.3;
+        // Use lower threshold values for easier scrolling detection
+        const threshold = isMobile ? (isIOS ? 0.2 : 0.25) : 0.3;
         
         if (entry.isIntersecting && entry.intersectionRatio > threshold) {
           const section = entry.target;
-          const sectionIndex = parseInt(section.dataset.step);
+          const sectionIndex = parseInt(section.dataset.step, 10);
           
           if (sectionIndex !== activeSection) {
             updateActiveSection(sectionIndex);
@@ -358,7 +365,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }, {
       root: stepsContainer,
-      threshold: isMobile ? [0.4, 0.6, 0.8] : [0.3, 0.5, 0.7] // Adjusted thresholds for mobile
+      threshold: isMobile ? [0.2, 0.3, 0.4] : [0.3, 0.5, 0.7] // Lower thresholds for mobile for easier detection
     });
     
     stepSections.forEach(section => {
@@ -366,25 +373,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   
-  // Reset scrolling flag after animation completes - faster on mobile
-  window.addEventListener('scrollend', () => {
-    setTimeout(() => {
-      isScrolling = false;
-    }, isMobile ? 400 : 600); // Reduced timeout for mobile
-  });
-
   // Fix for iOS scroll issue on page load - ensure content is visible
   if (isIOS) {
     window.addEventListener('load', () => {
       setTimeout(() => {
-        // Force a small scroll to trigger layout calculations
-        window.scrollTo(0, 1);
-        window.scrollTo(0, 0);
-        
-        // Position the first section properly
+        // Force step 1 to be visible on iOS
         const firstSection = document.querySelector('.step-section[data-step="1"]');
         if (firstSection) {
-          firstSection.scrollIntoView({ block: 'start' });
+          // Reset scroll position
+          stepsContainer.scrollTop = 0;
+          
+          // After a short delay, scroll to first section
+          setTimeout(() => {
+            firstSection.scrollIntoView({
+              block: 'start',
+              behavior: 'auto'
+            });
+          }, 50);
         }
       }, 300);
     });
