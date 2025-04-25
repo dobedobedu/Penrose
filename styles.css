@@ -348,13 +348,14 @@ body {
     position: sticky;
     top: 0;
     width: 100%;
-    height: 35vh; /* Reduced height to show more content */
-    min-height: 220px;
+    height: 25vh; /* Further reduced height to show more content */
+    min-height: 180px; /* Reduced min-height */
     z-index: 10;
-    padding: 1rem;
+    padding: 0.5rem;
     background-color: var(--background-color);
     align-items: flex-start; /* Left align for mobile */
-    padding-left: 1.5rem;
+    justify-content: flex-start; /* Align content to top */
+    padding-left: 1rem;
   }
   
   /* Adjust steps container to fill remaining space */
@@ -365,19 +366,20 @@ body {
     overflow-y: auto;
     padding-bottom: 60px; /* Add padding at the bottom for better scrolling */
     scroll-behavior: smooth;
-    scroll-snap-type: y proximity; /* Changed to proximity for easier scrolling */
+    scroll-snap-type: none; /* Removed snapping for easier scrolling */
   }
   
   /* Fix step sections positioning */
   .step-section {
-    min-height: 65vh;
+    min-height: auto; /* Allow natural content height */
     height: auto;
-    padding: 1rem 1rem 4rem 1rem;
+    padding: 1rem 1rem 3rem 1rem; /* Reduced padding */
     justify-content: flex-start;
-    scroll-margin-top: 35vh; /* Match the penrose container height */
+    scroll-margin-top: 30vh; /* Match the penrose container height plus safety margin */
     scroll-snap-align: start;
     scroll-snap-stop: normal; /* Make scrolling less rigid */
     margin-top: 0;
+    margin-bottom: 1rem; /* Add space between sections */
   }
   
   /* Ensure the step content is always visible */
@@ -386,12 +388,13 @@ body {
     opacity: 1 !important; /* Always visible */
     transform: none !important; /* No transform */
     transition: none !important; /* No transitions */
-    padding-bottom: 2rem; /* More padding to prevent content being cut off */
-    margin-top: 0; /* Removed extra margin */
+    padding-top: 25vh; /* Add top padding to push content below the penrose container */
+    display: block !important; /* Ensure display */
+    visibility: visible !important; /* Ensure visibility */
   }
   
   .sign-up-button {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     margin-bottom: 0.25rem;
   }
   
@@ -399,11 +402,12 @@ body {
     text-align: left; /* Left-align on mobile as requested */
     padding-left: 0.5rem;
     top: 5%;
+    width: 90%;
   }
   
   .penrose-title h2 {
-    font-size: 1.3rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    margin-bottom: 0.3rem;
   }
   
   .step-content h2 {
@@ -417,16 +421,16 @@ body {
   }
   
   .tagline {
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
     text-align: left; /* Left-align on mobile */
   }
   
   /* Further scale down for mobile devices */
   .penrose-image-container {
-    transform: scale(0.65);
-    margin-top: 40px; /* Reduced top margin to push image higher */
-    margin-left: -30px; /* Adjust horizontal position */
+    transform: scale(0.55);
+    margin-top: 35px; /* Adjusted top margin */
+    margin-left: -40px; /* Adjust horizontal position */
   }
   
   /* Better positioning for the step indicator */
@@ -444,76 +448,70 @@ body {
   
   /* Ensure the glowing ball is visible on mobile */
   .glowing-ball {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     box-shadow: 0 0 20px 6px rgba(255, 107, 0, 0.8); /* Enhanced glow */
+  }
+  
+  /* Make all step-sections visible on mobile */
+  .steps-container .step-section[data-step] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 }
 
 /* Adjust for smaller mobile screens */
 @media (max-width: 480px) {
   .penrose-container {
-    height: 30vh; /* Reduced height to show more content */
-    min-height: 200px; /* Reduced min-height */
-    padding: 0.5rem;
-    justify-content: flex-start;
-    padding-top: 1rem; /* Less top padding */
+    height: 23vh; /* Further reduced height */
+    min-height: 160px; /* Reduced min-height */
   }
   
-  .step-section {
-    min-height: 70vh;
-    padding: 0.75rem 0.75rem 6rem 0.75rem; /* Reduced padding */
-    scroll-margin-top: 30vh; /* Match the penrose container height */
+  .step-content {
+    padding-top: 23vh; /* Match the penrose container height */
   }
   
   /* Adjust for smaller phones */
   .penrose-image-container {
-    transform: scale(0.55); /* Smaller scale */
-    margin-top: 30px; /* Less top margin */
-    margin-left: -40px; /* More left offset to ensure visibility */
+    transform: scale(0.45); /* Smaller scale */
+    margin-top: 30px; /* Adjusted top margin */
+    margin-left: -50px; /* More left offset to ensure visibility */
   }
   
   /* Smaller ball for very small screens */
   :root {
-    --ball-size: 14px; /* Adjusted for mobile */
+    --ball-size: 10px; /* Adjusted for mobile */
   }
   
   .sign-up-button {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
   
   .penrose-title {
-    text-align: left;
-    padding-left: 0.5rem;
-    top: 3%; /* Move up further */
+    top: 2%; /* Move up further */
   }
   
   .penrose-title h2 {
-    font-size: 1.1rem;
-    margin-bottom: 0.3rem;
+    font-size: 1rem;
   }
   
   .tagline {
-    font-size: 0.8rem;
-    margin-top: 0.3rem;
-    text-align: left;
+    font-size: 0.75rem;
   }
   
   .step-content h2 {
-    font-size: 1.3rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
   }
   
   .step-content p {
     font-size: 0.9rem;
     line-height: 1.4;
-    margin-bottom: 0;
   }
   
   /* Make step-indicator more visible */
   .step-indicator {
     bottom: 15px;
-    font-size: 1.1rem;
-    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    font-size: 1rem;
   }
 }
