@@ -6,63 +6,164 @@
   --accent-color: #FF6B00;
   --section-height: 100vh;
   --ball-size: 16px;
-  --step-bottom-margin: 3rem; /* Added margin for bottom spacing */
+  --step-bottom-margin: 4rem; /* Increased margin for better spacing */
+  --blur-background: rgba(255, 255, 255, 0.8);
+  --content-padding: 2rem;
 }
 
-/* ... [Previous CSS remains the same until media queries] ... */
+/* Base styles for all screens */
+.container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
 
+.penrose-container {
+  flex: 1;
+  position: fixed;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2rem;
+  background-color: var(--background-color);
+}
+
+.steps-container {
+  flex: 1;
+  overflow-y: auto;
+  margin-left: 50%;
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+}
+
+/* Step sections */
+.step-section {
+  min-height: 100vh;
+  padding: var(--content-padding);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  scroll-snap-align: start;
+}
+
+/* Step content with glassmorphism */
+.step-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: var(--blur-background);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease-out;
+}
+
+.step-section.active .step-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Navigation arrows for desktop */
+.navigation-arrows {
+  position: fixed;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  z-index: 100;
+}
+
+.nav-arrow {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--blur-background);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.nav-arrow:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: scale(1.1);
+}
+
+/* Mobile styles */
 @media (max-width: 768px) {
-  .step-section {
-    min-height: 55vh; /* Reduced from 70vh for better scrolling sensitivity */
-    height: auto;
-    padding: 2rem 1rem;
-    padding-bottom: calc(2rem + var(--step-bottom-margin));
-    display: flex;
+  .container {
     flex-direction: column;
-    justify-content: flex-start;
+  }
+
+  .penrose-container {
     position: relative;
-    scroll-margin-top: 40vh;
-    scroll-snap-align: start;
+    height: auto;
+    min-height: 50vh;
+    padding: 1rem;
   }
 
   .steps-container {
-    scroll-snap-type: y proximity; /* Changed from mandatory for smoother scrolling */
-    scroll-behavior: smooth;
+    margin-left: 0;
+    height: 50vh;
+    scroll-snap-type: y mandatory;
   }
 
-  /* Adjusted step indicator without shadow */
+  .step-section {
+    min-height: 90vh; /* Adjusted for better single-swipe scrolling */
+    padding: 1.5rem;
+    padding-bottom: calc(1.5rem + var(--step-bottom-margin));
+    justify-content: flex-start;
+  }
+
+  .step-content {
+    padding: 1.5rem;
+    margin-bottom: var(--step-bottom-margin);
+  }
+
+  .navigation-arrows {
+    display: none; /* Hide arrows on mobile */
+  }
+
+  /* Mobile-specific step indicator */
   .step-indicator {
     position: fixed;
-    bottom: 10px;
+    bottom: 1.5rem;
     left: 0;
     width: 100%;
     text-align: center;
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 8px 0;
+    background: var(--blur-background);
+    backdrop-filter: blur(5px);
+    padding: 0.8rem 0;
     z-index: 20;
     font-size: 1.2rem;
-    box-shadow: none; /* Removed shadow */
-  }
-
-  /* Better spacing for step content */
-  .step-content {
-    max-width: 100%;
-    margin-bottom: var(--step-bottom-margin);
-    padding-bottom: 2rem; /* Added padding to prevent content from touching bottom */
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
   }
 }
 
+/* Small mobile adjustments */
 @media (max-width: 480px) {
   .step-section {
-    min-height: 50vh; /* Further reduced for more sensitive scrolling */
-    padding: 1.5rem 0.75rem;
-    padding-bottom: calc(1.5rem + var(--step-bottom-margin));
+    min-height: 85vh;
+    padding: 1rem;
   }
 
   .step-content {
+    padding: 1rem;
     margin-bottom: calc(var(--step-bottom-margin) * 0.75);
-    padding-bottom: 1.5rem;
   }
 
-  /* Rest of mobile styles remain the same */
+  :root {
+    --step-bottom-margin: 3rem;
+    --content-padding: 1rem;
+  }
 }
