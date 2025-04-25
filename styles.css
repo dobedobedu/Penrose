@@ -6,7 +6,8 @@
   --accent-color: #FF6B00;
   --section-height: 100vh;
   --ball-size: 16px;
-  --step-bottom-margin: 4rem; /* Increased margin for better spacing */
+  --step-indicator-height: 3.5rem; /* Height of the step indicator */
+  --step-bottom-margin: 6rem; /* Increased margin for better spacing on mobile */
   --blur-background: rgba(255, 255, 255, 0.8);
   --content-padding: 2rem;
 }
@@ -115,19 +116,21 @@
   .steps-container {
     margin-left: 0;
     height: 50vh;
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y mandatory; /* Make snap stricter on mobile */
   }
 
   .step-section {
-    min-height: 90vh; /* Adjusted for better single-swipe scrolling */
+    min-height: 75vh; /* Reduced height to fit better on mobile */
     padding: 1.5rem;
-    padding-bottom: calc(1.5rem + var(--step-bottom-margin));
+    padding-bottom: calc(1.5rem + var(--step-bottom-margin)); /* Add bottom padding to clear step indicator */
     justify-content: flex-start;
+    scroll-snap-align: start;
+    scroll-snap-stop: always; /* Force snap on mobile */
   }
 
   .step-content {
     padding: 1.5rem;
-    margin-bottom: var(--step-bottom-margin);
+    margin-bottom: var(--step-bottom-margin); /* Add margin to create space above the step indicator */
   }
 
   .navigation-arrows {
@@ -137,9 +140,10 @@
   /* Mobile-specific step indicator */
   .step-indicator {
     position: fixed;
-    bottom: 1.5rem;
+    bottom: 0;
     left: 0;
     width: 100%;
+    height: var(--step-indicator-height);
     text-align: center;
     background: var(--blur-background);
     backdrop-filter: blur(5px);
@@ -147,23 +151,29 @@
     z-index: 20;
     font-size: 1.2rem;
     border-top: 1px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
 /* Small mobile adjustments */
 @media (max-width: 480px) {
   .step-section {
-    min-height: 85vh;
+    min-height: 80vh;
     padding: 1rem;
+    /* The scroll snap has to be adjusted for the keyboard */
+    scroll-snap-align: start;
+    padding-bottom: calc(1rem + var(--step-bottom-margin)); /* Ensure enough bottom padding */
   }
 
   .step-content {
     padding: 1rem;
-    margin-bottom: calc(var(--step-bottom-margin) * 0.75);
+    margin-bottom: var(--step-bottom-margin);
   }
 
   :root {
-    --step-bottom-margin: 3rem;
+    --step-bottom-margin: 5rem; /* Increased even more for small screens */
     --content-padding: 1rem;
   }
 }
