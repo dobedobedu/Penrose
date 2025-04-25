@@ -115,8 +115,6 @@ body {
   transition: left 0.8s ease, top 0.8s ease;
   z-index: 10;
   pointer-events: none;
-  left: 125px; /* Initial position matching first step marker */
-  top: 160px; /* Updated to match the new Y-axis position */
 }
 
 /* Step markers (invisible, used for positioning) */
@@ -182,7 +180,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 2rem;
+  padding: 1.5rem;
   position: relative;
   transition: opacity 0.5s ease;
   opacity: 0.15;
@@ -252,6 +250,7 @@ body {
     width: 100%;
     height: 40vh;
     min-height: 300px;
+    padding: 1rem;
   }
   
   .steps-container {
@@ -269,6 +268,7 @@ body {
   .penrose-title {
     top: 5%;
     text-align: center;
+    width: 100%;
   }
   
   .step-indicator {
@@ -282,14 +282,8 @@ body {
   
   /* Scale down for tablets */
   .penrose-image-container {
-    transform: scale(0.7);
-    margin-top: -20px; /* Adjusts vertical positioning */
-  }
-  
-  /* Preserve ball positions on smaller screens */
-  .glowing-ball {
-    /* Keep the ball properly positioned when container is scaled */
-    transform: translate(-50%, -50%) scale(1.42857); /* 1/0.7 to counter the container scaling */
+    transform: scale(0.75);
+    margin-top: 0; /* Adjusted vertical positioning */
   }
 }
 
@@ -332,21 +326,8 @@ body {
   
   /* Further scale down for mobile devices */
   .penrose-image-container {
-    transform: scale(0.55);
-    margin-top: -40px;
-  }
-  
-  .glowing-ball {
-    transform: translate(-50%, -50%) scale(1.81818); /* 1/0.55 to counter the container scaling */
-  }
-  
-  /* Adjust ball size for mobile */
-  :root {
-    --ball-size: 14px; /* Adjusted for mobile but still larger than before */
-  }
-  
-  .step-content {
-    max-width: 100%;
+    transform: scale(0.6);
+    margin-top: -10px;
   }
 }
 
@@ -354,7 +335,8 @@ body {
 @media (max-width: 480px) {
   .penrose-container {
     height: 30vh;
-    min-height: 200px;
+    min-height: 220px;
+    padding: 0.75rem;
   }
   
   .steps-container {
@@ -363,23 +345,19 @@ body {
   
   .step-section {
     height: 70vh;
-    min-height: 200px;
+    min-height: 220px;
     padding: 0.75rem;
   }
   
   /* Adjust for smaller phones */
   .penrose-image-container {
-    transform: scale(0.45);
-    margin-top: -50px;
-  }
-  
-  .glowing-ball {
-    transform: translate(-50%, -50%) scale(2.22222); /* 1/0.45 to counter the container scaling */
+    transform: scale(0.5);
+    margin-top: -15px;
   }
   
   /* Smaller ball for very small screens */
   :root {
-    --ball-size: 12px; /* Still larger than original size */
+    --ball-size: 14px; /* Still larger than original size but better for mobile */
   }
   
   .sign-up-button {
