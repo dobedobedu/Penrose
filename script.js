@@ -93,15 +93,17 @@ document.addEventListener("DOMContentLoaded", () => {
           isScrolling = false;
         }, 300); // Shorter timeout for iOS
       } else if (isMobile) {
-        // For non-iOS mobile devices
-        targetSection.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
+        // For non-iOS mobile devices - ensure reliable scrolling behavior
+        const offset = targetSection.offsetTop;
+        stepsContainer.scrollTo({
+          top: offset,
+          behavior: 'smooth'
         });
         
+        // Longer timeout to ensure scrolling completes before allowing new scrolls
         setTimeout(() => {
           isScrolling = false;
-        }, 600);
+        }, 800); // Increased from 600 to 800ms for more reliable scrolling
       } else {
         // Desktop behavior
         const offset = targetSection.offsetTop;
@@ -235,6 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Only if sufficient time has passed since last swipe (300ms)
         if (now - lastSwipeTime > 300) {
           lastSwipeTime = now;
+          // Move only ONE step at a time regardless of how fast the swipe is
           scrollToSection(activeSection + 1);
         }
       } else if (direction === -1 && activeSection > 1) {
@@ -245,11 +248,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
     
-    // On mobile, immediately update the visible section after a swipe
+    // Don't update active section immediately - wait for scroll to complete
     setTimeout(() => {
-      const mostVisibleSection = getMostVisibleSection();
-      updateActiveSection(mostVisibleSection);
-    }, 50); // Reduced from 100 to 50 for faster mobile response
+      // Only update if not currently in a scroll animation
+      if (!isScrolling) {
+        const mostVisibleSection = getMostVisibleSection();
+        updateActiveSection(mostVisibleSection);
+      }
+    }, 150); // Increased from 50 to 150 for more reliable section detection
   }, { passive: true });
   
   // Reset to first step when clicking total steps
