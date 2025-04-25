@@ -370,39 +370,44 @@ body {
     scroll-snap-type: none !important; /* Removed snapping for easier scrolling */
   }
   
-  /* Make all steps visible and properly formatted */
+  /* CRITICAL FIX: Switch to non-absolute positioning for steps content */
   .step-section {
-    display: block !important;
-    min-height: auto; /* Allow natural content height */
-    height: auto;
-    padding: 1rem 1rem 2rem 1rem; /* Reduced padding */
-    justify-content: flex-start;
-    scroll-margin-top: 150px; /* Fixed offset value */
-    scroll-snap-align: start;
-    scroll-snap-stop: normal; /* Make scrolling less rigid */
-    margin-top: 0;
-    margin-bottom: 1rem; /* Add space between sections */
     position: relative;
-    visibility: visible !important;
-    opacity: 1 !important;
+    display: block !important;
+    min-height: auto;
+    height: auto;
+    margin-top: var(--mobile-header-height); /* Add top margin to push content below the staircase */
+    margin-bottom: 20px;
+    padding: 10px;
+    scroll-snap-align: none;
+  }
+  
+  /* Only apply the margin-top to the first step */
+  .step-section:not(:first-child) {
+    margin-top: 20px; /* Reduce margin for subsequent steps */
   }
   
   /* Fix for step content to ensure visibility */
   .step-content {
+    position: relative;
     max-width: 100%;
-    margin-top: var(--mobile-header-height); /* Use the header height variable */
+    width: 100%;
+    margin-top: 0;
+    padding: 15px 10px;
+    background-color: rgba(255, 255, 255, 0.95); /* Add slight background to improve visibility */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
-    display: block !important;
-    visibility: visible !important;
-    position: relative;
-    padding: 0;
   }
   
-  /* Only apply the margin-top to the first step */
-  .step-section:not([data-step="1"]) .step-content {
-    margin-top: 0;
+  /* Fix positioning for all steps */
+  .step-section .step-content {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none !important;
   }
   
   /* Style adjustments for mobile */
@@ -466,26 +471,51 @@ body {
     box-shadow: 0 0 20px 6px rgba(255, 107, 0, 0.8); /* Enhanced glow */
   }
   
-  /* Create a layout for mobile where sections stack */
+  /* Force mobile view to be a linear list */
   .steps-container {
     display: block;
+    padding-top: 0;
   }
   
-  /* Remove scrollsnap entirely for mobile */
-  .steps-container, .step-section {
+  /* Reset all layout properties that might be interfering */
+  .step-section {
+    position: static;
     scroll-snap-type: none;
     scroll-snap-align: none;
     scroll-snap-stop: none;
   }
   
-  /* Fix for the extra stacking - create a proper mobile view */
-  .mobile-view .steps-container {
-    padding-top: var(--mobile-header-height);
-  }
-  
   /* Special treatment for step 14 to ensure it's not blocked */
   .step-section[data-step="14"] {
     padding-bottom: 80px; /* Extra padding at the bottom */
+    margin-bottom: 60px; /* Extra margin to ensure it's visible */
+  }
+  
+  /* Completely redefine mobile layout with flexbox */
+  body.mobile-view .container {
+    flex-direction: column;
+    height: auto;
+    overflow: auto;
+  }
+  
+  body.mobile-view .steps-container {
+    display: flex;
+    flex-direction: column;
+    padding-top: var(--mobile-header-height);
+  }
+  
+  body.mobile-view .step-section {
+    position: relative;
+    height: auto;
+    min-height: auto;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+  }
+  
+  /* Make step content always in a reliable position */
+  body.mobile-view .step-section:first-child {
+    margin-top: 0;
   }
 }
 
@@ -498,10 +528,6 @@ body {
   .penrose-container {
     height: var(--mobile-header-height);
     min-height: 130px; /* Reduced min-height */
-  }
-  
-  .step-section {
-    scroll-margin-top: 130px; /* Match the min-height */
   }
   
   /* Adjust for smaller phones */
@@ -547,36 +573,55 @@ body {
     font-size: 1rem;
   }
   
-  /* Add a class to body for better mobile detection */
-  body.mobile-view .step-section {
-    display: flex !important;
-    flex-direction: column;
-  }
-  
   /* Add extra space between sections for better readability */
   body.mobile-view .step-section:not(:last-child) {
-    margin-bottom: 1rem;
+    margin-bottom: 15px;
   }
-}
-
-/* Special layout for mobile view - added via JS */
-body.mobile-view .steps-container {
-  display: block;
-  padding-top: 0;
-}
-
-body.mobile-view .step-section {
-  padding-top: var(--mobile-header-height); /* This ensures content appears below header */
-}
-
-/* Fix for step content on mobile */
-body.mobile-view .step-section .step-content {
-  margin-top: 0; /* Reset margin, let padding handle spacing */
+  
+  /* Further optimize mobile layout */
+  body.mobile-view .step-section {
+    margin-top: 5px;
+    padding: 5px 10px;
+  }
+  
+  body.mobile-view .step-content {
+    padding: 10px 8px;
+  }
 }
 
 /* Remove all transitions on mobile for better performance */
 @media (max-width: 768px) {
   * {
     transition: none !important;
+  }
+  
+  /* COMPLETELY ALTER THE MOBILE LAYOUT - CRITICAL FIX */
+  /* This is a new mobile-specific list view */
+  .mobile-view .steps-container {
+    display: block !important;
+    overflow-y: auto !important;
+    height: auto !important;
+    padding-top: var(--mobile-header-height) !important;
+  }
+  
+  .mobile-view .step-section {
+    display: block !important;
+    position: static !important;
+    height: auto !important;
+    min-height: auto !important;
+    margin-top: 10px !important;
+    margin-bottom: 20px !important;
+    padding: 5px 15px 15px 15px !important;
+    scroll-snap-align: none !important;
+  }
+  
+  .mobile-view .step-content {
+    position: static !important;
+    transform: none !important;
+    margin: 0 !important;
+    padding: 10px !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 }
