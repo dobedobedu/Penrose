@@ -220,6 +220,11 @@ body {
   max-width: 90%;
 }
 
+/* Hide navigation arrows - they've been removed from HTML */
+.navigation-arrows {
+  display: none;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1200px) {
   .step-content h2 {
@@ -323,7 +328,7 @@ body {
   .step-section {
     min-height: 70vh; /* Taller sections ensure more precise scrolling */
     height: auto;
-    padding: 2rem 1rem 4rem 1rem; /* Increased bottom padding */
+    padding: 2rem 1rem 6rem 1rem; /* Increased bottom padding to 6rem */
     display: flex;
     flex-direction: column;
     justify-content: flex-end; /* Changed from center to flex-end to align content to bottom */
@@ -339,7 +344,7 @@ body {
     opacity: 1 !important; /* Always visible */
     transform: none !important; /* No transform */
     transition: none !important; /* No transitions */
-    padding-bottom: 2rem; /* More padding to prevent content being cut off */
+    padding-bottom: 3rem; /* More padding to prevent content being cut off */
     margin-top: auto; /* Push content to the bottom */
   }
   
@@ -384,7 +389,7 @@ body {
   /* Better positioning for the step indicator */
   .step-indicator {
     position: fixed;
-    bottom: 10px;
+    bottom: 30px; /* Increased from 10px to 30px for more spacing */
     left: 0;
     width: 100%;
     text-align: center;
@@ -415,7 +420,7 @@ body {
   
   .step-section {
     min-height: 65vh;
-    padding: 1.5rem 0.75rem 4rem 0.75rem; /* More bottom padding */
+    padding: 1.5rem 0.75rem 7rem 0.75rem; /* More bottom padding - increased to 7rem */
     justify-content: flex-end; /* Ensure text content aligns to bottom only */
     scroll-snap-align: end; /* Force snap to bottom only */
     scroll-snap-stop: always; /* Ensure it always stops at each section */
