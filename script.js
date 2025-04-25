@@ -11,9 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const navUp = document.querySelector('.nav-up');
   const navDown = document.querySelector('.nav-down');
   
-  // Mobile detection
+  // Mobile detection with improved iOS detection
   let isMobile = window.innerWidth <= 768;
-  let isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  let isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream || /MacIntel/.test(navigator.platform) && navigator.maxTouchPoints > 1;
   
   // Update the total steps display
   totalStepsElem.textContent = totalSteps.toString().padStart(2, '0');
@@ -78,11 +78,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const targetSection = document.querySelector(`.step-section[data-step="${index}"]`);
     if (targetSection) {
       if (isIOS) {
-        // iOS-specific scroll handling - use a more direct approach
+        // iOS-specific scroll handling with smoother behavior
         const offset = targetSection.offsetTop;
+        
+        // For iOS, use a combination approach: start with auto and then smoothly adjust
         stepsContainer.scrollTo({
-          top: offset,
-          behavior: 'auto' // Use 'auto' instead of 'smooth' for iOS
+          top: offset - 20, // Slight offset to improve positioning
+          behavior: 'smooth' // Try smooth scrolling on newer iOS
         });
         
         // Force a reflow to ensure the scroll completes
@@ -91,9 +93,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // Set a flag to prevent other scrolling during this operation
         setTimeout(() => {
           isScrolling = false;
-        }, 300); // Shorter timeout for iOS
+        }, 400); // Shorter timeout for iOS
       } else if (isMobile) {
-        // For non-iOS mobile devices
+        // For non-iOS mobile devices - optimized approach
         targetSection.scrollIntoView({
           behavior: 'smooth',
           block: 'start'
@@ -137,19 +139,29 @@ document.addEventListener("DOMContentLoaded", () => {
     navDown.classList.toggle('disabled', activeSection === totalSteps);
   }
 
-  // Function to get the most visible section
+  // Function to get the most visible section with improved calculation
   function getMostVisibleSection() {
     let maxVisibility = 0;
     let mostVisibleIndex = activeSection;
     
+    // Get the viewport height and scroll position for better calculations
+    const viewportHeight = window.innerHeight;
+    const scrollTop = stepsContainer.scrollTop;
+    
     stepSections.forEach((section, index) => {
       const rect = section.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
       
-      const visibleTop = Math.max(0, rect.top);
-      const visibleBottom = Math.min(viewportHeight, rect.bottom);
+      // Calculate visibility with viewport adjustment for mobile
+      let visibleTop = Math.max(0, rect.top);
+      let visibleBottom = Math.min(viewportHeight, rect.bottom);
+      
+      // On mobile, adjust calculations to account for the sticky header
+      if (isMobile) {
+        const headerHeight = isIOS ? viewportHeight * 0.45 : viewportHeight * 0.4;
+        visibleTop = Math.max(headerHeight, rect.top);
+      }
+      
       const visibleHeight = Math.max(0, visibleBottom - visibleTop);
-      
       const visibility = visibleHeight / rect.height;
       
       if (visibility > maxVisibility) {
@@ -257,10 +269,11 @@ document.addEventListener("DOMContentLoaded", () => {
     scrollToSection(1);
   });
   
-  // Handle window resize
+  // Handle window resize with improved iOS detection
   window.addEventListener('resize', () => {
     const wasJustMobile = isMobile;
     isMobile = window.innerWidth <= 768;
+    isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream || /MacIntel/.test(navigator.platform) && navigator.maxTouchPoints > 1;
     
     glowingBall.style.transition = 'none';
     moveGlowingBall(activeSection);
