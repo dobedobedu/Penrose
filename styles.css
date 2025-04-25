@@ -167,7 +167,6 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
   scroll-behavior: smooth;
-  scroll-padding-top: 40vh;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -339,7 +338,7 @@ body {
     min-height: 70vh; /* Taller sections ensure more precise scrolling */
     height: auto;
     /* Adjust padding to push content below stairs */
-    padding: 270px 1rem 6rem 1rem; /* Added top padding of 270px to push content below stairs */
+    padding: 40vh 1rem 6rem 1rem; /* Added top padding of 270px to push content below stairs */
     display: flex;
     flex-direction: column;
     justify-content: flex-start; /* Changed to flex-start to align from top with our new top padding */
@@ -432,7 +431,7 @@ body {
   .step-section {
     min-height: 65vh;
     /* Adjust padding to push content below stairs on smaller screens */
-    padding: 240px 0.75rem 7rem 0.75rem; /* Adjusted top padding for smaller screens */
+    padding: 35vh 0.75rem 7rem 0.75rem; /* Adjusted top padding for smaller screens */
     justify-content: flex-start; /* Ensure text content starts from top */
     scroll-snap-align: start; /* Force snap to one direction */
     scroll-snap-stop: always; /* Ensure it always stops at each section */
