@@ -1,6 +1,6 @@
 /* Base styling and variables */
 :root {
-  --background-color: #ffffff;
+  --background-color: #f4f4f4;
   --text-color: #333333;
   --muted-color: #666666;
   --accent-color: #FF6B00;
@@ -382,7 +382,7 @@ body {
     height: auto;
     scroll-snap-align: start;
     padding: 0.5rem 1rem 2rem 1rem; /* Reduced padding */
-    padding-top: 2vh; /* REDUCED: Push content closer to the Penrose header */
+    padding-top: 15vh; /* ADDED 15vh spacing to push content below staircase */
     display: flex;
     flex-direction: column;
     justify-content: flex-start; /* Start alignment for better spacing */
@@ -452,7 +452,7 @@ body {
     left: 0;
     width: 100%;
     text-align: center;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(244, 244, 244, 0.9); /* Updated to match new background color */
     padding: 8px 0;
     z-index: 20;
     font-size: 1.2rem;
@@ -523,7 +523,7 @@ body {
   
   /* Adjust mobile sections for smaller screens */
   .step-section {
-    padding-top: 1vh; /* REDUCED: Even less padding on smaller screens */
+    padding-top: 15vh; /* Keep 15vh spacing consistent */
     min-height: 50vh; /* Reduced section height */
   }
 }
