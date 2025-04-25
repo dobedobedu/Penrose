@@ -184,6 +184,7 @@ body {
   position: relative;
   transition: opacity 0.3s ease;
   opacity: 1; /* Set all sections to full opacity */
+  box-sizing: border-box;
 }
 
 .step-section.active {
@@ -250,25 +251,32 @@ body {
     top: 0;
     width: 100%;
     height: 45vh; /* Increased for better visualization */
-    min-height: 320px;
+    min-height: 350px; /* Increased min-height for better display */
     padding: 1rem;
     z-index: 5;
+    background-color: var(--background-color); /* Ensure background is visible */
   }
   
   .steps-container {
     width: 100%;
     margin-left: 0;
     height: auto;
-    min-height: 55vh;
+    min-height: 60vh; /* Increased min-height */
+    padding-top: 5vh; /* Add padding to create space between container and content */
   }
   
   .step-section {
-    min-height: 65vh;
+    min-height: 75vh; /* Increased height for better spacing */
     height: auto;
-    padding: 1.5rem 1rem;
-    scroll-snap-align: start;
-    scroll-margin-top: 55vh; /* Add margin to prevent overlap */
-    padding-bottom: 4rem;
+    padding: 2rem 1rem 4rem 1rem; /* Increased bottom padding */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Changed to center to align content vertically in the middle */
+    position: relative;
+    scroll-margin-top: 45vh; /* Increased offset for sticky header */
+    scroll-snap-align: center; /* Changed to center for better positioning */
+    scroll-snap-stop: always; /* Force stopping at each section */
+    margin-top: 5vh; /* Add top margin to space from the staircase */
   }
   
   .penrose-title {
@@ -319,20 +327,6 @@ body {
     scroll-snap-type: y proximity; /* Changed from mandatory to proximity for better experience */
   }
   
-  /* Make each step section taller to prevent skipping */
-  .step-section {
-    min-height: 70vh; /* Taller sections ensure more precise scrolling */
-    height: auto;
-    padding: 2rem 1rem 4rem 1rem; /* Increased bottom padding */
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end; /* Changed from center to flex-end to align content to bottom */
-    position: relative;
-    scroll-margin-top: 40vh; /* Offset for sticky header */
-    scroll-snap-align: end; /* Changed from start to end to snap to bottom */
-    scroll-snap-stop: always; /* Force stopping at each section */
-  }
-  
   /* Ensure the step content is always visible */
   .step-content {
     max-width: 100%;
@@ -340,7 +334,8 @@ body {
     transform: none !important; /* No transform */
     transition: none !important; /* No transitions */
     padding-bottom: 2rem; /* More padding to prevent content being cut off */
-    margin-top: auto; /* Push content to the bottom */
+    margin-top: 15vh; /* Increased top margin to prevent overlap with staircase */
+    padding-top: 2vh; /* Additional top padding */
   }
   
   .sign-up-button {
@@ -377,7 +372,7 @@ body {
   /* Further scale down for mobile devices */
   .penrose-image-container {
     transform: scale(0.65);
-    margin-top: 60px; /* More space at top on mobile */
+    margin-top: 40px; /* Reduced top margin to push image higher */
     margin-left: -30px; /* Adjust horizontal position */
   }
   
@@ -400,34 +395,42 @@ body {
     height: 14px;
     box-shadow: 0 0 20px 6px rgba(255, 107, 0, 0.8); /* Enhanced glow */
   }
+  
+  /* Position all sections for iOS to avoid text overlap with stairs */
+  .step-section {
+    padding-top: 55vh; /* Add significant top padding to push content below staircase */
+    justify-content: flex-start; /* Align content to start (top) after padding */
+    min-height: 100vh; /* Full viewport height */
+    padding-bottom: 8rem; /* More bottom padding */
+  }
 }
 
 /* Adjust for smaller mobile screens */
 @media (max-width: 480px) {
   .penrose-container {
-    height: 35vh; /* Optimized height */
-    min-height: 220px;
+    height: 38vh; /* Reduced height to show more content */
+    min-height: 220px; /* Reduced min-height */
     padding: 0.5rem;
     justify-content: flex-start;
-    padding-top: 3rem;
+    padding-top: 1rem; /* Less top padding */
     align-items: flex-start; /* Left align for mobile */
   }
   
   .step-section {
-    min-height: 65vh;
-    padding: 1.5rem 0.75rem 4rem 0.75rem; /* More bottom padding */
-    justify-content: flex-end; /* Ensure text content aligns to bottom only */
-    scroll-snap-align: end; /* Force snap to bottom only */
-    scroll-snap-stop: always; /* Ensure it always stops at each section */
+    min-height: 100vh;
+    padding: 50vh 0.75rem 8rem 0.75rem; /* Significant top padding to push content below staircase */
+    justify-content: flex-start; /* Align to top of available area after padding */
+    scroll-snap-align: start; /* Snap to start */
+    scroll-snap-stop: always;
     display: flex;
-    align-items: flex-start; /* Align content to left */
+    align-items: flex-start;
   }
   
   /* Adjust for smaller phones */
   .penrose-image-container {
-    transform: scale(0.55);
-    margin-top: 50px;
-    margin-left: -20px;
+    transform: scale(0.5); /* Smaller scale */
+    margin-top: 30px; /* Less top margin */
+    margin-left: -40px; /* More left offset to ensure visibility */
   }
   
   /* Smaller ball for very small screens */
@@ -442,6 +445,7 @@ body {
   .penrose-title {
     text-align: left;
     padding-left: 0.5rem;
+    top: 3%; /* Move up further */
   }
   
   .penrose-title h2 {
@@ -457,9 +461,9 @@ body {
   
   .step-content {
     max-width: 100%;
-    margin-bottom: 0; /* Remove bottom margin */
-    margin-top: auto; /* Push content to bottom */
-    padding-bottom: 1rem; /* Add padding instead */
+    margin-bottom: 0;
+    margin-top: 0; /* No extra margin needed due to section padding */
+    padding-top: 0;
   }
   
   .step-content h2 {
@@ -470,6 +474,13 @@ body {
   .step-content p {
     font-size: 0.9rem;
     line-height: 1.4;
-    margin-bottom: 0; /* Remove extra bottom margin */
+    margin-bottom: 0;
+  }
+  
+  /* Make step-indicator more visible */
+  .step-indicator {
+    bottom: 15px;
+    font-size: 1.1rem;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
   }
 }
