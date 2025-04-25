@@ -167,6 +167,7 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
   scroll-behavior: smooth;
+  scroll-padding-top: 40vh;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
