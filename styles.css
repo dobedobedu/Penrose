@@ -112,7 +112,7 @@ body {
   background-color: var(--accent-color);
   box-shadow: 0 0 15px 4px rgba(255, 107, 0, 0.7); /* Adjusted glow effect */
   transform: translate(-50%, -50%);
-  transition: left 0.8s ease, top 0.8s ease;
+  transition: left 0.6s ease-out, top 0.6s ease-out;
   z-index: 10;
   pointer-events: none;
 }
@@ -246,33 +246,38 @@ body {
   }
   
   .penrose-container {
-    position: relative;
+    position: sticky;
+    top: 0;
     width: 100%;
     height: 45vh; /* Increased for better visualization */
     min-height: 320px;
     padding: 1rem;
+    z-index: 5;
   }
   
   .steps-container {
     width: 100%;
     margin-left: 0;
-    height: 55vh; /* Reduced to minimize space between sections */
+    height: auto;
+    min-height: 55vh;
   }
   
   .step-section {
-    height: 55vh;
-    min-height: 300px;
-    padding: 1rem;
+    min-height: 65vh;
+    height: auto;
+    padding: 1.5rem 1rem;
+    scroll-snap-align: start;
+    scroll-margin-top: 45vh; /* Add margin to prevent overlap */
   }
   
   .penrose-title {
-    top: 2%; /* Moved up to save space */
+    top: 5%; /* Moved up to save space */
     text-align: center;
     width: 100%;
   }
   
   .step-indicator {
-    bottom: 2%; /* Moved down to save space */
+    bottom: 5%; /* Moved down to save space */
   }
   
   .penrose-title p, .tagline {
@@ -288,24 +293,47 @@ body {
 }
 
 @media (max-width: 768px) {
+  /* Make the Penrose container sticky at the top */
   .penrose-container {
-    height: 45vh;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 40vh; /* Reduced height to show more content */
     min-height: 250px;
+    z-index: 10;
+    padding: 1rem;
+    background-color: var(--background-color);
     align-items: flex-start; /* Left align for mobile */
     padding-left: 1.5rem;
   }
   
+  /* Adjust steps container to fill remaining space */
   .steps-container {
-    height: 55vh;
+    width: 100%;
+    margin-left: 0;
+    height: auto;
+    overflow-y: auto;
+    padding-bottom: 60px; /* Add padding at the bottom for better scrolling */
   }
   
+  /* Make each step section taller to prevent skipping */
   .step-section {
-    height: 55vh;
-    min-height: 250px;
-    padding: 1rem 0.75rem;
-    /* Center content vertically */
-    justify-content: flex-start;
-    padding-top: 1.5rem;
+    min-height: 70vh; /* Taller sections ensure more precise scrolling */
+    height: auto;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    scroll-margin-top: 40vh; /* Offset for sticky header */
+  }
+  
+  /* Ensure the step content is always visible */
+  .step-content {
+    max-width: 100%;
+    opacity: 1 !important; /* Always visible */
+    transform: none !important; /* No transform */
+    transition: none !important; /* No transitions */
   }
   
   .sign-up-button {
@@ -346,24 +374,43 @@ body {
     margin-left: -30px; /* Adjust horizontal position */
   }
   
-  /* Repositioned step indicator as requested */
+  /* Better positioning for the step indicator */
   .step-indicator {
-    bottom: 5px;
-    font-size: 1.2rem;
     position: fixed;
+    bottom: 10px;
+    left: 0;
     width: 100%;
     text-align: center;
-    left: 0;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 5px 0;
-    z-index: 5;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 8px 0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 20;
+    font-size: 1.2rem;
+  }
+  
+  /* Ensure the glowing ball is visible on mobile */
+  .glowing-ball {
+    width: 14px;
+    height: 14px;
+    box-shadow: 0 0 20px 6px rgba(255, 107, 0, 0.8); /* Enhanced glow */
+  }
+  
+  /* Improve scroll snapping */
+  .steps-container {
+    scroll-behavior: smooth;
+    scroll-snap-type: y proximity; /* Changed from mandatory to proximity */
+  }
+  
+  .step-section {
+    scroll-snap-align: start;
+    scroll-snap-stop: always; /* Force stopping at each section */
   }
 }
 
 /* Adjust for smaller mobile screens */
 @media (max-width: 480px) {
   .penrose-container {
-    height: 40vh; /* Optimized height */
+    height: 35vh; /* Optimized height */
     min-height: 220px;
     padding: 0.5rem;
     justify-content: flex-start;
@@ -371,17 +418,9 @@ body {
     align-items: flex-start; /* Left align for mobile */
   }
   
-  .steps-container {
-    height: 60vh; /* Complementary to Penrose container */
-  }
-  
   .step-section {
-    height: 60vh;
-    min-height: 220px;
-    padding: 0.75rem;
-    /* Better vertical alignment */
-    justify-content: flex-start;
-    padding-top: 1.5rem;
+    min-height: 65vh;
+    padding: 1.5rem 0.75rem;
   }
   
   /* Adjust for smaller phones */
