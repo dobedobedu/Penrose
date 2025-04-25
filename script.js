@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const left = parseFloat(marker.style.left) || 0;
     const top = parseFloat(marker.style.top) || 0;
     
-    // Position the ball at the marker
+    // Position the ball at the marker with a smooth transition
     glowingBall.style.left = `${left}px`;
     glowingBall.style.top = `${top}px`;
   }
