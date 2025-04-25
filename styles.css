@@ -180,7 +180,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 1.5rem;
+  padding-bottom: 4rem;
   position: relative;
   transition: opacity 0.3s ease;
   opacity: 1; /* Set all sections to full opacity */
