@@ -22,6 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let activeSection = 1;
   let isScrolling = false;
   let scrollTimeout = null;
+  let userInitiatedScroll = false;
+  let lastScrollTime = 0;
   
   // Define each step's title for debugging and reference
   const stepTitles = [
@@ -70,38 +72,44 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Function to scroll to a specific section with improved behavior for iOS
   function scrollToSection(index) {
+    // Prevent scrolling if already in progress or invalid index
     if (isScrolling || index < 1 || index > totalSteps) return;
     
     isScrolling = true;
+    userInitiatedScroll = true;
+    lastScrollTime = new Date().getTime();
+    
+    console.log(`Scrolling to section ${index}`);
+    
     updateActiveSection(index);
     
     const targetSection = document.querySelector(`.step-section[data-step="${index}"]`);
     if (targetSection) {
       if (isIOS) {
-        // iOS-specific scroll handling - use a more direct approach
+        // iOS-specific scroll handling
         const offset = targetSection.offsetTop;
         stepsContainer.scrollTo({
           top: offset,
           behavior: 'auto' // Use 'auto' instead of 'smooth' for iOS
         });
         
-        // Force a reflow to ensure the scroll completes
-        stepsContainer.offsetHeight;
-        
-        // Set a flag to prevent other scrolling during this operation
         setTimeout(() => {
           isScrolling = false;
-        }, 300); // Shorter timeout for iOS
+          userInitiatedScroll = false;
+        }, 500); // Longer timeout for iOS
       } else if (isMobile) {
-        // For non-iOS mobile devices
-        targetSection.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
+        // For non-iOS mobile devices - use direct scrollTo for most reliable behavior
+        const offset = targetSection.offsetTop;
+        stepsContainer.scrollTo({
+          top: offset,
+          behavior: 'smooth'
         });
         
+        // Use a longer timeout to ensure scroll completes
         setTimeout(() => {
           isScrolling = false;
-        }, 600);
+          userInitiatedScroll = false;
+        }, 1000);
       } else {
         // Desktop behavior
         const offset = targetSection.offsetTop;
@@ -112,6 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         setTimeout(() => {
           isScrolling = false;
+          userInitiatedScroll = false;
         }, 600);
       }
     }
@@ -192,64 +201,83 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Improved scroll handler with debouncing
   stepsContainer.addEventListener('scroll', () => {
+    // Skip scroll handling if it was initiated by our code
+    if (userInitiatedScroll) return;
+    
+    // Clear any existing timeout
     if (scrollTimeout) {
       clearTimeout(scrollTimeout);
     }
     
-    // Set a new timeout - FASTER on mobile
+    // Only update active section if not currently animating
+    const now = new Date().getTime();
+    if (now - lastScrollTime < 500) return; // Skip if scrolled recently
+    
+    // Set a new timeout
     scrollTimeout = setTimeout(() => {
       if (isScrolling) return;
       
       const mostVisibleSection = getMostVisibleSection();
       
       if (mostVisibleSection !== activeSection) {
-        updateActiveSection(mostVisibleSection);
+        // Update the UI without triggering another scroll
+        moveGlowingBall(mostVisibleSection);
+        activeSection = mostVisibleSection;
+        updateNavigationArrows();
       }
-    }, isMobile ? 30 : 100); // Reduced timeout for more responsive mobile experience
+    }, isMobile ? 100 : 100);
   }, { passive: true });
   
-  // Enhanced touch handling for mobile
+  // Enhanced touch handling for mobile - HEAVILY MODIFIED FOR PRECISE CONTROL
   let touchStartY = 0;
   let touchEndY = 0;
   let lastSwipeTime = 0;
+  let isSwiping = false;
+  let swipeDirection = 0;
   
   stepsContainer.addEventListener('touchstart', (e) => {
+    // Stop if already in a scroll animation
+    if (isScrolling) return;
+    
     touchStartY = e.touches[0].clientY;
+    isSwiping = false;
+  }, { passive: true });
+  
+  stepsContainer.addEventListener('touchmove', (e) => {
+    // Don't process during scroll animations
+    if (isScrolling) return;
+    
+    const currentY = e.touches[0].clientY;
+    const diffY = touchStartY - currentY;
+    
+    // Only consider as a swipe if moved more than threshold
+    if (Math.abs(diffY) > 30) {
+      isSwiping = true;
+      swipeDirection = diffY > 0 ? 1 : -1; // 1 = up, -1 = down
+    }
   }, { passive: true });
   
   stepsContainer.addEventListener('touchend', (e) => {
-    if (isIOS && isScrolling) return; // Prevent handling during animation on iOS
+    // Skip if already scrolling or no swipe detected
+    if (isScrolling || !isSwiping) return;
     
-    touchEndY = e.changedTouches[0].clientY;
-    
-    // Calculate swipe distance and direction
-    const touchDistance = touchStartY - touchEndY;
     const now = new Date().getTime();
     
-    // Only process swipes that are significant enough
-    if (Math.abs(touchDistance) > 30) { // Reduced threshold for easier detection
-      const direction = touchDistance > 0 ? 1 : -1; // 1 = up, -1 = down
-      
-      // If swiping up, go to next step; if swiping down, go to previous step
-      if (direction === 1 && activeSection < totalSteps) {
-        // Only if sufficient time has passed since last swipe (300ms)
-        if (now - lastSwipeTime > 300) {
-          lastSwipeTime = now;
-          scrollToSection(activeSection + 1);
-        }
-      } else if (direction === -1 && activeSection > 1) {
-        if (now - lastSwipeTime > 300) {
-          lastSwipeTime = now;
-          scrollToSection(activeSection - 1);
-        }
-      }
+    // Cooldown to prevent multiple rapid swipes
+    if (now - lastSwipeTime < 500) return;
+    
+    lastSwipeTime = now;
+    
+    // Process the swipe - move exactly one step
+    if (swipeDirection === 1 && activeSection < totalSteps) {
+      scrollToSection(activeSection + 1);
+    } else if (swipeDirection === -1 && activeSection > 1) {
+      scrollToSection(activeSection - 1);
     }
     
-    // On mobile, immediately update the visible section after a swipe
-    setTimeout(() => {
-      const mostVisibleSection = getMostVisibleSection();
-      updateActiveSection(mostVisibleSection);
-    }, 50); // Reduced from 100 to 50 for faster mobile response
+    // Reset swipe state
+    isSwiping = false;
+    swipeDirection = 0;
   }, { passive: true });
   
   // Reset to first step when clicking total steps
@@ -297,36 +325,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Add IntersectionObserver for better section detection
-  if ('IntersectionObserver' in window) {
-    const sectionObserver = new IntersectionObserver((entries) => {
-      if (isScrolling) return;
-      
-      entries.forEach(entry => {
-        // Lower threshold for better reactivity
-        if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
-          const section = entry.target;
-          const sectionIndex = parseInt(section.dataset.step);
-          
-          if (sectionIndex !== activeSection) {
-            updateActiveSection(sectionIndex);
-          }
-        }
-      });
-    }, {
-      root: stepsContainer,
-      threshold: [0.3, 0.5, 0.7] // Multiple thresholds for better detection
-    });
-    
-    stepSections.forEach(section => {
-      sectionObserver.observe(section);
-    });
-  }
-  
-  // Reset scrolling flag after animation completes - faster on mobile
+  // Reset scrolling flag after animation completes
   window.addEventListener('scrollend', () => {
     setTimeout(() => {
       isScrolling = false;
-    }, isMobile ? 400 : 600); // Reduced timeout for mobile
+      userInitiatedScroll = false;
+    }, isMobile ? 400 : 600);
   });
 });
