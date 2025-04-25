@@ -182,8 +182,8 @@ body {
   justify-content: center;
   padding: 1.5rem;
   position: relative;
-  transition: opacity 0.5s ease;
-  opacity: 0.15;
+  transition: opacity 0.3s ease;
+  opacity: 1; /* Set all sections to full opacity */
 }
 
 .step-section.active {
@@ -191,14 +191,14 @@ body {
 }
 
 .step-section.adjacent {
-  opacity: 0.35;
+  opacity: 1; /* Keep adjacent sections fully visible */
 }
 
 .step-content {
   max-width: 80%;
-  transform: translateY(20px);
-  transition: transform 0.5s ease, opacity 0.5s ease;
-  opacity: 0;
+  transform: translateY(0); /* No initial transform */
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 1; /* Keep content fully visible */
 }
 
 .step-section.active .step-content {
@@ -289,16 +289,18 @@ body {
 
 @media (max-width: 768px) {
   .penrose-container {
-    height: 42vh;
+    height: 45vh;
     min-height: 250px;
+    align-items: flex-start; /* Left align for mobile */
+    padding-left: 1.5rem;
   }
   
   .steps-container {
-    height: 58vh;
+    height: 55vh;
   }
   
   .step-section {
-    height: 58vh;
+    height: 55vh;
     min-height: 250px;
     padding: 1rem 0.75rem;
     /* Center content vertically */
@@ -309,6 +311,11 @@ body {
   .sign-up-button {
     font-size: 1.8rem;
     margin-bottom: 0.25rem;
+  }
+  
+  .penrose-title {
+    text-align: left; /* Left-align on mobile as requested */
+    padding-left: 0.5rem;
   }
   
   .penrose-title h2 {
@@ -329,41 +336,59 @@ body {
   .tagline {
     font-size: 0.9rem;
     margin-top: 0.5rem;
+    text-align: left; /* Left-align on mobile */
   }
   
   /* Further scale down for mobile devices */
   .penrose-image-container {
     transform: scale(0.65);
-    margin-top: 15px;
+    margin-top: 60px; /* More space at top on mobile */
+    margin-left: -30px; /* Adjust horizontal position */
+  }
+  
+  /* Repositioned step indicator as requested */
+  .step-indicator {
+    bottom: 5px;
+    font-size: 1.2rem;
+    position: fixed;
+    width: 100%;
+    text-align: center;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 5px 0;
+    z-index: 5;
   }
 }
 
 /* Adjust for smaller mobile screens */
 @media (max-width: 480px) {
   .penrose-container {
-    height: 38vh; /* Optimized height */
+    height: 40vh; /* Optimized height */
     min-height: 220px;
     padding: 0.5rem;
     justify-content: flex-start;
     padding-top: 3rem;
+    align-items: flex-start; /* Left align for mobile */
   }
   
   .steps-container {
-    height: 62vh; /* Complementary to Penrose container */
+    height: 60vh; /* Complementary to Penrose container */
   }
   
   .step-section {
-    height: 62vh;
+    height: 60vh;
     min-height: 220px;
     padding: 0.75rem;
     /* Better vertical alignment */
-    justify-content: center;
+    justify-content: flex-start;
+    padding-top: 1.5rem;
   }
   
   /* Adjust for smaller phones */
   .penrose-image-container {
     transform: scale(0.55);
-    margin-top: 20px;
+    margin-top: 50px;
+    margin-left: -20px;
   }
   
   /* Smaller ball for very small screens */
@@ -375,6 +400,11 @@ body {
     font-size: 1.5rem;
   }
   
+  .penrose-title {
+    text-align: left;
+    padding-left: 0.5rem;
+  }
+  
   .penrose-title h2 {
     font-size: 1.1rem;
     margin-bottom: 0.3rem;
@@ -383,6 +413,7 @@ body {
   .tagline {
     font-size: 0.8rem;
     margin-top: 0.3rem;
+    text-align: left;
   }
   
   .step-content {
