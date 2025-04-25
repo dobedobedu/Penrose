@@ -314,6 +314,8 @@ body {
     height: auto;
     overflow-y: auto;
     padding-bottom: 60px; /* Add padding at the bottom for better scrolling */
+    scroll-behavior: smooth;
+    scroll-snap-type: y proximity; /* Changed from mandatory to proximity for better experience */
   }
   
   /* Make each step section taller to prevent skipping */
@@ -323,9 +325,11 @@ body {
     padding: 2rem 1rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-end; /* Changed from center to flex-end to align content to bottom */
     position: relative;
     scroll-margin-top: 40vh; /* Offset for sticky header */
+    scroll-snap-align: end; /* Changed from start to end to snap to bottom */
+    scroll-snap-stop: always; /* Force stopping at each section */
   }
   
   /* Ensure the step content is always visible */
@@ -334,6 +338,7 @@ body {
     opacity: 1 !important; /* Always visible */
     transform: none !important; /* No transform */
     transition: none !important; /* No transitions */
+    padding-bottom: 2rem; /* More padding to prevent content being cut off */
   }
   
   .sign-up-button {
@@ -394,17 +399,6 @@ body {
     height: 14px;
     box-shadow: 0 0 20px 6px rgba(255, 107, 0, 0.8); /* Enhanced glow */
   }
-  
-  /* Improve scroll snapping */
-  .steps-container {
-    scroll-behavior: smooth;
-    scroll-snap-type: y proximity; /* Changed from mandatory to proximity */
-  }
-  
-  .step-section {
-    scroll-snap-align: start;
-    scroll-snap-stop: always; /* Force stopping at each section */
-  }
 }
 
 /* Adjust for smaller mobile screens */
@@ -420,7 +414,9 @@ body {
   
   .step-section {
     min-height: 65vh;
-    padding: 1.5rem 0.75rem;
+    padding: 1.5rem 0.75rem 3rem 0.75rem; /* Added bottom padding */
+    justify-content: flex-end; /* Ensure text content aligns to bottom */
+    scroll-snap-align: end; /* Force snap to bottom */
   }
   
   /* Adjust for smaller phones */
@@ -457,6 +453,7 @@ body {
   
   .step-content {
     max-width: 100%;
+    margin-bottom: 1rem; /* Add space at bottom */
   }
   
   .step-content h2 {
