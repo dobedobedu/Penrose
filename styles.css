@@ -6,7 +6,7 @@
   --accent-color: #FF6B00;
   --section-height: 100vh;
   --ball-size: 16px;
-  --mobile-header-height: 220px; /* Using px instead of vh for more precise control */
+  --mobile-header-height: 280px; /* Much larger header for mobile */
 }
 
 @font-face {
@@ -337,62 +337,82 @@ body {
 }
 
 @media (max-width: 768px) {
+  /* Entire viewport structure changed for mobile */
+  body {
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .container {
+    display: block;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+  
   .navigation-arrows {
     display: none;
   }
 
-  /* Use fixed positioning for mobile header */
+  /* Fixed header with Penrose visualization */
   .penrose-container {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: var(--mobile-header-height);
-    min-height: auto;
-    z-index: 10;
+    min-height: var(--mobile-header-height);
     padding: 0.5rem;
     background-color: var(--background-color);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
     padding-left: 1rem;
   }
   
-  /* Adjust steps container to account for fixed header */
+  /* Move staircase image higher */
+  .penrose-image-container {
+    transform: scale(0.4);
+    margin-top: 50px;
+    margin-left: -30px;
+  }
+  
+  /* Full height scroll container */
   .steps-container {
+    position: absolute;
+    top: var(--mobile-header-height);
+    left: 0;
     width: 100%;
-    margin-left: 0;
-    margin-top: var(--mobile-header-height);
-    height: calc(100vh - var(--mobile-header-height));
+    height: calc(100vh - var(--mobile-header-height) - 40px); /* Account for step indicator */
+    margin: 0;
+    padding: 0;
     overflow-y: auto;
-    overflow-x: hidden;
-    padding-bottom: 60px;
+    scroll-snap-type: y mandatory;
   }
 
-  /* Fix mobile step sections */
+  /* Ensure one step per view */
   .step-section {
-    min-height: calc(100vh - var(--mobile-header-height));
-    height: auto;
+    height: calc(100vh - var(--mobile-header-height) - 40px);
+    min-height: calc(100vh - var(--mobile-header-height) - 40px);
     scroll-snap-align: start;
-    padding: 1rem;
-    padding-top: 1.5rem;
-    margin-top: 0;
+    scroll-snap-stop: always;
+    padding: 20px;
+    margin: 0;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: flex-start;
-    position: relative;
-    opacity: 1;
-    scroll-margin-top: 0;
   }
   
-  /* Fix content spacing */
+  /* Better content spacing */
   .step-content {
     max-width: 100%;
-    margin-top: 0;
-    padding: 0.5rem;
+    margin-top: 20px;
+    padding: 0;
   }
   
-  /* Style adjustments for mobile */
+  /* Style adjustments */
   .sign-up-button {
     font-size: 1.6rem;
     margin-bottom: 0.25rem;
@@ -427,22 +447,17 @@ body {
     text-align: left;
   }
   
-  /* Position staircase higher */
-  .penrose-image-container {
-    transform: scale(0.4);
-    margin-top: 50px;
-    margin-left: -40px;
-  }
-  
-  /* Reposition step indicator to bottom of viewport */
+  /* Fixed step indicator at bottom */
   .step-indicator {
     position: fixed;
-    bottom: 10px;
+    bottom: 0;
     left: 0;
     width: 100%;
-    text-align: center;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: rgba(244, 244, 244, 0.9);
-    padding: 8px 0;
     z-index: 20;
     font-size: 1.2rem;
   }
@@ -456,19 +471,14 @@ body {
 
 @media (max-width: 480px) {
   :root {
-    --mobile-header-height: 240px;
+    --mobile-header-height: 300px; /* Even larger for small screens */
   }
   
-  /* Adjust for smaller phones */
+  /* Further adjustments for small screens */
   .penrose-image-container {
     transform: scale(0.35);
     margin-top: 55px;
-    margin-left: -50px;
-  }
-  
-  /* Smaller ball for very small screens */
-  :root {
-    --ball-size: 10px;
+    margin-left: -40px;
   }
   
   .sign-up-button {
@@ -489,7 +499,7 @@ body {
   
   .step-content h2 {
     font-size: 1.2rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
   }
   
   .step-content p {
@@ -497,13 +507,11 @@ body {
     line-height: 1.3;
   }
   
+  .step-content {
+    margin-top: 15px;
+  }
+  
   .step-indicator {
-    bottom: 15px;
     font-size: 1rem;
   }
-}
-
-/* Special fix for step 14 to ensure it's visible */
-.step-section[data-step="14"] {
-  padding-bottom: 80px;
 }
