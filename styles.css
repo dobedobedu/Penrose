@@ -5,210 +5,471 @@
   --muted-color: #666666;
   --accent-color: #FF6B00;
   --section-height: 100vh;
-  --ball-size: 24px; /* Increased ball size (was 16px) */
-  --step-indicator-height: 3.5rem; /* Height of the step indicator */
-  --step-bottom-margin: 6rem; /* Increased margin for better spacing on mobile */
-  --content-padding: 2rem;
-  --step-content-margin: 3rem; /* Additional margin between content and stairs */
+  --ball-size: 16px; /* Adjusted size to match screenshot */
 }
 
-/* Base styles for all screens */
-.container {
-  display: flex;
-  height: 100vh;
+@font-face {
+  font-family: 'SF Pro Expanded Black';
+  src: url('https://fonts.cdnfonts.com/css/sf-pro-expanded-black') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
   overflow: hidden;
 }
 
-.penrose-container {
-  flex: 1;
-  position: fixed;
+/* Main container split layout */
+.container {
+  display: flex;
+  width: 100%;
   height: 100vh;
+}
+
+/* Left panel with fixed Penrose visualization */
+.penrose-container {
+  width: 50%;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
   padding: 2rem;
   background-color: var(--background-color);
 }
 
-.steps-container {
-  flex: 1;
-  overflow-y: auto;
-  margin-left: 50%;
-  scroll-behavior: smooth;
-  scroll-snap-type: y proximity;
+.penrose-title {
+  position: absolute;
+  top: 10%;
+  text-align: left;
+  width: 80%;
 }
 
-/* Step sections */
-.step-section {
-  min-height: 100vh;
-  padding: var(--content-padding);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.sign-up-button {
+  display: inline-block;
+  font-family: 'SF Pro Expanded Black', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.sign-up-button:hover {
+  transform: translateY(-3px);
+  opacity: 0.9;
+}
+
+.penrose-title h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.tagline {
+  color: var(--muted-color);
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+/* Penrose image container with exact dimensions */
+.penrose-image-container {
   position: relative;
-  scroll-snap-align: start;
+  width: 500px; /* Hard-coded width as specified */
+  height: 381px; /* Hard-coded height as specified */
+  margin-bottom: 2rem;
+  transform-origin: center center; /* For scaling on small screens */
 }
 
-/* Step content - removed glassmorphism */
-.step-content {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem;
-  background: #ffffff; /* Solid white background instead of blur */
-  border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  border: 1px solid #f0f0f0; /* Lighter border */
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.5s ease-out;
+.base-staircase {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
-.step-section.active .step-content {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Glowing ball - bigger orange ball */
+/* Glowing ball - Updated for exact positioning and larger size */
 .glowing-ball {
   position: absolute;
   width: var(--ball-size);
   height: var(--ball-size);
-  background-color: var(--accent-color);
   border-radius: 50%;
-  box-shadow: 0 0 15px 5px rgba(255, 107, 0, 0.5); /* Enhanced glow */
+  background-color: var(--accent-color);
+  box-shadow: 0 0 15px 4px rgba(255, 107, 0, 0.7); /* Adjusted glow effect */
+  transform: translate(-50%, -50%);
   transition: left 0.6s ease-out, top 0.6s ease-out;
   z-index: 10;
+  pointer-events: none;
 }
 
-/* Navigation arrows for desktop */
-.navigation-arrows {
-  position: fixed;
-  right: 2rem;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  z-index: 100;
+/* Step markers (invisible, used for positioning) */
+#step-markers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
-.nav-arrow {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: white; /* Solid background instead of blur */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: 1px solid #f0f0f0;
+.step-marker {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
 }
 
-.nav-arrow:hover {
-  background: #f5f5f5;
-  transform: scale(1.1);
-}
-
-/* Step indicator styling */
+/* Step indicator with clickable reset */
 .step-indicator {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.2rem;
-  padding: 0.8rem 0;
-  z-index: 20;
-  background: white; /* Solid background */
-  border-top: 1px solid #f0f0f0;
+  position: absolute;
+  bottom: 10%;
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--text-color);
+}
+
+#current-step {
+  color: var(--accent-color);
+  font-weight: 600;
 }
 
 .clickable-reset {
   cursor: pointer;
+  transition: color 0.3s ease;
 }
 
-/* Mobile styles */
-@media (max-width: 768px) {
+.clickable-reset:hover {
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+/* Right panel with scrollable content */
+.steps-container {
+  width: 50%;
+  margin-left: 50%;
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory !important;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.steps-container::-webkit-scrollbar {
+  display: none;
+}
+
+.step-section {
+  height: 100vh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1.5rem;
+  position: relative;
+  transition: opacity 0.3s ease;
+  opacity: 1; /* Set all sections to full opacity */
+}
+
+.step-section.active {
+  opacity: 1;
+}
+
+.step-section.adjacent {
+  opacity: 1; /* Keep adjacent sections fully visible */
+}
+
+.step-content {
+  max-width: 80%;
+  transform: translateY(0); /* No initial transform */
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 1; /* Keep content fully visible */
+}
+
+.step-section.active .step-content {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.step-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.step-content p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--muted-color);
+  max-width: 90%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .step-content h2 {
+    font-size: 2rem;
+  }
+  
+  .sign-up-button {
+    font-size: 2.2rem;
+  }
+  
+  .penrose-title h2 {
+    font-size: 1.5rem;
+  }
+  
+  /* Keep exact dimensions on medium screens, just scale down */
+  .penrose-image-container {
+    transform: scale(0.9);
+  }
+}
+
+@media (max-width: 992px) {
   .container {
     flex-direction: column;
   }
-
+  
   .penrose-container {
-    position: relative;
-    height: auto;
-    min-height: 50vh;
-    padding: 1rem;
-  }
-
-  .steps-container {
-    margin-left: 0;
-    height: 50vh;
-    scroll-snap-type: y mandatory; /* Make snap stricter on mobile */
-  }
-
-  .step-section {
-    min-height: 75vh; /* Reduced height to fit better on mobile */
-    padding: 1.5rem;
-    padding-bottom: calc(1.5rem + var(--step-bottom-margin)); /* Add bottom padding to clear step indicator */
-    justify-content: flex-start;
-    scroll-snap-align: start;
-    scroll-snap-stop: always; /* Force snap on mobile */
-  }
-
-  .step-content {
-    padding: 1.5rem;
-    margin-bottom: var(--step-bottom-margin); /* Add margin to create space above the step indicator */
-  }
-
-  .navigation-arrows {
-    display: none; /* Hide arrows on mobile */
-  }
-
-  /* Mobile-specific step indicator */
-  .step-indicator {
-    position: fixed;
-    bottom: 0;
-    left: 0;
+    position: sticky;
+    top: 0;
     width: 100%;
-    height: var(--step-indicator-height);
-    text-align: center;
-    background: white; /* Solid background */
-    padding: 0.8rem 0;
-    z-index: 20;
-    font-size: 1.2rem;
-    border-top: 1px solid #f0f0f0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height: 45vh; /* Increased for better visualization */
+    min-height: 320px;
+    padding: 1rem;
+    z-index: 5;
   }
   
-  /* Ensure sufficient spacing between Penrose stairs and step content on mobile */
+  .steps-container {
+    width: 100%;
+    margin-left: 0;
+    height: auto;
+    min-height: 55vh;
+  }
+  
+  .step-section {
+    min-height: 65vh;
+    height: auto;
+    padding: 1.5rem 1rem;
+    scroll-snap-align: start;
+    scroll-margin-top: 55vh; /* Add margin to prevent overlap */
+    padding-bottom: 4rem;
+  }
+  
+  .penrose-title {
+    top: 5%; /* Moved up to save space */
+    text-align: center;
+    width: 100%;
+  }
+  
+  .step-indicator {
+    bottom: 5%; /* Moved down to save space */
+  }
+  
+  .penrose-title p, .tagline {
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  /* Scale down for tablets */
   .penrose-image-container {
-    margin-bottom: var(--step-content-margin);
+    transform: scale(0.75);
+    margin-top: 5px; /* Adjusted vertical positioning */
   }
 }
 
-/* Small mobile adjustments */
-@media (max-width: 480px) {
-  .step-section {
-    min-height: 80vh;
+@media (max-width: 768px) {
+  /* Make the Penrose container sticky at the top */
+  .penrose-container {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 40vh; /* Reduced height to show more content */
+    min-height: 250px;
+    z-index: 10;
     padding: 1rem;
-    /* The scroll snap has to be adjusted for the keyboard */
-    scroll-snap-align: start;
-    padding-bottom: calc(1rem + var(--step-bottom-margin)); /* Ensure enough bottom padding */
-  }
-
-  .step-content {
-    padding: 1rem;
-    margin-bottom: var(--step-bottom-margin);
-  }
-
-  :root {
-    --step-bottom-margin: 5rem; /* Increased even more for small screens */
-    --content-padding: 1rem;
+    background-color: var(--background-color);
+    align-items: flex-start; /* Left align for mobile */
+    padding-left: 1.5rem;
   }
   
-  /* Additional spacing for the Penrose container on small screens */
+  /* Adjust steps container to fill remaining space */
+  .steps-container {
+    width: 100%;
+    margin-left: 0;
+    height: auto;
+    overflow-y: auto;
+    padding-bottom: 60px; /* Add padding at the bottom for better scrolling */
+    scroll-behavior: smooth;
+    scroll-snap-type: y proximity; /* Changed from mandatory to proximity for better experience */
+  }
+  
+  /* Make each step section taller to prevent skipping */
+  .step-section {
+    min-height: 70vh; /* Taller sections ensure more precise scrolling */
+    height: auto;
+    padding: 2rem 1rem 4rem 1rem; /* Increased bottom padding */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Changed from center to flex-end to align content to bottom */
+    position: relative;
+    scroll-margin-top: 40vh; /* Offset for sticky header */
+    scroll-snap-align: end; /* Changed from start to end to snap to bottom */
+    scroll-snap-stop: always; /* Force stopping at each section */
+  }
+  
+  /* Ensure the step content is always visible */
+  .step-content {
+    max-width: 100%;
+    opacity: 1 !important; /* Always visible */
+    transform: none !important; /* No transform */
+    transition: none !important; /* No transitions */
+    padding-bottom: 2rem; /* More padding to prevent content being cut off */
+    margin-top: auto; /* Push content to the bottom */
+  }
+  
+  .sign-up-button {
+    font-size: 1.8rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .penrose-title {
+    text-align: left; /* Left-align on mobile as requested */
+    padding-left: 0.5rem;
+  }
+  
+  .penrose-title h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .step-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .step-content p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  .tagline {
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    text-align: left; /* Left-align on mobile */
+  }
+  
+  /* Further scale down for mobile devices */
   .penrose-image-container {
-    margin-bottom: var(--step-content-margin);
+    transform: scale(0.65);
+    margin-top: 60px; /* More space at top on mobile */
+    margin-left: -30px; /* Adjust horizontal position */
+  }
+  
+  /* Better positioning for the step indicator */
+  .step-indicator {
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 8px 0;
+    z-index: 20;
+    font-size: 1.2rem;
+  }
+  
+  /* Ensure the glowing ball is visible on mobile */
+  .glowing-ball {
+    width: 14px;
+    height: 14px;
+    box-shadow: 0 0 20px 6px rgba(255, 107, 0, 0.8); /* Enhanced glow */
+  }
+}
+
+/* Adjust for smaller mobile screens */
+@media (max-width: 480px) {
+  .penrose-container {
+    height: 35vh; /* Optimized height */
+    min-height: 220px;
+    padding: 0.5rem;
+    justify-content: flex-start;
+    padding-top: 3rem;
+    align-items: flex-start; /* Left align for mobile */
+  }
+  
+  .step-section {
+    min-height: 65vh;
+    padding: 1.5rem 0.75rem 4rem 0.75rem; /* More bottom padding */
+    justify-content: flex-end; /* Ensure text content aligns to bottom only */
+    scroll-snap-align: end; /* Force snap to bottom only */
+    scroll-snap-stop: always; /* Ensure it always stops at each section */
+    display: flex;
+    align-items: flex-start; /* Align content to left */
+  }
+  
+  /* Adjust for smaller phones */
+  .penrose-image-container {
+    transform: scale(0.55);
+    margin-top: 50px;
+    margin-left: -20px;
+  }
+  
+  /* Smaller ball for very small screens */
+  :root {
+    --ball-size: 14px; /* Adjusted for mobile */
+  }
+  
+  .sign-up-button {
+    font-size: 1.5rem;
+  }
+  
+  .penrose-title {
+    text-align: left;
+    padding-left: 0.5rem;
+  }
+  
+  .penrose-title h2 {
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+  }
+  
+  .tagline {
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+    text-align: left;
+  }
+  
+  .step-content {
+    max-width: 100%;
+    margin-bottom: 0; /* Remove bottom margin */
+    margin-top: auto; /* Push content to bottom */
+    padding-bottom: 1rem; /* Add padding instead */
+  }
+  
+  .step-content h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .step-content p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 0; /* Remove extra bottom margin */
   }
 }
