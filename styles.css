@@ -5,8 +5,8 @@
   --muted-color: #666666;
   --accent-color: #FF6B00;
   --section-height: 100vh;
-  --ball-size: 16px; /* Adjusted size to match screenshot */
-  --mobile-header-height: 50vh; /* Significantly increased height to avoid overlap */
+  --ball-size: 16px;
+  --mobile-header-height: 220px; /* Using px instead of vh for more precise control */
 }
 
 @font-face {
@@ -92,10 +92,10 @@ body {
 /* Penrose image container with exact dimensions */
 .penrose-image-container {
   position: relative;
-  width: 500px; /* Hard-coded width as specified */
-  height: 381px; /* Hard-coded height as specified */
+  width: 500px;
+  height: 381px;
   margin-bottom: 2rem;
-  transform-origin: center center; /* For scaling on small screens */
+  transform-origin: center center;
 }
 
 .base-staircase {
@@ -104,14 +104,14 @@ body {
   object-fit: contain;
 }
 
-/* Glowing ball - Updated for exact positioning and larger size */
+/* Glowing ball */
 .glowing-ball {
   position: absolute;
   width: var(--ball-size);
   height: var(--ball-size);
   border-radius: 50%;
   background-color: var(--accent-color);
-  box-shadow: 0 0 15px 4px rgba(255, 107, 0, 0.7); /* Adjusted glow effect */
+  box-shadow: 0 0 15px 4px rgba(255, 107, 0, 0.7);
   transform: translate(-50%, -50%);
   transition: left 0.6s ease-out, top 0.6s ease-out;
   z-index: 10;
@@ -184,7 +184,7 @@ body {
   padding: 1.5rem;
   position: relative;
   transition: opacity 0.3s ease;
-  opacity: 1; /* Set all sections to full opacity */
+  opacity: 1;
   box-sizing: border-box;
 }
 
@@ -193,14 +193,14 @@ body {
 }
 
 .step-section.adjacent {
-  opacity: 1; /* Keep adjacent sections fully visible */
+  opacity: 1;
 }
 
 .step-content {
   max-width: 80%;
-  transform: translateY(0); /* No initial transform */
+  transform: translateY(0);
   transition: transform 0.3s ease, opacity 0.3s ease;
-  opacity: 1; /* Keep content fully visible */
+  opacity: 1;
 }
 
 .step-section.active .step-content {
@@ -272,7 +272,6 @@ body {
     font-size: 1.5rem;
   }
   
-  /* Keep exact dimensions on medium screens, just scale down */
   .penrose-image-container {
     transform: scale(0.9);
   }
@@ -287,43 +286,43 @@ body {
     position: sticky;
     top: 0;
     width: 100%;
-    height: 45vh; /* Increased for better visualization */
-    min-height: 350px; /* Increased min-height for better display */
+    height: 45vh;
+    min-height: 350px;
     padding: 1rem;
     z-index: 5;
-    background-color: var(--background-color); /* Ensure background is visible */
+    background-color: var(--background-color);
   }
   
   .steps-container {
     width: 100%;
     margin-left: 0;
     height: auto;
-    min-height: 60vh; /* Increased min-height */
-    padding-top: 5vh; /* Add padding to create space between container and content */
+    min-height: 60vh;
+    padding-top: 5vh;
   }
   
   .step-section {
-    min-height: 75vh; /* Increased height for better spacing */
+    min-height: 75vh;
     height: auto;
-    padding: 2rem 1rem 4rem 1rem; /* Increased bottom padding */
+    padding: 2rem 1rem 4rem 1rem;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Changed to center to align content vertically in the middle */
+    justify-content: center;
     position: relative;
-    scroll-margin-top: 45vh; /* Increased offset for sticky header */
-    scroll-snap-align: center; /* Changed to center for better positioning */
-    scroll-snap-stop: always; /* Force stopping at each section */
-    margin-top: 5vh; /* Add top margin to space from the staircase */
+    scroll-margin-top: 45vh;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    margin-top: 5vh;
   }
   
   .penrose-title {
-    top: 5%; /* Moved up to save space */
+    top: 5%;
     text-align: center;
     width: 100%;
   }
   
   .step-indicator {
-    bottom: 5%; /* Moved down to save space */
+    bottom: 5%;
   }
   
   .penrose-title p, .tagline {
@@ -331,81 +330,65 @@ body {
     text-align: center;
   }
   
-  /* Scale down for tablets */
   .penrose-image-container {
     transform: scale(0.75);
-    margin-top: 5px; /* Adjusted vertical positioning */
+    margin-top: 5px;
   }
 }
 
 @media (max-width: 768px) {
-  /* Hide navigation arrows on mobile */
   .navigation-arrows {
     display: none;
   }
 
-  /* Make the Penrose container sticky at the top with increased height */
+  /* Use fixed positioning for mobile header */
   .penrose-container {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
     width: 100%;
-    height: var(--mobile-header-height); /* INCREASED SIGNIFICANTLY to give full clearance */
-    min-height: 320px; /* Further increased min-height to ensure staircase is fully visible */
+    height: var(--mobile-header-height);
+    min-height: auto;
     z-index: 10;
     padding: 0.5rem;
     background-color: var(--background-color);
-    align-items: flex-start; /* Left align for mobile */
-    justify-content: flex-start; /* Align content to top */
+    align-items: flex-start;
+    justify-content: flex-start;
     padding-left: 1rem;
   }
   
-  /* Adjust steps container to fill remaining space */
+  /* Adjust steps container to account for fixed header */
   .steps-container {
     width: 100%;
     margin-left: 0;
-    height: auto;
-    overflow-y: scroll; /* Ensure it's scrollable */
+    margin-top: var(--mobile-header-height);
+    height: calc(100vh - var(--mobile-header-height));
+    overflow-y: auto;
     overflow-x: hidden;
-    padding-bottom: 60px; /* Add padding at the bottom for better scrolling */
-    scroll-behavior: smooth;
-    scroll-snap-type: y mandatory; /* Re-enable snap scrolling */
+    padding-bottom: 60px;
   }
 
-  /* Re-enable scrolling behavior */
-  body {
-    overflow: auto;
-  }
-  
-  /* Fix mobile step sections for proper scrolling */
+  /* Fix mobile step sections */
   .step-section {
-    min-height: 60vh; /* Reduced height */
+    min-height: calc(100vh - var(--mobile-header-height));
     height: auto;
     scroll-snap-align: start;
-    padding: 0.5rem 1rem 2rem 1rem; /* Reduced padding */
-    padding-top: 5vh; /* Space from the top edge of the content area */
-    margin-top: 0; /* Remove top margin */
+    padding: 1rem;
+    padding-top: 1.5rem;
+    margin-top: 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Start alignment for better spacing */
+    justify-content: flex-start;
     align-items: flex-start;
     position: relative;
     opacity: 1;
-    scroll-margin-top: var(--mobile-header-height);
-    margin-bottom: 0; /* Remove margin between sections */
+    scroll-margin-top: 0;
   }
   
-  /* Special handling for Step 1 to avoid overlap */
-  .step-section[data-step="1"] {
-    padding-top: 5vh; /* Keep standard spacing */
-  }
-  
-  /* Fix content positioning to appear below header */
+  /* Fix content spacing */
   .step-content {
     max-width: 100%;
     margin-top: 0;
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
     padding: 0.5rem;
   }
   
@@ -416,7 +399,7 @@ body {
   }
   
   .penrose-title {
-    text-align: left; /* Left-align on mobile as requested */
+    text-align: left;
     padding-left: 0.5rem;
     top: 5%;
     width: 90%;
@@ -434,65 +417,58 @@ body {
   
   .step-content p {
     font-size: 1rem;
-    line-height: 1.4; /* Slightly reduced line height */
+    line-height: 1.4;
     margin-bottom: 0;
   }
   
   .tagline {
     font-size: 0.8rem;
     margin-top: 0.3rem;
-    text-align: left; /* Left-align on mobile */
+    text-align: left;
   }
   
-  /* Further scale down for mobile devices but position in more space */
+  /* Position staircase higher */
   .penrose-image-container {
-    transform: scale(0.4); /* Smaller scale */
-    margin-top: 60px; /* INCREASED top margin to position staircase higher */
-    margin-left: -40px; /* Adjust horizontal position */
+    transform: scale(0.4);
+    margin-top: 50px;
+    margin-left: -40px;
   }
   
-  /* Better positioning for the step indicator */
+  /* Reposition step indicator to bottom of viewport */
   .step-indicator {
     position: fixed;
     bottom: 10px;
     left: 0;
     width: 100%;
     text-align: center;
-    background-color: rgba(244, 244, 244, 0.9); /* Updated to match new background color */
+    background-color: rgba(244, 244, 244, 0.9);
     padding: 8px 0;
     z-index: 20;
     font-size: 1.2rem;
   }
   
-  /* Ensure the glowing ball is visible on mobile */
   .glowing-ball {
     width: 12px;
     height: 12px;
-    box-shadow: 0 0 20px 6px rgba(255, 107, 0, 0.8); /* Enhanced glow */
+    box-shadow: 0 0 20px 6px rgba(255, 107, 0, 0.8);
   }
 }
 
-/* Adjust for smaller mobile screens */
 @media (max-width: 480px) {
   :root {
-    --mobile-header-height: 54vh; /* FURTHER INCREASED for smaller screens to ensure full clearance */
-  }
-  
-  .penrose-container {
-    height: var(--mobile-header-height);
-    min-height: 340px; /* Further increased min-height */
+    --mobile-header-height: 240px;
   }
   
   /* Adjust for smaller phones */
   .penrose-image-container {
-    transform: scale(0.35); /* Even smaller scale */
-    margin-top: 70px; /* INCREASED top margin further */
-    margin-left: -50px; /* More left offset to ensure visibility */
+    transform: scale(0.35);
+    margin-top: 55px;
+    margin-left: -50px;
   }
   
   /* Smaller ball for very small screens */
   :root {
-    --ball-size: 10px; /* Adjusted for mobile */
+    --ball-size: 10px;
   }
   
   .sign-up-button {
@@ -500,7 +476,7 @@ body {
   }
   
   .penrose-title {
-    top: 2%; /* Move up further */
+    top: 2%;
   }
   
   .penrose-title h2 {
@@ -518,23 +494,16 @@ body {
   
   .step-content p {
     font-size: 0.9rem;
-    line-height: 1.3; /* Further reduced line height */
+    line-height: 1.3;
   }
   
-  /* Make step-indicator more visible */
   .step-indicator {
     bottom: 15px;
     font-size: 1rem;
-  }
-  
-  /* Adjust mobile sections for smaller screens */
-  .step-section {
-    padding-top: 5vh; /* Keep consistent spacing */
-    min-height: 50vh; /* Reduced section height */
   }
 }
 
 /* Special fix for step 14 to ensure it's visible */
 .step-section[data-step="14"] {
-  padding-bottom: 80px; /* Extra padding to ensure visibility */
+  padding-bottom: 80px;
 }
