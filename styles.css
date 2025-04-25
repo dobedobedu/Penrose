@@ -5,11 +5,11 @@
   --muted-color: #666666;
   --accent-color: #FF6B00;
   --section-height: 100vh;
-  --ball-size: 16px;
+  --ball-size: 24px; /* Increased ball size (was 16px) */
   --step-indicator-height: 3.5rem; /* Height of the step indicator */
   --step-bottom-margin: 6rem; /* Increased margin for better spacing on mobile */
-  --blur-background: rgba(255, 255, 255, 0.8);
   --content-padding: 2rem;
+  --step-content-margin: 3rem; /* Additional margin between content and stairs */
 }
 
 /* Base styles for all screens */
@@ -49,16 +49,15 @@
   scroll-snap-align: start;
 }
 
-/* Step content with glassmorphism */
+/* Step content - removed glassmorphism */
 .step-content {
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
-  background: var(--blur-background);
-  backdrop-filter: blur(10px);
+  background: #ffffff; /* Solid white background instead of blur */
   border-radius: 16px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid #f0f0f0; /* Lighter border */
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.5s ease-out;
@@ -67,6 +66,18 @@
 .step-section.active .step-content {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Glowing ball - bigger orange ball */
+.glowing-ball {
+  position: absolute;
+  width: var(--ball-size);
+  height: var(--ball-size);
+  background-color: var(--accent-color);
+  border-radius: 50%;
+  box-shadow: 0 0 15px 5px rgba(255, 107, 0, 0.5); /* Enhanced glow */
+  transition: left 0.6s ease-out, top 0.6s ease-out;
+  z-index: 10;
 }
 
 /* Navigation arrows for desktop */
@@ -85,19 +96,34 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--blur-background);
-  backdrop-filter: blur(5px);
+  background: white; /* Solid background instead of blur */
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid #f0f0f0;
 }
 
 .nav-arrow:hover {
-  background: rgba(255, 255, 255, 0.9);
+  background: #f5f5f5;
   transform: scale(1.1);
+}
+
+/* Step indicator styling */
+.step-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  padding: 0.8rem 0;
+  z-index: 20;
+  background: white; /* Solid background */
+  border-top: 1px solid #f0f0f0;
+}
+
+.clickable-reset {
+  cursor: pointer;
 }
 
 /* Mobile styles */
@@ -145,15 +171,19 @@
     width: 100%;
     height: var(--step-indicator-height);
     text-align: center;
-    background: var(--blur-background);
-    backdrop-filter: blur(5px);
+    background: white; /* Solid background */
     padding: 0.8rem 0;
     z-index: 20;
     font-size: 1.2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    border-top: 1px solid #f0f0f0;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  
+  /* Ensure sufficient spacing between Penrose stairs and step content on mobile */
+  .penrose-image-container {
+    margin-bottom: var(--step-content-margin);
   }
 }
 
@@ -175,5 +205,10 @@
   :root {
     --step-bottom-margin: 5rem; /* Increased even more for small screens */
     --content-padding: 1rem;
+  }
+  
+  /* Additional spacing for the Penrose container on small screens */
+  .penrose-image-container {
+    margin-bottom: var(--step-content-margin);
   }
 }
