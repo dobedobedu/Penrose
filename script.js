@@ -58,6 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
       section.style.display = "block";
       section.style.visibility = "visible";
       section.style.opacity = "1";
+      section.style.position = "static";
       
       // Make the content inside visible too
       const content = section.querySelector('.step-content');
@@ -66,8 +67,15 @@ document.addEventListener("DOMContentLoaded", () => {
         content.style.visibility = "visible";
         content.style.opacity = "1";
         content.style.transform = "none";
+        content.style.position = "static";
       }
     });
+    
+    // Ensure the container is properly set up for mobile
+    stepsContainer.style.overflowY = "auto";
+    stepsContainer.style.height = "auto";
+    stepsContainer.style.display = "block";
+    stepsContainer.style.paddingTop = "var(--mobile-header-height)";
   }
   
   // Ensure the Penrose container is properly sized for mobile
@@ -119,6 +127,65 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   
+  // Special function for mobile to completely reset the layout
+  function resetMobileLayout() {
+    if (!isMobile) return;
+    
+    // Add the mobile view class to body
+    document.body.classList.add('mobile-view');
+    
+    // Adjust container sizes
+    adjustPenroseContainerForMobile();
+    
+    // Reset main container
+    const container = document.querySelector('.container');
+    if (container) {
+      container.style.flexDirection = "column";
+      container.style.height = "auto";
+      container.style.overflow = "auto";
+    }
+    
+    // Reset steps container
+    stepsContainer.style.width = "100%";
+    stepsContainer.style.marginLeft = "0";
+    stepsContainer.style.overflowY = "auto";
+    stepsContainer.style.height = "auto";
+    stepsContainer.style.display = "block";
+    stepsContainer.style.paddingTop = window.innerWidth <= 480 ? "20vh" : "23vh";
+    
+    // Reset all step sections
+    stepSections.forEach((section, index) => {
+      section.style.position = "static";
+      section.style.height = "auto";
+      section.style.minHeight = "auto";
+      section.style.display = "block";
+      section.style.visibility = "visible";
+      section.style.opacity = "1";
+      section.style.marginTop = index === 0 ? "0" : "10px";
+      section.style.marginBottom = "20px";
+      section.style.padding = "5px 15px 15px 15px";
+      
+      // Reset step content
+      const content = section.querySelector('.step-content');
+      if (content) {
+        content.style.position = "static";
+        content.style.transform = "none";
+        content.style.margin = "0";
+        content.style.padding = "10px";
+        content.style.display = "block";
+        content.style.visibility = "visible";
+        content.style.opacity = "1";
+      }
+    });
+    
+    // Ensure step 14 has extra padding
+    const lastStep = document.querySelector('.step-section[data-step="14"]');
+    if (lastStep) {
+      lastStep.style.paddingBottom = "80px";
+      lastStep.style.marginBottom = "60px";
+    }
+  }
+  
   // Function to scroll to a specific section with improved behavior for iOS
   function scrollToSection(index) {
     if (isScrolling || index < 1 || index > totalSteps) return;
@@ -126,9 +193,10 @@ document.addEventListener("DOMContentLoaded", () => {
     isScrolling = true;
     updateActiveSection(index);
     
-    // Force all content to be visible on mobile
+    // On mobile, ensure all content is visible first
     if (isMobile) {
       forceContentVisibility();
+      resetMobileLayout();
     }
     
     const targetSection = document.querySelector(`.step-section[data-step="${index}"]`);
@@ -180,7 +248,7 @@ document.addEventListener("DOMContentLoaded", () => {
     moveGlowingBall(index);
     activeSection = index;
     
-    // On mobile, force content visibility after section change
+    // On mobile, ensure content visibility
     if (isMobile) {
       forceContentVisibility();
     }
@@ -201,32 +269,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to get the most visible section with improved calculation for mobile
   function getMostVisibleSection() {
+    // On mobile, don't change active section based on scroll position
+    // since we're using a linear layout with all sections visible
+    if (isMobile) {
+      return activeSection;
+    }
+    
     let maxVisibility = 0;
     let mostVisibleIndex = activeSection;
     
     // Get the viewport height and scroll position for better calculations
     const viewportHeight = window.innerHeight;
-    const scrollTop = stepsContainer.scrollTop;
     
     stepSections.forEach((section) => {
       const rect = section.getBoundingClientRect();
       const sectionStep = parseInt(section.dataset.step, 10);
       
-      // Calculate visibility with viewport adjustment for mobile
+      // Calculate visibility with viewport adjustment
       let visibleTop = Math.max(0, rect.top);
       let visibleBottom = Math.min(viewportHeight, rect.bottom);
-      
-      // On mobile, adjust calculations to account for the sticky header
-      if (isMobile) {
-        // For mobile, require less visibility to consider a section active
-        const headerHeight = isMobile ? viewportHeight * 0.2 : 0; // Reduced threshold for easier scrolling
-        visibleTop = Math.max(headerHeight, rect.top);
-        
-        // Special case for step 1 on iOS for immediate visibility on load
-        if (sectionStep === 1 && isIOS && scrollTop < 50) {
-          return mostVisibleIndex = 1;
-        }
-      }
       
       const visibleHeight = Math.max(0, visibleBottom - visibleTop);
       const visibility = visibleHeight / rect.height;
@@ -251,11 +312,8 @@ document.addEventListener("DOMContentLoaded", () => {
       // Force all content to be immediately visible
       forceContentVisibility();
       
-      // Add mobile class to body
-      document.body.classList.add('mobile-view');
-      
-      // Adjust Penrose container size
-      adjustPenroseContainerForMobile();
+      // Reset the mobile layout
+      resetMobileLayout();
     }
     
     penroseContainer.offsetWidth; // Force reflow
@@ -270,19 +328,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // Reset scroll position first
         stepsContainer.scrollTop = 0;
         
-        // Ensure first step is visible
-        const firstSection = document.querySelector('.step-section[data-step="1"]');
-        if (firstSection) {
-          setTimeout(() => {
-            firstSection.scrollIntoView({
-              block: 'start',
-              behavior: 'auto'
-            });
-            
-            // Force visibility again after scrolling
-            forceContentVisibility();
-          }, 100);
-        }
+        // Force content visibility
+        forceContentVisibility();
+        resetMobileLayout();
       }
     }, 50);
   }, 100);
@@ -313,9 +361,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Make sure content is visible while scrolling on mobile
     if (isMobile) {
       forceContentVisibility();
+      return; // Don't track active section on mobile since all are visible
     }
     
-    // Set a new timeout - FASTER on mobile
+    // Set a new timeout - Only for desktop
     scrollTimeout = setTimeout(() => {
       if (isScrolling) return;
       
@@ -324,61 +373,23 @@ document.addEventListener("DOMContentLoaded", () => {
       if (mostVisibleSection !== activeSection) {
         updateActiveSection(mostVisibleSection);
       }
-    }, isMobile ? 30 : 100); // Reduced timeout for more responsive mobile experience
+    }, 100);
   }, { passive: true });
   
-  // Enhanced touch handling for mobile with reduced sensitivity for easier scrolling
-  let touchStartY = 0;
-  let touchEndY = 0;
-  let lastSwipeTime = 0;
-  
-  // Only add touch handlers on mobile
+  // Enhanced touch handling for mobile
   if (isMobile) {
-    stepsContainer.addEventListener('touchstart', (e) => {
-      touchStartY = e.touches[0].clientY;
-      
-      // Ensure content visibility on any touch
+    // On mobile, we don't need complex touch handling since we've switched to a simple list view
+    // Just ensure content is visible on any interaction
+    stepsContainer.addEventListener('touchstart', () => {
+      forceContentVisibility();
+      resetMobileLayout();
+    }, { passive: true });
+    
+    stepsContainer.addEventListener('touchmove', () => {
       forceContentVisibility();
     }, { passive: true });
     
-    stepsContainer.addEventListener('touchend', (e) => {
-      if (isScrolling) return; // Prevent handling during animation
-      
-      touchEndY = e.changedTouches[0].clientY;
-      
-      // Calculate swipe distance and direction
-      const touchDistance = touchStartY - touchEndY;
-      const now = new Date().getTime();
-      
-      // Only process swipes that are significant enough but with lower threshold for easier navigation
-      if (Math.abs(touchDistance) > 50) { // Increased threshold to make it less sensitive
-        const direction = touchDistance > 0 ? 1 : -1; // 1 = up, -1 = down
-        
-        // Only navigate if sufficient time has passed since last swipe to prevent accidental triggers
-        if (now - lastSwipeTime > 400) { // Increased delay between swipes
-          lastSwipeTime = now;
-          
-          // If swiping up, go to next step; if swiping down, go to previous step
-          if (direction === 1 && activeSection < totalSteps) {
-            scrollToSection(activeSection + 1);
-          } else if (direction === -1 && activeSection > 1) {
-            scrollToSection(activeSection - 1);
-          }
-        }
-      }
-      
-      // Update the visible section after a swipe
-      setTimeout(() => {
-        // Force visibility again after touch
-        forceContentVisibility();
-        
-        const mostVisibleSection = getMostVisibleSection();
-        updateActiveSection(mostVisibleSection);
-      }, 100);
-    }, { passive: true });
-    
-    // Add touch move handler to keep content visible while dragging
-    stepsContainer.addEventListener('touchmove', () => {
+    stepsContainer.addEventListener('touchend', () => {
       forceContentVisibility();
     }, { passive: true });
   }
@@ -417,14 +428,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // Toggle mobile class
     document.body.classList.toggle('mobile-view', isMobile);
     
-    // Adjust the Penrose container if on mobile
+    // Adjust the layout if on mobile
     if (isMobile) {
-      adjustPenroseContainerForMobile();
-      
-      // Force content visibility if switching to mobile
       if (!wasMobile) {
+        // If switching from desktop to mobile, reset the layout
         forceContentVisibility();
+        resetMobileLayout();
+      } else {
+        // Just adjust the container size
+        adjustPenroseContainerForMobile();
       }
+    } else if (wasMobile) {
+      // If switching from mobile to desktop, reload the page to reset everything
+      window.location.reload();
     }
     
     // Update the glowing ball position
@@ -465,45 +481,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Add IntersectionObserver for better section detection with less strict thresholds
-  if ('IntersectionObserver' in window) {
-    const sectionObserver = new IntersectionObserver((entries) => {
-      if (isScrolling) return;
-      
-      entries.forEach(entry => {
-        // Use lower threshold values for easier scrolling detection
-        const threshold = isMobile ? 0.1 : 0.3;
-        
-        if (entry.isIntersecting && entry.intersectionRatio > threshold) {
-          const section = entry.target;
-          const sectionIndex = parseInt(section.dataset.step, 10);
-          
-          if (sectionIndex !== activeSection) {
-            updateActiveSection(sectionIndex);
-          }
-        }
-      });
-    }, {
-      root: stepsContainer,
-      threshold: isMobile ? [0.05, 0.1, 0.2] : [0.3, 0.5, 0.7] // Lower thresholds for mobile for easier detection
-    });
-    
+  // Add a simple click handler to each step section on mobile
+  // This makes it easier to navigate between steps
+  if (isMobile) {
     stepSections.forEach(section => {
-      sectionObserver.observe(section);
+      const sectionStep = parseInt(section.dataset.step, 10);
+      
+      // Add a click handler to the section title
+      const title = section.querySelector('h2');
+      if (title) {
+        title.style.cursor = 'pointer';
+        title.addEventListener('click', () => {
+          // When clicked, update the active section and move the ball
+          updateActiveSection(sectionStep);
+        });
+      }
     });
   }
   
   // Handle document load event to ensure all content is visible after full page load
   window.addEventListener('load', () => {
     if (isMobile) {
-      // Force all sections to be visible
+      // Force all content to be visible
       forceContentVisibility();
-      
-      // Add special mobile class
-      document.body.classList.add('mobile-view');
-      
-      // Adjust container height
-      adjustPenroseContainerForMobile();
+      resetMobileLayout();
       
       // Fix specific issues with Safari/iOS
       if (isIOS) {
@@ -513,15 +514,7 @@ document.addEventListener("DOMContentLoaded", () => {
           
           // Force visibility of all sections
           forceContentVisibility();
-          
-          // First section special handling
-          const firstSection = document.querySelector('.step-section[data-step="1"]');
-          if (firstSection) {
-            firstSection.scrollIntoView({
-              block: 'start',
-              behavior: 'auto'
-            });
-          }
+          resetMobileLayout();
         }, 300);
       }
     }
