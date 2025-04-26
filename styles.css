@@ -8,8 +8,12 @@
   --ball-size: 16px;
   --mobile-header-height: 60px;
   --mobile-footer-height: 40px;
-  --mobile-staircase-height: 240px;
+  --mobile-staircase-height: 280px;
   --mobile-indicator-height: 40px;
+  --blur-intensity: 0;
+  --blur-transition: 0.3s;
+  --glow-color: rgba(255, 107, 0, 0.7);
+  --staircase-blur-color: rgba(244, 244, 244, 0.85);
 }
 
 @font-face {
@@ -23,6 +27,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  text-shadow: none; /* Remove any text shadows */
 }
 
 body {
@@ -71,6 +76,7 @@ body {
   color: var(--accent-color);
   text-decoration: none;
   transition: transform 0.3s ease, opacity 0.3s ease;
+  text-shadow: none;
 }
 
 .sign-up-button:hover {
@@ -83,6 +89,7 @@ body {
   margin-bottom: 1rem;
   font-weight: 500;
   color: var(--text-color);
+  text-shadow: none;
 }
 
 .tagline {
@@ -90,6 +97,7 @@ body {
   font-size: 1.2rem;
   font-weight: 500;
   margin-top: 1rem;
+  text-shadow: none;
 }
 
 /* Penrose image container with exact dimensions */
@@ -114,7 +122,7 @@ body {
   height: var(--ball-size);
   border-radius: 50%;
   background-color: var(--accent-color);
-  box-shadow: 0 0 15px 4px rgba(255, 107, 0, 0.7);
+  box-shadow: 0 0 15px 4px var(--glow-color);
   transform: translate(-50%, -50%);
   transition: left 0.6s ease-out, top 0.6s ease-out;
   z-index: 10;
@@ -144,6 +152,7 @@ body {
   font-size: 1.5rem;
   font-weight: 300;
   color: var(--text-color);
+  text-shadow: none;
 }
 
 #current-step {
@@ -202,13 +211,16 @@ body {
 .step-content {
   max-width: 80%;
   transform: translateY(0);
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, filter var(--blur-transition);
   opacity: 1;
+  filter: blur(calc(var(--blur-intensity) * 5px));
+  text-shadow: none;
 }
 
 .step-section.active .step-content {
   transform: translateY(0);
   opacity: 1;
+  filter: blur(0);
 }
 
 .step-content h2 {
@@ -216,6 +228,7 @@ body {
   margin-bottom: 1.5rem;
   font-weight: 700;
   color: var(--text-color);
+  text-shadow: none;
 }
 
 .step-content p {
@@ -223,6 +236,25 @@ body {
   line-height: 1.8;
   color: var(--muted-color);
   max-width: 90%;
+  text-shadow: none;
+}
+
+/* Blurred Content Effect */
+.blur-content {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.blur-content::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background: linear-gradient(to bottom, rgba(244, 244, 244, 0), var(--background-color));
+  pointer-events: none;
 }
 
 /* Navigation arrows for desktop */
@@ -335,11 +367,21 @@ body {
   
   .penrose-image-container {
     transform: scale(0.75);
-    margin-top: 5px;
+    margin-top: 40px;
+  }
+  
+  /* Enhanced glowing ball for tablet */
+  .glowing-ball {
+    box-shadow: 0 0 18px 6px var(--glow-color);
   }
 }
 
 @media (max-width: 768px) {
+  /* Hide navigation arrows on mobile */
+  .navigation-arrows {
+    display: none;
+  }
+
   /* Mobile approach - standard scrolling with sticky elements */
   body {
     overflow-y: auto;
@@ -349,8 +391,10 @@ body {
   .container {
     display: block;
     min-height: 100%;
-    padding-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height));
+    padding-top: 0;
   }
+  
+  /* Layer structure for elements */
   
   /* Title bar sticky at top */
   .penrose-title {
@@ -384,34 +428,40 @@ body {
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   }
   
-  /* Penrose container sticky below step indicator */
-  .penrose-container {
+  /* Blur gradient layer for smooth transition */
+  .penrose-blur-layer {
     position: fixed;
     top: calc(var(--mobile-header-height) + var(--mobile-indicator-height));
     left: 0;
     width: 100%;
     height: var(--mobile-staircase-height);
-    min-height: auto;
+    z-index: 102;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      var(--staircase-blur-color) 0%,
+      var(--staircase-blur-color) 50%,
+      rgba(244, 244, 244, 0) 100%
+    );
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  
+  /* Penrose container with transparent background */
+  .penrose-container {
+    position: fixed;
+    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) - 20px);
+    left: 0;
+    width: 100%;
+    height: var(--mobile-staircase-height);
+    min-height: var(--mobile-staircase-height);
     padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 100;
-    background-color: var(--background-color);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  }
-  
-  /* Larger staircase and ball */
-  .penrose-image-container {
-    transform: scale(0.5);
-    margin: 0;
-  }
-  
-  .glowing-ball {
-    width: 20px;
-    height: 20px;
-    box-shadow: 0 0 25px 8px rgba(255, 107, 0, 0.8);
+    z-index: 104; /* Above blur layer */
+    background-color: transparent;
   }
   
   /* Content sections */
@@ -420,28 +470,89 @@ body {
     margin-left: 0;
     padding-bottom: 60px;
     overflow-y: visible;
-    scroll-snap-type: none;
+    scroll-snap-type: y proximity;
+    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height) - 20px);
+    position: relative;
+    z-index: 99; /* Below everything */
+  }
+  
+  /* Larger staircase and ball */
+  .penrose-image-container {
+    transform: scale(0.65);
+    margin: 0;
+    margin-top: 20px;
+    position: relative;
+    z-index: 105; /* Ensure staircase is above blur layer */
+  }
+  
+  .glowing-ball {
+    width: 20px;
+    height: 20px;
+    z-index: 106; /* Ensure ball is on top of everything */
+    box-shadow: 0 0 25px 8px var(--glow-color); /* Enhanced glow for mobile */
   }
   
   .step-section {
     min-height: auto;
     height: auto;
-    scroll-snap-align: none;
-    scroll-snap-stop: none;
-    padding: 30px 20px 50px 20px;
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+    padding: 30px 20px 70px 20px;
     margin: 0;
     display: block;
+    position: relative;
+    z-index: 98;
+    transition: filter 0.3s ease;
   }
   
-  /* Special handling for the last section */
-  .step-section[data-step="14"] {
-    padding-bottom: 100px;
-    margin-bottom: 60px;
+  /* Text scroll blur effect for sections */
+  .step-content {
+    max-width: 100%;
+    margin-top: 0;
+    padding: 0;
+    position: relative;
+    transition: filter 0.4s ease;
+  }
+
+  .step-content.blur-out {
+    filter: blur(3px);
   }
   
-  /* Hide navigation arrows */
-  .navigation-arrows {
-    display: none;
+  /* No need for dynamic blur - the blur layer handles it */
+  .step-section .step-content {
+    filter: blur(0);
+  }
+  
+  /* Add blur transition for better scrolling experience */
+  .step-section {
+    scroll-snap-align: start;
+  }
+  
+  /* Active section should be crisp and clear */
+  .step-section.active .step-content {
+    filter: blur(0);
+  }
+  
+  /* Adjacent sections are slightly blurred */
+  .step-section:not(.active) .step-content {
+    filter: blur(1px);
+  }
+  
+  .blur-content::after {
+    height: 40px;
+  }
+  
+  .step-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+    text-shadow: none;
+  }
+  
+  .step-content p {
+    font-size: 1rem;
+    line-height: 1.4;
+    margin-bottom: 0;
+    text-shadow: none;
   }
   
   /* Style adjustments for mobile */
@@ -459,33 +570,23 @@ body {
   .tagline {
     display: none;
   }
-  
-  .step-content {
-    max-width: 100%;
-    margin-top: 0;
-    padding: 0;
-  }
 
-  .step-content h2 {
-    font-size: 1.5rem;
-    margin-bottom: 0.75rem;
-  }
-  
-  .step-content p {
-    font-size: 1rem;
-    line-height: 1.4;
-    margin-bottom: 0;
+  /* Special handling for the last section */
+  .step-section[data-step="14"] {
+    padding-bottom: 100px;
+    margin-bottom: 60px;
   }
 }
 
 @media (max-width: 480px) {
   :root {
-    --mobile-staircase-height: 200px;
+    --mobile-staircase-height: 260px;
   }
   
   /* Adjust for smaller phones */
   .penrose-image-container {
-    transform: scale(0.45);
+    transform: scale(0.6);
+    margin-top: 15px;
   }
   
   .sign-up-button {
@@ -508,5 +609,10 @@ body {
   
   .step-indicator {
     font-size: 1rem;
+  }
+  
+  /* Enhanced glow for small phones */
+  .glowing-ball {
+    box-shadow: 0 0 20px 6px var(--glow-color);
   }
 }
