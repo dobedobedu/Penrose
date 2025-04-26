@@ -6,10 +6,10 @@
   --accent-color: #FF6B00;
   --section-height: 100vh;
   --ball-size: 16px;
-  --mobile-header-height: 60px; /* Reduced header height to move button up */
+  --mobile-header-height: 50px; /* Further reduced header height */
   --mobile-footer-height: 40px;
-  --mobile-staircase-height: 180px; /* Reduced height to reduce spacing */
-  --mobile-indicator-height: 40px; /* Reduced indicator height */
+  --mobile-staircase-height: 160px; /* Reduced staircase height */
+  --mobile-indicator-height: 40px; /* Indicator height */
   --blur-intensity: 0;
   --blur-transition: 0.3s;
   --glow-color: rgba(255, 107, 0, 0.7);
@@ -422,12 +422,12 @@ body {
     width: 100%;
     height: var(--mobile-header-height);
     padding: 0.1rem 20px;
-    padding-top: 10px; /* Reduced padding to move everything up */
+    padding-top: 5px; /* Further reduced top padding */
     background-color: var(--background-color);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-start; /* Changed from center to top-align */
+    align-items: center; /* Changed to center for better alignment */
     z-index: 102;
   }
   
@@ -436,8 +436,8 @@ body {
     font-size: 1rem;
     margin-bottom: 0;
     padding: 0.1rem 0.8rem;
-    margin-top: 10px; /* Reduced margin for better vertical alignment */
-    align-self: flex-start; /* Keep at top */
+    margin-top: 0; /* Removed margin completely for perfect alignment */
+    align-self: center; /* Changed to center to match title */
     order: 2; /* Move to right side */
   }
   
@@ -467,10 +467,47 @@ body {
     text-align: left;
   }
   
-  /* Step indicator sticky below title */
-  .step-indicator {
+  /* Penrose container with transparent background */
+  .penrose-container {
     position: fixed;
     top: var(--mobile-header-height);
+    left: 0;
+    width: 100%;
+    height: var(--mobile-staircase-height);
+    min-height: var(--mobile-staircase-height);
+    padding: 0;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 104;
+    background-color: transparent;
+  }
+  
+  /* Blur gradient layer for smooth transition */
+  .penrose-blur-layer {
+    position: fixed;
+    top: var(--mobile-header-height);
+    left: 0;
+    width: 100%;
+    height: var(--mobile-staircase-height);
+    z-index: 102;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      var(--staircase-blur-color) 0%,
+      var(--staircase-blur-color) 25%,
+      rgba(244, 244, 244, 0) 100%
+    );
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+  
+  /* Step indicator moved below staircase */
+  .step-indicator {
+    position: fixed;
+    top: calc(var(--mobile-header-height) + var(--mobile-staircase-height));
     left: 0;
     width: 100%;
     height: var(--mobile-indicator-height);
@@ -487,70 +524,33 @@ body {
     margin-top: 0;
   }
   
-  /* Blur gradient layer for smooth transition */
-  .penrose-blur-layer {
-    position: fixed;
-    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height));
-    left: 0;
-    width: 100%;
-    height: var(--mobile-staircase-height);
-    z-index: 102;
-    pointer-events: none;
-    background: linear-gradient(
-      to bottom,
-      var(--staircase-blur-color) 0%,
-      var(--staircase-blur-color) 25%, /* Further reduced to show more content */
-      rgba(244, 244, 244, 0) 100%
-    );
-    backdrop-filter: blur(2px); /* Further reduced blur intensity */
-    -webkit-backdrop-filter: blur(2px);
+  /* Larger staircase and ball */
+  .penrose-image-container {
+    transform: scale(0.5);
+    margin: 0;
+    margin-top: 10px;
+    position: relative;
+    z-index: 105;
   }
   
-  /* Penrose container with transparent background */
-  .penrose-container {
-    position: fixed;
-    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height));
-    left: 0;
-    width: 100%;
-    height: var(--mobile-staircase-height);
-    min-height: var(--mobile-staircase-height);
-    padding: 0;
-    padding-top: 5px; /* Reduced padding for less space */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 104; /* Above blur layer */
-    background-color: transparent;
+  .glowing-ball {
+    width: 20px;
+    height: 20px;
+    z-index: 106;
+    box-shadow: 0 0 25px 8px var(--glow-color);
   }
   
-  /* Content sections */
+  /* Content sections - adjusted to account for new step indicator position */
   .steps-container {
     width: 100%;
     margin-left: 0;
     padding-bottom: 90px;
     overflow-y: visible;
     scroll-snap-type: y proximity;
-    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height) - 10px); /* Added negative offset to bring content up */
+    margin-top: calc(var(--mobile-header-height) + var(--mobile-staircase-height) + var(--mobile-indicator-height));
     position: relative;
-    z-index: 99; /* Below everything */
-    -webkit-overflow-scrolling: touch; /* Improved scrolling on iOS */
-  }
-  
-  /* Larger staircase and ball */
-  .penrose-image-container {
-    transform: scale(0.55); /* Further reduced scale for more compact view */
-    margin: 0;
-    margin-top: 10px; /* Reduced top margin */
-    position: relative;
-    z-index: 105; /* Ensure staircase is above blur layer */
-  }
-  
-  .glowing-ball {
-    width: 20px;
-    height: 20px;
-    z-index: 106; /* Ensure ball is on top of everything */
-    box-shadow: 0 0 25px 8px var(--glow-color); /* Enhanced glow for mobile */
+    z-index: 99;
+    -webkit-overflow-scrolling: touch;
   }
   
   .step-section {
@@ -604,15 +604,15 @@ body {
   }
   
   .step-content h2 {
-    font-size: 1.4rem; /* Slightly smaller for mobile */
-    margin-bottom: 0.4rem; /* Further reduced for more sleek look */
+    font-size: 1.4rem;
+    margin-bottom: 0.4rem;
     text-shadow: none;
-    line-height: 1.1; /* Even tighter line spacing */
+    line-height: 1.1;
   }
   
   .step-content p {
     font-size: 1rem;
-    line-height: 1.3; /* Reduced line height */
+    line-height: 1.3;
     margin-bottom: 0;
     text-shadow: none;
   }
@@ -626,24 +626,24 @@ body {
 
 @media (max-width: 480px) {
   :root {
-    --mobile-staircase-height: 220px; /* Slightly reduced from original */
-    --mobile-header-height: 60px; /* Reduced for better spacing */
+    --mobile-staircase-height: 180px;
+    --mobile-header-height: 50px;
   }
   
   /* Adjust for smaller phones */
   .penrose-image-container {
-    transform: scale(0.5); /* Further scaled down */
-    margin-top: 15px; /* Reduced margin */
+    transform: scale(0.45);
+    margin-top: 10px;
   }
   
   .sign-up-button {
     font-size: 0.9rem;
-    padding: 0.12rem 0.7rem; /* Adjusted padding for smaller screens */
+    padding: 0.12rem 0.7rem;
   }
   
   .penrose-title h2 {
     font-size: 0.9rem;
-    color: #000000; /* Ensuring black color on smallest screens too */
+    color: #000000;
   }
   
   .step-content h2 {
@@ -653,7 +653,7 @@ body {
   
   .step-content p {
     font-size: 0.9rem;
-    line-height: 1.25; /* Even tighter for smallest screens */
+    line-height: 1.25;
   }
   
   .step-indicator {
