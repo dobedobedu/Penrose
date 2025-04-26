@@ -52,16 +52,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   
-  // Create blur overlay for content behind the Penrose stairs
-  function createPenroseBlurOverlay() {
+  // Create the dedicated blur gradient layer for smooth transitions
+  function createBlurGradientLayer() {
     if (!isMobile) return;
     
-    // Check if the overlay already exists
-    if (document.querySelector('.penrose-behind-blur')) return;
+    // Check if the blur layer already exists
+    if (document.querySelector('.penrose-blur-layer')) return;
     
-    const blurOverlay = document.createElement('div');
-    blurOverlay.className = 'penrose-behind-blur';
-    document.body.appendChild(blurOverlay);
+    const blurLayer = document.createElement('div');
+    blurLayer.className = 'penrose-blur-layer';
+    document.body.appendChild(blurLayer);
   }
   
   // Enable blur effect for text that's scrolling out of view
@@ -76,22 +76,36 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
     
-    // Initialize scroll observer for blur effect
+    // Create the blur gradient layer
+    createBlurGradientLayer();
+    
+    // Set up snap alignment for sections
+    stepSections.forEach(section => {
+      section.style.scrollSnapAlign = "start";
+    });
+    
+    // Initialize intersection observer to handle section visibility
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        const content = entry.target.querySelector('.step-content');
+        const section = entry.target;
+        const content = section.querySelector('.step-content');
         if (!content) return;
         
         if (entry.isIntersecting) {
-          // When section is in view, remove blur
-          content.classList.remove('blur-out');
-          
-          // Gradually remove blur as the section becomes more visible
-          const ratio = entry.intersectionRatio;
-          content.style.filter = `blur(${3 - (ratio * 3)}px)`;
+          // When section is in good view, make it the active one and remove blur
+          if (entry.intersectionRatio > 0.7) {
+            section.classList.add('active');
+            content.style.filter = "blur(0)";
+          } else {
+            // Partially visible, apply slight blur
+            section.classList.remove('active');
+            const blurAmount = Math.max(0, 1 - entry.intersectionRatio) * 2;
+            content.style.filter = `blur(${blurAmount}px)`;
+          }
         } else {
           // When section is out of view, add blur
-          content.classList.add('blur-out');
+          section.classList.remove('active');
+          content.style.filter = "blur(2px)";
         }
       });
     }, {
@@ -103,38 +117,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Observe all step sections
     stepSections.forEach(section => {
       observer.observe(section);
-    });
-    
-    // Create the blur overlay for stairs
-    createPenroseBlurOverlay();
-  }
-  
-  // Apply stronger blur to content behind the Penrose stairs
-  function applyStairsBlurEffect() {
-    if (!isMobile) return;
-    
-    const penroseHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mobile-staircase-height'));
-    const headerHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mobile-header-height'));
-    const indicatorHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mobile-indicator-height'));
-    
-    const stairsBottom = headerHeight + indicatorHeight + penroseHeight;
-    
-    stepSections.forEach(section => {
-      const content = section.querySelector('.step-content');
-      if (!content) return;
-      
-      const rect = section.getBoundingClientRect();
-      
-      // If the section is behind or partially behind the stairs
-      if (rect.top < stairsBottom) {
-        // Calculate how much of the section is behind the stairs
-        const overlapPercentage = (stairsBottom - rect.top) / rect.height;
-        if (overlapPercentage > 0) {
-          // Apply stronger blur for more overlap
-          const blurAmount = Math.min(5, overlapPercentage * 6);
-          content.style.filter = `blur(${blurAmount}px)`;
-        }
-      }
     });
   }
   
@@ -177,12 +159,22 @@ document.addEventListener("DOMContentLoaded", () => {
     currentStepElem.textContent = index.toString().padStart(2, '0');
     
     // Add active class to current section and remove from others
-    stepSections.forEach((section, i) => {
+    stepSections.forEach((section) => {
       const sectionStep = parseInt(section.dataset.step, 10);
       if (sectionStep === index) {
         section.classList.add('active');
+        // Make active section content clear
+        const content = section.querySelector('.step-content');
+        if (content) {
+          content.style.filter = "blur(0)";
+        }
       } else {
         section.classList.remove('active');
+        // Apply slight blur to non-active sections
+        const content = section.querySelector('.step-content');
+        if (content) {
+          content.style.filter = "blur(1px)";
+        }
       }
     });
   }
@@ -214,9 +206,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // Set a flag to prevent other scrolling during this operation
         setTimeout(() => {
           isScrolling = false;
-          if (isMobile) {
-            applyStairsBlurEffect();
-          }
         }, 200); // Shorter timeout for iOS for better responsiveness
       } else if (isMobile) {
         // For non-iOS mobile devices - optimized approach with easier scrolling
@@ -227,7 +216,6 @@ document.addEventListener("DOMContentLoaded", () => {
         
         setTimeout(() => {
           isScrolling = false;
-          applyStairsBlurEffect();
         }, 600);
       } else {
         // Desktop behavior
@@ -252,7 +240,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // On mobile, ensure content visibility
     if (isMobile) {
       forceContentVisibility();
-      applyStairsBlurEffect();
     }
     
     moveGlowingBall(index);
@@ -329,9 +316,6 @@ document.addEventListener("DOMContentLoaded", () => {
       
       // Setup blur effect for text scrolling
       setupBlurEffect();
-      
-      // Apply initial blur for text behind stairs
-      applyStairsBlurEffect();
     }
     
     penroseContainer.offsetWidth; // Force reflow
@@ -357,7 +341,11 @@ document.addEventListener("DOMContentLoaded", () => {
             
             // Force visibility again after scrolling
             forceContentVisibility();
-            applyStairsBlurEffect();
+            firstSection.classList.add('active');
+            const content = firstSection.querySelector('.step-content');
+            if (content) {
+              content.style.filter = "blur(0)";
+            }
           }, 100);
         }
       }
@@ -384,9 +372,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Add scrolling handler to update blur effect
   stepsContainer.addEventListener('scroll', () => {
     if (isMobile) {
-      // Apply stairs blur effect during scroll
-      applyStairsBlurEffect();
-      
       // Update blur effect based on scroll position
       stepSections.forEach(section => {
         const content = section.querySelector('.step-content');
@@ -399,19 +384,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const distanceFromCenter = Math.abs((rect.top + rect.height / 2) - (viewportHeight / 2));
         const maxDistance = viewportHeight / 2 + rect.height / 2;
         
-        // Calculate blur amount (0 when centered, up to 3px when far away)
-        const blurAmount = Math.min(3, (distanceFromCenter / maxDistance) * 3);
+        // Calculate blur amount (0 when centered, up to 2px when far away)
+        const blurAmount = Math.min(2, (distanceFromCenter / maxDistance) * 2);
         
-        // Apply blur based on scrolling distance
-        // Don't apply this to content that's behind the stairs (that's handled by applyStairsBlurEffect)
-        const penroseHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mobile-staircase-height'));
-        const headerHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mobile-header-height'));
-        const indicatorHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mobile-indicator-height'));
-        const stairsBottom = headerHeight + indicatorHeight + penroseHeight;
-        
-        if (rect.top >= stairsBottom) {
-          content.style.filter = `blur(${blurAmount}px)`;
-        }
+        // Apply blur with smooth transition
+        content.style.filter = `blur(${blurAmount}px)`;
       });
     }
     
@@ -434,11 +411,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (mostVisibleSection !== activeSection) {
         updateActiveSection(mostVisibleSection);
       }
-      
-      // Apply stairs blur after scrolling settles
-      if (isMobile) {
-        applyStairsBlurEffect();
-      }
     }, isMobile ? 30 : 100); // Reduced timeout for more responsive mobile experience
   }, { passive: true });
   
@@ -454,7 +426,6 @@ document.addEventListener("DOMContentLoaded", () => {
       
       // Ensure content visibility on any touch
       forceContentVisibility();
-      applyStairsBlurEffect();
     }, { passive: true });
     
     stepsContainer.addEventListener('touchend', (e) => {
@@ -487,7 +458,6 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
         // Force visibility again after touch
         forceContentVisibility();
-        applyStairsBlurEffect();
         
         const mostVisibleSection = getMostVisibleSection();
         updateActiveSection(mostVisibleSection);
@@ -500,8 +470,6 @@ document.addEventListener("DOMContentLoaded", () => {
       forceContentVisibility();
       
       // Update blur effect during touch movement
-      applyStairsBlurEffect();
-      
       stepSections.forEach(section => {
         const content = section.querySelector('.step-content');
         if (!content) return;
@@ -514,17 +482,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const maxDistance = viewportHeight / 2 + rect.height / 2;
         
         // Calculate blur amount
-        const blurAmount = Math.min(3, (distanceFromCenter / maxDistance) * 3);
+        const blurAmount = Math.min(2, (distanceFromCenter / maxDistance) * 2);
         
-        // Apply blur with transition - but not to content behind stairs, that's handled separately
-        const penroseHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mobile-staircase-height'));
-        const headerHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mobile-header-height'));
-        const indicatorHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mobile-indicator-height'));
-        const stairsBottom = headerHeight + indicatorHeight + penroseHeight;
-        
-        if (rect.top >= stairsBottom) {
-          content.style.filter = `blur(${blurAmount}px)`;
-        }
+        // Apply blur with transition
+        content.style.filter = `blur(${blurAmount}px)`;
       });
     }, { passive: true });
   }
@@ -567,7 +528,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!wasJustMobile) {
         forceContentVisibility();
         setupBlurEffect();
-        applyStairsBlurEffect();
       }
     } else if (wasJustMobile) {
       // If switching from mobile to desktop, reload the page to reset everything
@@ -624,9 +584,6 @@ document.addEventListener("DOMContentLoaded", () => {
       // Setup blur effect
       setupBlurEffect();
       
-      // Apply stairs blur effect
-      applyStairsBlurEffect();
-      
       // Fix specific issues with Safari/iOS
       if (isIOS) {
         setTimeout(() => {
@@ -635,7 +592,6 @@ document.addEventListener("DOMContentLoaded", () => {
           
           // Force visibility of all sections
           forceContentVisibility();
-          applyStairsBlurEffect();
           
           // First section special handling
           const firstSection = document.querySelector('.step-section[data-step="1"]');
@@ -645,9 +601,13 @@ document.addEventListener("DOMContentLoaded", () => {
               behavior: 'auto'
             });
             
-            // Reapply blur after scrolling
+            // Make first section active and clear
             setTimeout(() => {
-              applyStairsBlurEffect();
+              firstSection.classList.add('active');
+              const content = firstSection.querySelector('.step-content');
+              if (content) {
+                content.style.filter = "blur(0)";
+              }
             }, 100);
           }
         }, 300);
