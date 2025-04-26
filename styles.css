@@ -6,9 +6,9 @@
   --accent-color: #FF6B00;
   --section-height: 100vh;
   --ball-size: 16px;
-  --mobile-header-height: 60px;
+  --mobile-header-height: 65px;
   --mobile-footer-height: 40px;
-  --mobile-staircase-height: 280px;
+  --mobile-staircase-height: 300px;
   --mobile-indicator-height: 40px;
   --blur-intensity: 0;
   --blur-transition: 0.3s;
@@ -68,6 +68,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  padding-left: 20px;
 }
 
 .sign-up-button {
@@ -369,6 +370,7 @@ body {
     text-align: center;
     width: 100%;
     align-items: center;
+    padding-left: 20px;
   }
   
   .step-indicator {
@@ -418,22 +420,23 @@ body {
     left: 0;
     width: 100%;
     height: var(--mobile-header-height);
-    padding: 10px 15px;
+    padding: 10px 20px;
     background-color: var(--background-color);
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     z-index: 102;
   }
   
   /* Sign up button at the top */
   .sign-up-button {
     font-size: 1rem;
-    margin-bottom: 0.75rem; /* Space between button and title */
+    margin-bottom: 0;
     padding: 0.15rem 0.8rem;
-    align-self: flex-start;
-    order: -1; /* Ensures the button is always displayed first */
+    margin-top: 0;
+    align-self: center;
+    order: 2; /* Move to right side */
   }
   
   /* Ensure header content is visible and left-aligned */
@@ -441,14 +444,18 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: 100%;
+    width: auto;
+    max-width: 65%;
+    order: 1;
   }
   
   .penrose-title h2 {
     font-size: 1rem;
     display: block;
-    margin-bottom: 0;
+    margin-bottom: 0.2rem;
     text-align: left;
+    line-height: 1.3;
+    padding-left: 0;
   }
   
   .tagline {
@@ -464,13 +471,16 @@ body {
     left: 0;
     width: 100%;
     height: var(--mobile-indicator-height);
-    padding: 8px 0;
-    background-color: rgba(244, 244, 244, 0.8);
+    padding: 10px 0;
+    background-color: rgba(244, 244, 244, 0.95);
     z-index: 101;
     text-align: center;
     font-size: 1.2rem;
     border-top: 1px solid rgba(0, 0, 0, 0.05);
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
   /* Blur gradient layer for smooth transition */
@@ -495,7 +505,7 @@ body {
   /* Penrose container with transparent background */
   .penrose-container {
     position: fixed;
-    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) - 20px);
+    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height));
     left: 0;
     width: 100%;
     height: var(--mobile-staircase-height);
@@ -513,19 +523,20 @@ body {
   .steps-container {
     width: 100%;
     margin-left: 0;
-    padding-bottom: 60px;
+    padding-bottom: 90px;
     overflow-y: visible;
     scroll-snap-type: y proximity;
-    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height) - 20px);
+    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height));
     position: relative;
     z-index: 99; /* Below everything */
+    -webkit-overflow-scrolling: touch; /* Improved scrolling on iOS */
   }
   
   /* Larger staircase and ball */
   .penrose-image-container {
     transform: scale(0.65);
     margin: 0;
-    margin-top: 20px;
+    margin-top: 30px;
     position: relative;
     z-index: 105; /* Ensure staircase is above blur layer */
   }
@@ -542,8 +553,8 @@ body {
     height: auto;
     scroll-snap-align: start;
     scroll-snap-stop: normal;
-    padding: 30px 20px 70px 20px;
-    margin: 0;
+    padding: 30px 20px 90px 20px;
+    margin: 0 0 15px 0;
     display: block;
     position: relative;
     z-index: 98;
@@ -603,20 +614,21 @@ body {
 
   /* Special handling for the last section */
   .step-section[data-step="14"] {
-    padding-bottom: 100px;
-    margin-bottom: 60px;
+    padding-bottom: 120px;
+    margin-bottom: 80px;
   }
 }
 
 @media (max-width: 480px) {
   :root {
-    --mobile-staircase-height: 260px;
+    --mobile-staircase-height: 280px;
+    --mobile-header-height: 60px;
   }
   
   /* Adjust for smaller phones */
   .penrose-image-container {
     transform: scale(0.6);
-    margin-top: 15px;
+    margin-top: 35px;
   }
   
   .sign-up-button {
