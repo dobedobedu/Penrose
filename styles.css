@@ -13,6 +13,7 @@
   --blur-intensity: 0;
   --blur-transition: 0.3s;
   --glow-color: rgba(255, 107, 0, 0.7);
+  --staircase-blur-color: rgba(244, 244, 244, 0.85);
 }
 
 @font-face {
@@ -392,11 +393,7 @@ body {
     padding-top: 0;
   }
   
-  /* Layer structure: 
-   * z-index 100: Penrose container (stairs & ball)
-   * z-index 101: Step indicator
-   * z-index 102: Title bar
-   */
+  /* Layer structure for elements */
   
   /* Title bar sticky at top */
   .penrose-title {
@@ -429,7 +426,26 @@ body {
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   }
   
-  /* Penrose container - now on top with higher z-index */
+  /* Blur gradient layer for smooth transition */
+  .penrose-blur-layer {
+    position: fixed;
+    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height));
+    left: 0;
+    width: 100%;
+    height: var(--mobile-staircase-height);
+    z-index: 102;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      var(--staircase-blur-color) 0%,
+      var(--staircase-blur-color) 50%,
+      rgba(244, 244, 244, 0) 100%
+    );
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  
+  /* Penrose container with transparent background */
   .penrose-container {
     position: fixed;
     top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) - 20px);
@@ -442,8 +458,8 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 103; /* Increased to be above the indicator */
-    background-color: transparent; /* Make background transparent so stairs show on top */
+    z-index: 104; /* Above blur layer */
+    background-color: transparent;
   }
   
   /* Content sections */
@@ -464,61 +480,60 @@ body {
     margin: 0;
     margin-top: 20px;
     position: relative;
-    z-index: 104; /* Ensure staircase is above everything */
+    z-index: 105; /* Ensure staircase is above blur layer */
   }
   
   .glowing-ball {
     width: 20px;
     height: 20px;
-    z-index: 105; /* Ensure ball is on top of everything */
+    z-index: 106; /* Ensure ball is on top of everything */
     box-shadow: 0 0 25px 8px var(--glow-color); /* Enhanced glow for mobile */
   }
   
   .step-section {
     min-height: auto;
     height: auto;
-    scroll-snap-align: none;
+    scroll-snap-align: start;
     scroll-snap-stop: normal;
     padding: 30px 20px 70px 20px;
     margin: 0;
     display: block;
     position: relative;
     z-index: 98;
+    transition: filter 0.3s ease;
   }
   
-  /* Text scroll blur effect */
+  /* Text scroll blur effect for sections */
   .step-content {
     max-width: 100%;
     margin-top: 0;
     padding: 0;
     position: relative;
-    transition: filter 0.3s ease;
+    transition: filter 0.4s ease;
   }
 
   .step-content.blur-out {
     filter: blur(3px);
   }
   
-  /* Blur text content that's behind the Penrose stairs */
-  .penrose-behind-blur {
-    position: absolute;
-    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height));
-    left: 0;
-    width: 100%;
-    height: var(--mobile-staircase-height);
-    background: transparent;
-    z-index: 102;
-    pointer-events: none;
+  /* No need for dynamic blur - the blur layer handles it */
+  .step-section .step-content {
+    filter: blur(0);
   }
   
-  /* Apply blur to content behind stairs */
+  /* Add blur transition for better scrolling experience */
+  .step-section {
+    scroll-snap-align: start;
+  }
+  
+  /* Active section should be crisp and clear */
+  .step-section.active .step-content {
+    filter: blur(0);
+  }
+  
+  /* Adjacent sections are slightly blurred */
   .step-section:not(.active) .step-content {
-    filter: blur(3px);
-  }
-  
-  /* Apply specific blur to content behind the Penrose stairs */
-  .step-section:first-child .step-content {
-    filter: blur(4px);
+    filter: blur(1px);
   }
   
   .blur-content::after {
