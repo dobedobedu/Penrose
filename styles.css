@@ -8,8 +8,8 @@
   --ball-size: 16px;
   --mobile-header-height: 50px; /* Further reduced header height */
   --mobile-footer-height: 40px;
-  --mobile-staircase-height: 160px; /* Reduced staircase height */
-  --mobile-indicator-height: 40px; /* Indicator height */
+  --mobile-staircase-height: 180px; /* Reduced staircase height */
+  --mobile-indicator-height: 60px; /* Indicator height */
   --blur-intensity: 0;
   --blur-transition: 0.3s;
   --glow-color: rgba(255, 107, 0, 0.7);
