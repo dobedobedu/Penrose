@@ -6,7 +6,7 @@
   --accent-color: #FF6B00;
   --section-height: 100vh;
   --ball-size: 16px;
-  --mobile-header-height: 50px; /* Further reduced header height */
+  --mobile-header-height: 60px; /* Increased header height to prevent text cut-off */
   --mobile-footer-height: 40px;
   --mobile-staircase-height: 180px; /* Reduced staircase height */
   --mobile-indicator-height: 30px; /* Reduced indicator height */
@@ -424,8 +424,9 @@ body {
     left: 0;
     width: 100%;
     height: var(--mobile-header-height);
-    padding: 0.1rem 20px;
-    padding-top: 15px; /* Increased top padding */
+    padding: 0.3rem 20px;
+    padding-top: 18px; /* Increased top padding to prevent text cut-off */
+    padding-bottom: 10px; /* Added bottom padding */
     background-color: var(--background-color);
     display: flex;
     flex-direction: row;
@@ -475,7 +476,7 @@ body {
   /* Step indicator positioned above staircase, below header */
   .step-indicator {
     position: fixed;
-    top: var(--mobile-header-height);
+    top: calc(var(--mobile-header-height) + 5px); /* Added 5px gap between title and indicator */
     left: 0;
     width: 100%;
     height: var(--mobile-indicator-height);
@@ -494,7 +495,7 @@ body {
   /* Penrose container with transparent background */
   .penrose-container {
     position: fixed;
-    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height));
+    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + 5px); /* Adjusted for the added gap */
     left: 0;
     width: 100%;
     height: var(--mobile-staircase-height);
@@ -512,7 +513,7 @@ body {
   /* Blur gradient layer for smooth transition */
   .penrose-blur-layer {
     position: fixed;
-    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height));
+    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + 5px); /* Adjusted for the added gap */
     left: 0;
     width: 100%;
     height: var(--mobile-staircase-height);
@@ -551,7 +552,7 @@ body {
     padding-bottom: 90px;
     overflow-y: visible;
     scroll-snap-type: y proximity;
-    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height));
+    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height) + 5px); /* Adjusted for the added gap */
     position: relative;
     z-index: 99;
     -webkit-overflow-scrolling: touch;
@@ -633,7 +634,7 @@ body {
 @media (max-width: 480px) {
   :root {
     --mobile-staircase-height: 180px;
-    --mobile-header-height: 50px;
+    --mobile-header-height: 60px; /* Increased header height for very small screens too */
     --mobile-indicator-height: 25px; /* Even smaller for very small screens */
   }
   
