@@ -6,10 +6,10 @@
   --accent-color: #FF6B00;
   --section-height: 100vh;
   --ball-size: 16px;
-  --mobile-header-height: 75px; /* Increased header height to provide more room */
+  --mobile-header-height: 60px; /* Reduced header height to move button up */
   --mobile-footer-height: 40px;
-  --mobile-staircase-height: 200px;
-  --mobile-indicator-height: 50px;
+  --mobile-staircase-height: 180px; /* Reduced height to reduce spacing */
+  --mobile-indicator-height: 40px; /* Reduced indicator height */
   --blur-intensity: 0;
   --blur-transition: 0.3s;
   --glow-color: rgba(255, 107, 0, 0.7);
@@ -422,12 +422,12 @@ body {
     width: 100%;
     height: var(--mobile-header-height);
     padding: 0.1rem 20px;
-    padding-top: 20px; /* Added padding to create headroom */
+    padding-top: 10px; /* Reduced padding to move everything up */
     background-color: var(--background-color);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start; /* Changed from center to top-align */
     z-index: 102;
   }
   
@@ -436,8 +436,8 @@ body {
     font-size: 1rem;
     margin-bottom: 0;
     padding: 0.1rem 0.8rem;
-    margin-top: 20px; /* Added to align with the title */
-    align-self: flex-start; /* Changed from center to align with title */
+    margin-top: 10px; /* Reduced margin for better vertical alignment */
+    align-self: flex-start; /* Keep at top */
     order: 2; /* Move to right side */
   }
   
@@ -449,7 +449,7 @@ body {
     width: auto;
     max-width: 65%;
     order: 1;
-    margin-top: 0; /* Ensure consistent alignment */
+    margin-top: 0;
   }
   
   .penrose-title h2 {
@@ -484,7 +484,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 0; /* Ensure proper positioning */
+    margin-top: 0;
   }
   
   /* Blur gradient layer for smooth transition */
@@ -499,11 +499,11 @@ body {
     background: linear-gradient(
       to bottom,
       var(--staircase-blur-color) 0%,
-      var(--staircase-blur-color) 35%, /* Reduced from 50% to show more content */
+      var(--staircase-blur-color) 25%, /* Further reduced to show more content */
       rgba(244, 244, 244, 0) 100%
     );
-    backdrop-filter: blur(3px); /* Reduced blur intensity */
-    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(2px); /* Further reduced blur intensity */
+    -webkit-backdrop-filter: blur(2px);
   }
   
   /* Penrose container with transparent background */
@@ -515,7 +515,7 @@ body {
     height: var(--mobile-staircase-height);
     min-height: var(--mobile-staircase-height);
     padding: 0;
-    padding-top: 10px; /* Add space for the Penrose staircase */
+    padding-top: 5px; /* Reduced padding for less space */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -531,7 +531,7 @@ body {
     padding-bottom: 90px;
     overflow-y: visible;
     scroll-snap-type: y proximity;
-    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height));
+    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height) - 10px); /* Added negative offset to bring content up */
     position: relative;
     z-index: 99; /* Below everything */
     -webkit-overflow-scrolling: touch; /* Improved scrolling on iOS */
@@ -539,9 +539,9 @@ body {
   
   /* Larger staircase and ball */
   .penrose-image-container {
-    transform: scale(0.65);
+    transform: scale(0.55); /* Further reduced scale for more compact view */
     margin: 0;
-    margin-top: 30px;
+    margin-top: 10px; /* Reduced top margin */
     position: relative;
     z-index: 105; /* Ensure staircase is above blur layer */
   }
@@ -626,14 +626,14 @@ body {
 
 @media (max-width: 480px) {
   :root {
-    --mobile-staircase-height: 280px;
-    --mobile-header-height: 75px; /* Increased from 60px for more headroom */
+    --mobile-staircase-height: 220px; /* Slightly reduced from original */
+    --mobile-header-height: 60px; /* Reduced for better spacing */
   }
   
   /* Adjust for smaller phones */
   .penrose-image-container {
-    transform: scale(0.6);
-    margin-top: 35px;
+    transform: scale(0.5); /* Further scaled down */
+    margin-top: 15px; /* Reduced margin */
   }
   
   .sign-up-button {
