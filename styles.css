@@ -6,7 +6,7 @@
   --accent-color: #FF6B00;
   --section-height: 100vh;
   --ball-size: 16px;
-  --mobile-header-height: 65px;
+  --mobile-header-height: 75px; /* Increased header height to provide more room */
   --mobile-footer-height: 40px;
   --mobile-staircase-height: 240px;
   --mobile-indicator-height: 50px;
@@ -422,6 +422,7 @@ body {
     width: 100%;
     height: var(--mobile-header-height);
     padding: 0.1rem 20px;
+    padding-top: 20px; /* Added padding to create headroom */
     background-color: var(--background-color);
     display: flex;
     flex-direction: row;
@@ -435,8 +436,8 @@ body {
     font-size: 1rem;
     margin-bottom: 0;
     padding: 0.1rem 0.8rem;
-    margin-top: 0;
-    align-self: center;
+    margin-top: 20px; /* Added to align with the title */
+    align-self: flex-start; /* Changed from center to align with title */
     order: 2; /* Move to right side */
   }
   
@@ -448,6 +449,7 @@ body {
     width: auto;
     max-width: 65%;
     order: 1;
+    margin-top: 0; /* Ensure consistent alignment */
   }
   
   .penrose-title h2 {
@@ -482,6 +484,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 0; /* Ensure proper positioning */
   }
   
   /* Blur gradient layer for smooth transition */
@@ -496,11 +499,11 @@ body {
     background: linear-gradient(
       to bottom,
       var(--staircase-blur-color) 0%,
-      var(--staircase-blur-color) 50%,
+      var(--staircase-blur-color) 35%, /* Reduced from 50% to show more content */
       rgba(244, 244, 244, 0) 100%
     );
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(3px); /* Reduced blur intensity */
+    -webkit-backdrop-filter: blur(3px);
   }
   
   /* Penrose container with transparent background */
@@ -512,6 +515,7 @@ body {
     height: var(--mobile-staircase-height);
     min-height: var(--mobile-staircase-height);
     padding: 0;
+    padding-top: 10px; /* Add space for the Penrose staircase */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -623,7 +627,7 @@ body {
 @media (max-width: 480px) {
   :root {
     --mobile-staircase-height: 280px;
-    --mobile-header-height: 60px;
+    --mobile-header-height: 75px; /* Increased from 60px for more headroom */
   }
   
   /* Adjust for smaller phones */
