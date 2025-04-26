@@ -72,14 +72,14 @@ body {
   font-family: 'SF Pro Expanded Black', 'Helvetica Neue', Arial, sans-serif;
   font-size: 2.5rem;
   font-weight: 900;
-  margin-bottom: 1.5rem; /* Increased spacing between button and title */
+  margin-bottom: 2rem; /* Further increased spacing between button and title */
   color: var(--accent-color);
   text-decoration: none;
   transition: transform 0.3s ease, opacity 0.3s ease;
   text-shadow: none;
-  border: 2px solid var(--accent-color); /* Adding thin pill shape outline */
-  border-radius: 50px; /* Make it pill shaped */
-  padding: 0.25rem 1.5rem; /* Add padding for better button appearance */
+  border: 2px solid var(--accent-color); /* Thin pill shape outline */
+  border-radius: 50px; /* Pill shaped */
+  padding: 0.25rem 1.5rem; /* Padding for better button appearance */
 }
 
 .sign-up-button:hover {
@@ -89,9 +89,9 @@ body {
 
 .penrose-title h2 {
   font-size: 1.8rem;
-  margin-bottom: 0.5rem; /* Reduced space between title and tagline */
-  font-weight: 900; /* Changed to black weight */
-  color: #000000; /* Changed to black color */
+  margin-bottom: 0.3rem; /* Further reduced space between title and tagline */
+  font-weight: 900; /* Black weight */
+  color: #000000; /* Black color */
   text-shadow: none;
 }
 
@@ -99,7 +99,7 @@ body {
   color: var(--muted-color);
   font-size: 1.2rem;
   font-weight: 500;
-  margin-top: 0.5rem; /* Reduced space after title */
+  margin-top: 0.3rem; /* Further reduced space after title */
   text-shadow: none;
 }
 
@@ -232,7 +232,7 @@ body {
   font-weight: 700;
   color: var(--text-color);
   text-shadow: none;
-  line-height: 1.2; /* Reduced line height for more sleek appearance */
+  line-height: 1.1; /* Further reduced line height for more sleek appearance */
 }
 
 .step-content p {
@@ -546,9 +546,9 @@ body {
   
   .step-content h2 {
     font-size: 1.4rem; /* Slightly smaller for mobile */
-    margin-bottom: 0.5rem; /* Reduced for more sleek look */
+    margin-bottom: 0.4rem; /* Further reduced for more sleek look */
     text-shadow: none;
-    line-height: 1.2; /* Tighter line spacing */
+    line-height: 1.1; /* Even tighter line spacing */
   }
   
   .step-content p {
@@ -561,7 +561,7 @@ body {
   /* Style adjustments for mobile */
   .sign-up-button {
     font-size: 1.5rem;
-    margin-bottom: 0.75rem; /* Adjusted spacing */
+    margin-bottom: 1.25rem; /* Increased spacing between button and title on mobile */
     display: block;
     padding: 0.2rem 1.2rem; /* Adjusted padding for mobile */
   }
@@ -569,13 +569,14 @@ body {
   .penrose-title h2 {
     font-size: 1rem;
     margin-bottom: 0;
-    font-weight: 900; /* Maintain black weight on mobile */
+    font-weight: 900; /* Black weight */
+    color: #000000; /* Ensuring black color on mobile too */
   }
   
   .tagline {
     display: block; /* Show tagline on mobile */
     font-size: 0.8rem; /* Smaller size on mobile */
-    margin-top: 0.25rem; /* Reduced space */
+    margin-top: 0.2rem; /* Further reduced space for more compact look */
   }
 
   /* Special handling for the last section */
@@ -603,6 +604,7 @@ body {
   
   .penrose-title h2 {
     font-size: 0.9rem;
+    color: #000000; /* Ensuring black color on smallest screens too */
   }
   
   .step-content h2 {
