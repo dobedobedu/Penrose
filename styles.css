@@ -84,6 +84,7 @@ body {
   border-radius: 50px; /* Pill shaped */
   padding: 0.25rem 1.5rem; /* Padding for better button appearance */
   order: -1; /* Ensures the button is always displayed first */
+  z-index: 150; /* Higher z-index to ensure it appears above other elements */
 }
 
 .sign-up-button:hover {
@@ -434,6 +435,17 @@ body {
     padding: 0.15rem 0.8rem;
     align-self: flex-start;
     order: -1; /* Ensures the button is always displayed first */
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    z-index: 150;
+  }
+  
+  @media (max-width: 480px) {
+    /* Hide sign up button on very small screens to prevent overlapping */
+    .sign-up-button {
+      display: none;
+    }
   }
   
   /* Ensure header content is visible and left-aligned */
