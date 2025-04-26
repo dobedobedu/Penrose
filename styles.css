@@ -8,7 +8,7 @@
   --ball-size: 16px;
   --mobile-header-height: 60px;
   --mobile-footer-height: 40px;
-  --mobile-staircase-height: 260px;
+  --mobile-staircase-height: 280px;
   --mobile-indicator-height: 40px;
   --blur-intensity: 0;
   --blur-transition: 0.3s;
@@ -377,6 +377,12 @@ body {
     padding-top: 0;
   }
   
+  /* Layer structure: 
+   * z-index 100: Penrose container (stairs & ball)
+   * z-index 101: Step indicator
+   * z-index 102: Title bar
+   */
+  
   /* Title bar sticky at top */
   .penrose-title {
     position: fixed;
@@ -400,7 +406,7 @@ body {
     width: 100%;
     height: var(--mobile-indicator-height);
     padding: 8px 0;
-    background-color: rgba(244, 244, 244, 0.95);
+    background-color: rgba(244, 244, 244, 0.8);
     z-index: 101;
     text-align: center;
     font-size: 1.2rem;
@@ -408,33 +414,21 @@ body {
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   }
   
-  /* Penrose container sticky below step indicator */
+  /* Penrose container - now on top with higher z-index */
   .penrose-container {
     position: fixed;
-    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height));
+    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) - 20px);
     left: 0;
     width: 100%;
     height: var(--mobile-staircase-height);
-    min-height: 260px;
+    min-height: var(--mobile-staircase-height);
     padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 100;
-    background-color: var(--background-color);
-  }
-  
-  /* Larger staircase and ball */
-  .penrose-image-container {
-    transform: scale(0.6);
-    margin: 0;
-    margin-top: 20px;
-  }
-  
-  .glowing-ball {
-    width: 20px;
-    height: 20px;
+    z-index: 103; /* Increased to be above the indicator */
+    background-color: transparent; /* Make background transparent so stairs show on top */
   }
   
   /* Content sections */
@@ -444,7 +438,24 @@ body {
     padding-bottom: 60px;
     overflow-y: visible;
     scroll-snap-type: y proximity;
-    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height));
+    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height) - 20px);
+    position: relative;
+    z-index: 99; /* Below everything */
+  }
+  
+  /* Larger staircase and ball */
+  .penrose-image-container {
+    transform: scale(0.65);
+    margin: 0;
+    margin-top: 20px;
+    position: relative;
+    z-index: 104; /* Ensure staircase is above everything */
+  }
+  
+  .glowing-ball {
+    width: 20px;
+    height: 20px;
+    z-index: 105; /* Ensure ball is on top of everything */
   }
   
   .step-section {
@@ -510,12 +521,12 @@ body {
 
 @media (max-width: 480px) {
   :root {
-    --mobile-staircase-height: 240px;
+    --mobile-staircase-height: 260px;
   }
   
   /* Adjust for smaller phones */
   .penrose-image-container {
-    transform: scale(0.55);
+    transform: scale(0.6);
     margin-top: 15px;
   }
   
