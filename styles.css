@@ -62,9 +62,12 @@ body {
 
 .penrose-title {
   position: absolute;
-  top: 10%;
+  top: 5%;
   text-align: left;
   width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .sign-up-button {
@@ -72,7 +75,7 @@ body {
   font-family: 'SF Pro Expanded Black', 'Helvetica Neue', Arial, sans-serif;
   font-size: 2.5rem;
   font-weight: 900;
-  margin-bottom: 2rem; /* Further increased spacing between button and title */
+  margin-bottom: 1.5rem; /* Space between button and title */
   color: var(--accent-color);
   text-decoration: none;
   transition: transform 0.3s ease, opacity 0.3s ease;
@@ -357,6 +360,7 @@ body {
     top: 5%;
     text-align: center;
     width: 100%;
+    align-items: center;
   }
   
   .step-indicator {
@@ -410,8 +414,37 @@ body {
     background-color: var(--background-color);
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
+    align-items: flex-start;
     z-index: 102;
+  }
+  
+  /* Sign up button at the top */
+  .sign-up-button {
+    font-size: 1rem;
+    margin-bottom: 0.75rem; /* Space between button and title */
+    padding: 0.15rem 0.8rem;
+    align-self: flex-start;
+  }
+  
+  /* Ensure header content is visible and left-aligned */
+  .header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .penrose-title h2 {
+    font-size: 1rem;
+    display: block;
+    margin-bottom: 0;
+    text-align: left;
+  }
+  
+  .tagline {
+    font-size: 0.8rem;
+    display: block;
+    text-align: left;
   }
   
   /* Step indicator sticky below title */
@@ -557,27 +590,6 @@ body {
     margin-bottom: 0;
     text-shadow: none;
   }
-  
-  /* Style adjustments for mobile */
-  .sign-up-button {
-    font-size: 1.5rem;
-    margin-bottom: 1.25rem; /* Increased spacing between button and title on mobile */
-    display: block;
-    padding: 0.2rem 1.2rem; /* Adjusted padding for mobile */
-  }
-  
-  .penrose-title h2 {
-    font-size: 1rem;
-    margin-bottom: 0;
-    font-weight: 900; /* Black weight */
-    color: #000000; /* Ensuring black color on mobile too */
-  }
-  
-  .tagline {
-    display: block; /* Show tagline on mobile */
-    font-size: 0.8rem; /* Smaller size on mobile */
-    margin-top: 0.2rem; /* Further reduced space for more compact look */
-  }
 
   /* Special handling for the last section */
   .step-section[data-step="14"] {
@@ -598,8 +610,8 @@ body {
   }
   
   .sign-up-button {
-    font-size: 1.2rem;
-    padding: 0.15rem 1rem; /* Adjusted padding for smaller screens */
+    font-size: 0.9rem;
+    padding: 0.12rem 0.7rem; /* Adjusted padding for smaller screens */
   }
   
   .penrose-title h2 {
