@@ -83,11 +83,19 @@ body {
   border: 2px solid var(--accent-color); /* Thin pill shape outline */
   border-radius: 50px; /* Pill shaped */
   padding: 0.25rem 1.5rem; /* Padding for better button appearance */
+  order: -1; /* Ensures the button is always displayed first */
 }
 
 .sign-up-button:hover {
   transform: translateY(-3px);
   opacity: 0.9;
+}
+
+.header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
 }
 
 .penrose-title h2 {
@@ -425,6 +433,7 @@ body {
     margin-bottom: 0.75rem; /* Space between button and title */
     padding: 0.15rem 0.8rem;
     align-self: flex-start;
+    order: -1; /* Ensures the button is always displayed first */
   }
   
   /* Ensure header content is visible and left-aligned */
@@ -432,6 +441,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    width: 100%;
   }
   
   .penrose-title h2 {
