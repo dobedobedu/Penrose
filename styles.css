@@ -17,9 +17,9 @@
 }
 
 @font-face {
-  font-family: 'SF Pro Expanded Black';
-  src: url('https://fonts.cdnfonts.com/css/sf-pro-expanded-black') format('woff2');
-  font-weight: 900;
+  font-family: 'Akira Expanded';
+  src: url('https://fonts.cdnfonts.com/css/akira-expanded') format('woff2');
+  font-weight: 800;
   font-style: normal;
 }
 
@@ -74,9 +74,9 @@ body {
 
 .sign-up-button {
   display: inline-block;
-  font-family: 'SF Pro Expanded Black', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Akira Expanded', 'Helvetica Neue', Arial, sans-serif;
   font-size: 2.5rem;
-  font-weight: 900;
+  font-weight: 800;
   margin-bottom: 2rem; /* Space between button and title */
   color: var(--accent-color);
   text-decoration: none;
@@ -101,9 +101,10 @@ body {
 }
 
 .penrose-title h2 {
+  font-family: 'Akira Expanded', 'Helvetica Neue', Arial, sans-serif;
   font-size: 1.8rem;
   margin-bottom: 0.3rem; /* Further reduced space between title and tagline */
-  font-weight: 900; /* Black weight */
+  font-weight: 800; /* Heavy weight */
   color: #000000; /* Black color */
   text-shadow: none;
 }
@@ -240,9 +241,10 @@ body {
 }
 
 .step-content h2 {
+  font-family: 'Akira Expanded', 'Helvetica Neue', Arial, sans-serif;
   font-size: 2.2rem; /* Slightly reduced size */
   margin-bottom: 0.75rem; /* Reduced spacing after title */
-  font-weight: 700;
+  font-weight: 800;
   color: var(--text-color);
   text-shadow: none;
   line-height: 1.1; /* Further reduced line height for more sleek appearance */
@@ -433,7 +435,7 @@ body {
   
   /* Sign up button at the top */
   .sign-up-button {
-    font-size: 1rem;
+    font-size: 0.9rem;
     margin-bottom: 0;
     padding: 0.1rem 0.8rem;
     margin-top: 0; /* Removed margin completely for perfect alignment */
@@ -604,6 +606,7 @@ body {
   }
   
   .step-content h2 {
+    font-family: 'Akira Expanded', 'Helvetica Neue', Arial, sans-serif;
     font-size: 1.4rem;
     margin-bottom: 0.4rem;
     text-shadow: none;
@@ -637,16 +640,19 @@ body {
   }
   
   .sign-up-button {
+    font-family: 'Akira Expanded', 'Helvetica Neue', Arial, sans-serif;
     font-size: 0.9rem;
     padding: 0.12rem 0.7rem;
   }
   
   .penrose-title h2 {
+    font-family: 'Akira Expanded', 'Helvetica Neue', Arial, sans-serif;
     font-size: 0.9rem;
     color: #000000;
   }
   
   .step-content h2 {
+    font-family: 'Akira Expanded', 'Helvetica Neue', Arial, sans-serif;
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
   }
