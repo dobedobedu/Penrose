@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Define each step's title for debugging and reference
   const stepTitles = [
     "Get Inspired and Disciplined",
-    "Problem Exploring",
+    "Need Finding",
     "Problem Framing",
     "User Research",
     "Ideation",
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "Go to Market",
     "Growth Strategy",
     "Demo Day",
-    "Feedback Collection, Reflect and Connect the Dots"
+    "Reflect and Connect the Dots"
   ];
   
   // Function to ensure all step content is visible for mobile
