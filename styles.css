@@ -8,8 +8,10 @@
   --ball-size: 16px;
   --mobile-header-height: 60px;
   --mobile-footer-height: 40px;
-  --mobile-staircase-height: 240px;
+  --mobile-staircase-height: 260px;
   --mobile-indicator-height: 40px;
+  --blur-intensity: 0;
+  --blur-transition: 0.3s;
 }
 
 @font-face {
@@ -114,7 +116,6 @@ body {
   height: var(--ball-size);
   border-radius: 50%;
   background-color: var(--accent-color);
-  box-shadow: 0 0 15px 4px rgba(255, 107, 0, 0.7);
   transform: translate(-50%, -50%);
   transition: left 0.6s ease-out, top 0.6s ease-out;
   z-index: 10;
@@ -202,13 +203,15 @@ body {
 .step-content {
   max-width: 80%;
   transform: translateY(0);
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, filter var(--blur-transition);
   opacity: 1;
+  filter: blur(calc(var(--blur-intensity) * 5px));
 }
 
 .step-section.active .step-content {
   transform: translateY(0);
   opacity: 1;
+  filter: blur(0);
 }
 
 .step-content h2 {
@@ -246,7 +249,6 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
 }
 
@@ -259,6 +261,24 @@ body {
 .nav-arrow.disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+/* Blurred Content Effect */
+.blur-content {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.blur-content::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background: linear-gradient(to bottom, rgba(244, 244, 244, 0), var(--background-color));
+  pointer-events: none;
 }
 
 /* Responsive adjustments */
@@ -335,11 +355,16 @@ body {
   
   .penrose-image-container {
     transform: scale(0.75);
-    margin-top: 5px;
+    margin-top: 40px;
   }
 }
 
 @media (max-width: 768px) {
+  /* Hide navigation arrows on mobile */
+  .navigation-arrows {
+    display: none;
+  }
+
   /* Mobile approach - standard scrolling with sticky elements */
   body {
     overflow-y: auto;
@@ -349,7 +374,7 @@ body {
   .container {
     display: block;
     min-height: 100%;
-    padding-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height));
+    padding-top: 0;
   }
   
   /* Title bar sticky at top */
@@ -365,7 +390,6 @@ body {
     flex-direction: column;
     justify-content: center;
     z-index: 102;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   }
   
   /* Step indicator sticky below title */
@@ -391,7 +415,7 @@ body {
     left: 0;
     width: 100%;
     height: var(--mobile-staircase-height);
-    min-height: auto;
+    min-height: 260px;
     padding: 0;
     display: flex;
     flex-direction: column;
@@ -399,19 +423,18 @@ body {
     justify-content: center;
     z-index: 100;
     background-color: var(--background-color);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   }
   
   /* Larger staircase and ball */
   .penrose-image-container {
-    transform: scale(0.5);
+    transform: scale(0.6);
     margin: 0;
+    margin-top: 20px;
   }
   
   .glowing-ball {
     width: 20px;
     height: 20px;
-    box-shadow: 0 0 25px 8px rgba(255, 107, 0, 0.8);
   }
   
   /* Content sections */
@@ -420,28 +443,46 @@ body {
     margin-left: 0;
     padding-bottom: 60px;
     overflow-y: visible;
-    scroll-snap-type: none;
+    scroll-snap-type: y proximity;
+    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height));
   }
   
   .step-section {
     min-height: auto;
     height: auto;
     scroll-snap-align: none;
-    scroll-snap-stop: none;
-    padding: 30px 20px 50px 20px;
+    scroll-snap-stop: normal;
+    padding: 30px 20px 70px 20px;
     margin: 0;
     display: block;
   }
   
-  /* Special handling for the last section */
-  .step-section[data-step="14"] {
-    padding-bottom: 100px;
-    margin-bottom: 60px;
+  /* Text scroll blur effect */
+  .step-content {
+    max-width: 100%;
+    margin-top: 0;
+    padding: 0;
+    position: relative;
+    transition: filter 0.3s ease;
+  }
+
+  .step-content.blur-out {
+    filter: blur(3px);
   }
   
-  /* Hide navigation arrows */
-  .navigation-arrows {
-    display: none;
+  .blur-content::after {
+    height: 40px;
+  }
+  
+  .step-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .step-content p {
+    font-size: 1rem;
+    line-height: 1.4;
+    margin-bottom: 0;
   }
   
   /* Style adjustments for mobile */
@@ -459,33 +500,23 @@ body {
   .tagline {
     display: none;
   }
-  
-  .step-content {
-    max-width: 100%;
-    margin-top: 0;
-    padding: 0;
-  }
 
-  .step-content h2 {
-    font-size: 1.5rem;
-    margin-bottom: 0.75rem;
-  }
-  
-  .step-content p {
-    font-size: 1rem;
-    line-height: 1.4;
-    margin-bottom: 0;
+  /* Special handling for the last section */
+  .step-section[data-step="14"] {
+    padding-bottom: 100px;
+    margin-bottom: 60px;
   }
 }
 
 @media (max-width: 480px) {
   :root {
-    --mobile-staircase-height: 200px;
+    --mobile-staircase-height: 240px;
   }
   
   /* Adjust for smaller phones */
   .penrose-image-container {
-    transform: scale(0.45);
+    transform: scale(0.55);
+    margin-top: 15px;
   }
   
   .sign-up-button {
