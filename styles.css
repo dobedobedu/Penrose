@@ -69,7 +69,7 @@ body {
   flex-direction: column;
   align-items: flex-start;
   padding-left: 20px;
-  padding-top: 35px:
+  padding-top: 35px;
 }
 
 .sign-up-button {
@@ -101,7 +101,7 @@ body {
 }
 
 .penrose-title h2 {
-  font-family: 'Akira Expanded', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 1.8rem;
   margin-bottom: 0.3rem; /* Further reduced space between title and tagline */
   font-weight: 800; /* Heavy weight */
@@ -241,7 +241,7 @@ body {
 }
 
 .step-content h2 {
-  font-family: 'Akira Expanded', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 2.2rem; /* Slightly reduced size */
   margin-bottom: 0.75rem; /* Reduced spacing after title */
   font-weight: 800;
@@ -251,6 +251,7 @@ body {
 }
 
 .step-content p {
+  font-family: Arial, 'Helvetica Neue', sans-serif;
   font-size: 1.1rem;
   line-height: 1.5; /* Reduced line height for more sleek appearance */
   color: var(--muted-color);
@@ -424,7 +425,7 @@ body {
     width: 100%;
     height: var(--mobile-header-height);
     padding: 0.1rem 20px;
-    padding-top: 5px; /* Further reduced top padding */
+    padding-top: 12px; /* Increased top padding */
     background-color: var(--background-color);
     display: flex;
     flex-direction: row;
@@ -506,20 +507,18 @@ body {
     -webkit-backdrop-filter: blur(2px);
   }
   
-  /* Step indicator moved below staircase */
+  /* Step indicator moved above staircase */
   .step-indicator {
     position: fixed;
-    top: calc(var(--mobile-header-height) + var(--mobile-staircase-height));
+    top: calc(var(--mobile-header-height) + 10px); /* Positioned just below header with spacing */
     left: 0;
     width: 100%;
-    height: var(--mobile-indicator-height);
-    padding: 10px 0;
-    background-color: rgba(244, 244, 244, 0.95);
-    z-index: 101;
+    height: auto;
+    padding: 5px 0;
+    background-color: transparent;
+    z-index: 105;
     text-align: center;
     font-size: 1.2rem;
-    border-top: 0px solid rgba(0, 0, 0, 0.05);
-    border-bottom: 0px solid rgba(0, 0, 0, 0.05);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -530,7 +529,7 @@ body {
   .penrose-image-container {
     transform: scale(0.5);
     margin: 0;
-    margin-top: 10px;
+    margin-top: 35px; /* Increased margin-top for the staircase */
     position: relative;
     z-index: 105;
   }
@@ -549,7 +548,7 @@ body {
     padding-bottom: 90px;
     overflow-y: visible;
     scroll-snap-type: y proximity;
-    margin-top: calc(var(--mobile-header-height) + var(--mobile-staircase-height) + var(--mobile-indicator-height));
+    margin-top: calc(var(--mobile-header-height) + var(--mobile-staircase-height));
     position: relative;
     z-index: 99;
     -webkit-overflow-scrolling: touch;
@@ -606,7 +605,7 @@ body {
   }
   
   .step-content h2 {
-    font-family: 'Akira Expanded', 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
     font-size: 1.4rem;
     margin-bottom: 0.4rem;
     text-shadow: none;
@@ -614,6 +613,7 @@ body {
   }
   
   .step-content p {
+    font-family: Arial, 'Helvetica Neue', sans-serif;
     font-size: 1rem;
     line-height: 1.3;
     margin-bottom: 0;
@@ -636,7 +636,7 @@ body {
   /* Adjust for smaller phones */
   .penrose-image-container {
     transform: scale(0.45);
-    margin-top: 10px;
+    margin-top: 40px; /* Adjusted for the step indicator above */
   }
   
   .sign-up-button {
@@ -646,13 +646,13 @@ body {
   }
   
   .penrose-title h2 {
-    font-family: 'Akira Expanded', 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
     font-size: 0.9rem;
     color: #000000;
   }
   
   .step-content h2 {
-    font-family: 'Akira Expanded', 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
   }
