@@ -49,13 +49,74 @@ document.addEventListener("DOMContentLoaded", () => {
     // Make all sections visible
     stepSections.forEach(section => {
       section.style.opacity = "1";
-      
-      // Make the content inside visible too
+    });
+  }
+  
+  // Create the dedicated blur gradient layer for smooth transitions
+  function createBlurGradientLayer() {
+    if (!isMobile) return;
+    
+    // Check if the blur layer already exists
+    if (document.querySelector('.penrose-blur-layer')) return;
+    
+    const blurLayer = document.createElement('div');
+    blurLayer.className = 'penrose-blur-layer';
+    document.body.appendChild(blurLayer);
+  }
+  
+  // Enable blur effect for text that's scrolling out of view
+  function setupBlurEffect() {
+    if (!isMobile) return;
+    
+    // Add blur-content class to all step content elements
+    stepSections.forEach(section => {
       const content = section.querySelector('.step-content');
       if (content) {
-        content.style.opacity = "1";
-        content.style.transform = "none";
+        content.parentElement.classList.add('blur-content');
       }
+    });
+    
+    // Create the blur gradient layer
+    createBlurGradientLayer();
+    
+    // Set up snap alignment for sections
+    stepSections.forEach(section => {
+      section.style.scrollSnapAlign = "start";
+    });
+    
+    // Initialize intersection observer to handle section visibility
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const section = entry.target;
+        const content = section.querySelector('.step-content');
+        if (!content) return;
+        
+        if (entry.isIntersecting) {
+          // When section is in good view, make it the active one and remove blur
+          if (entry.intersectionRatio > 0.7) {
+            section.classList.add('active');
+            content.style.filter = "blur(0)";
+          } else {
+            // Partially visible, apply slight blur
+            section.classList.remove('active');
+            const blurAmount = Math.max(0, 1 - entry.intersectionRatio) * 2;
+            content.style.filter = `blur(${blurAmount}px)`;
+          }
+        } else {
+          // When section is out of view, add blur
+          section.classList.remove('active');
+          content.style.filter = "blur(2px)";
+        }
+      });
+    }, {
+      root: null,
+      threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+      rootMargin: '-5% 0px -5% 0px'
+    });
+    
+    // Observe all step sections
+    stepSections.forEach(section => {
+      observer.observe(section);
     });
   }
   
@@ -65,9 +126,9 @@ document.addEventListener("DOMContentLoaded", () => {
     
     const containerElement = document.querySelector('.penrose-container');
     if (containerElement) {
-      // Set mobile-friendly height
-      containerElement.style.height = window.innerWidth <= 480 ? '18vh' : '20vh';
-      containerElement.style.minHeight = window.innerWidth <= 480 ? '120px' : '150px';
+      // Set mobile-friendly height with more space for the stairs
+      containerElement.style.height = window.innerWidth <= 480 ? '260px' : '280px';
+      containerElement.style.minHeight = window.innerWidth <= 480 ? '260px' : '280px';
     }
   }
   
@@ -98,12 +159,22 @@ document.addEventListener("DOMContentLoaded", () => {
     currentStepElem.textContent = index.toString().padStart(2, '0');
     
     // Add active class to current section and remove from others
-    stepSections.forEach((section, i) => {
+    stepSections.forEach((section) => {
       const sectionStep = parseInt(section.dataset.step, 10);
       if (sectionStep === index) {
         section.classList.add('active');
+        // Make active section content clear
+        const content = section.querySelector('.step-content');
+        if (content) {
+          content.style.filter = "blur(0)";
+        }
       } else {
         section.classList.remove('active');
+        // Apply slight blur to non-active sections
+        const content = section.querySelector('.step-content');
+        if (content) {
+          content.style.filter = "blur(1px)";
+        }
       }
     });
   }
@@ -166,13 +237,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (index === activeSection) return;
     if (index < 1 || index > totalSteps) return;
     
-    moveGlowingBall(index);
-    activeSection = index;
-    
     // On mobile, ensure content visibility
     if (isMobile) {
       forceContentVisibility();
     }
+    
+    moveGlowingBall(index);
+    activeSection = index;
     
     // Update navigation arrows state - only for desktop
     if (!isMobile) {
@@ -242,6 +313,9 @@ document.addEventListener("DOMContentLoaded", () => {
       
       // Adjust Penrose container size
       adjustPenroseContainerForMobile();
+      
+      // Setup blur effect for text scrolling
+      setupBlurEffect();
     }
     
     penroseContainer.offsetWidth; // Force reflow
@@ -267,6 +341,11 @@ document.addEventListener("DOMContentLoaded", () => {
             
             // Force visibility again after scrolling
             forceContentVisibility();
+            firstSection.classList.add('active');
+            const content = firstSection.querySelector('.step-content');
+            if (content) {
+              content.style.filter = "blur(0)";
+            }
           }, 100);
         }
       }
@@ -290,8 +369,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Improved scroll handler with debouncing
+  // Add scrolling handler to update blur effect
   stepsContainer.addEventListener('scroll', () => {
+    if (isMobile) {
+      // Update blur effect based on scroll position
+      stepSections.forEach(section => {
+        const content = section.querySelector('.step-content');
+        if (!content) return;
+        
+        const rect = section.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        
+        // Calculate how far the section is from the center of viewport
+        const distanceFromCenter = Math.abs((rect.top + rect.height / 2) - (viewportHeight / 2));
+        const maxDistance = viewportHeight / 2 + rect.height / 2;
+        
+        // Calculate blur amount (0 when centered, up to 2px when far away)
+        const blurAmount = Math.min(2, (distanceFromCenter / maxDistance) * 2);
+        
+        // Apply blur with smooth transition
+        content.style.filter = `blur(${blurAmount}px)`;
+      });
+    }
+    
+    // Original scroll handler logic
     if (scrollTimeout) {
       clearTimeout(scrollTimeout);
     }
@@ -363,9 +464,29 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 100);
     }, { passive: true });
     
-    // Add touch move handler to keep content visible while dragging
-    stepsContainer.addEventListener('touchmove', () => {
+    // Add touch move handler to keep content visible while dragging and update blur
+    stepsContainer.addEventListener('touchmove', (e) => {
+      // Keep content visible during touch movement
       forceContentVisibility();
+      
+      // Update blur effect during touch movement
+      stepSections.forEach(section => {
+        const content = section.querySelector('.step-content');
+        if (!content) return;
+        
+        const rect = section.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        
+        // Calculate how far the section is from the center of viewport
+        const distanceFromCenter = Math.abs((rect.top + rect.height / 2) - (viewportHeight / 2));
+        const maxDistance = viewportHeight / 2 + rect.height / 2;
+        
+        // Calculate blur amount
+        const blurAmount = Math.min(2, (distanceFromCenter / maxDistance) * 2);
+        
+        // Apply blur with transition
+        content.style.filter = `blur(${blurAmount}px)`;
+      });
     }, { passive: true });
   }
   
@@ -394,9 +515,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Handle window resize with improved iOS detection
   window.addEventListener('resize', () => {
-    const wasMobile = isMobile;
-    
-    // Update device detection
+    const wasJustMobile = isMobile;
     isMobile = window.innerWidth <= 768;
     isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream || /MacIntel/.test(navigator.platform) && navigator.maxTouchPoints > 1;
     
@@ -406,10 +525,11 @@ document.addEventListener("DOMContentLoaded", () => {
       adjustPenroseContainerForMobile();
       
       // Force content visibility if switching to mobile
-      if (!wasMobile) {
+      if (!wasJustMobile) {
         forceContentVisibility();
+        setupBlurEffect();
       }
-    } else if (wasMobile) {
+    } else if (wasJustMobile) {
       // If switching from mobile to desktop, reload the page to reset everything
       window.location.reload();
     }
@@ -461,6 +581,9 @@ document.addEventListener("DOMContentLoaded", () => {
       // Adjust container size
       adjustPenroseContainerForMobile();
       
+      // Setup blur effect
+      setupBlurEffect();
+      
       // Fix specific issues with Safari/iOS
       if (isIOS) {
         setTimeout(() => {
@@ -477,6 +600,15 @@ document.addEventListener("DOMContentLoaded", () => {
               block: 'start',
               behavior: 'auto'
             });
+            
+            // Make first section active and clear
+            setTimeout(() => {
+              firstSection.classList.add('active');
+              const content = firstSection.querySelector('.step-content');
+              if (content) {
+                content.style.filter = "blur(0)";
+              }
+            }, 100);
           }
         }, 300);
       }
