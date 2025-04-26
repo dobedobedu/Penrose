@@ -49,14 +49,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // Make all sections visible
     stepSections.forEach(section => {
       section.style.opacity = "1";
-      
-      // Make the content inside visible too
-      const content = section.querySelector('.step-content');
-      if (content) {
-        content.style.opacity = "1";
-        content.style.transform = "none";
-      }
     });
+  }
+  
+  // Create blur overlay for content behind the Penrose stairs
+  function createPenroseBlurOverlay() {
+    if (!isMobile) return;
+    
+    // Check if the overlay already exists
+    if (document.querySelector('.penrose-behind-blur')) return;
+    
+    const blurOverlay = document.createElement('div');
+    blurOverlay.className = 'penrose-behind-blur';
+    document.body.appendChild(blurOverlay);
   }
   
   // Enable blur effect for text that's scrolling out of view
@@ -92,12 +97,44 @@ document.addEventListener("DOMContentLoaded", () => {
     }, {
       root: null,
       threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
-      rootMargin: '-10% 0px -10% 0px'
+      rootMargin: '-5% 0px -5% 0px'
     });
     
     // Observe all step sections
     stepSections.forEach(section => {
       observer.observe(section);
+    });
+    
+    // Create the blur overlay for stairs
+    createPenroseBlurOverlay();
+  }
+  
+  // Apply stronger blur to content behind the Penrose stairs
+  function applyStairsBlurEffect() {
+    if (!isMobile) return;
+    
+    const penroseHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mobile-staircase-height'));
+    const headerHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mobile-header-height'));
+    const indicatorHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mobile-indicator-height'));
+    
+    const stairsBottom = headerHeight + indicatorHeight + penroseHeight;
+    
+    stepSections.forEach(section => {
+      const content = section.querySelector('.step-content');
+      if (!content) return;
+      
+      const rect = section.getBoundingClientRect();
+      
+      // If the section is behind or partially behind the stairs
+      if (rect.top < stairsBottom) {
+        // Calculate how much of the section is behind the stairs
+        const overlapPercentage = (stairsBottom - rect.top) / rect.height;
+        if (overlapPercentage > 0) {
+          // Apply stronger blur for more overlap
+          const blurAmount = Math.min(5, overlapPercentage * 6);
+          content.style.filter = `blur(${blurAmount}px)`;
+        }
+      }
     });
   }
   
@@ -108,8 +145,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const containerElement = document.querySelector('.penrose-container');
     if (containerElement) {
       // Set mobile-friendly height with more space for the stairs
-      containerElement.style.height = window.innerWidth <= 480 ? '240px' : '260px';
-      containerElement.style.minHeight = window.innerWidth <= 480 ? '240px' : '260px';
+      containerElement.style.height = window.innerWidth <= 480 ? '260px' : '280px';
+      containerElement.style.minHeight = window.innerWidth <= 480 ? '260px' : '280px';
     }
   }
   
@@ -177,6 +214,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // Set a flag to prevent other scrolling during this operation
         setTimeout(() => {
           isScrolling = false;
+          if (isMobile) {
+            applyStairsBlurEffect();
+          }
         }, 200); // Shorter timeout for iOS for better responsiveness
       } else if (isMobile) {
         // For non-iOS mobile devices - optimized approach with easier scrolling
@@ -187,6 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         setTimeout(() => {
           isScrolling = false;
+          applyStairsBlurEffect();
         }, 600);
       } else {
         // Desktop behavior
@@ -211,6 +252,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // On mobile, ensure content visibility
     if (isMobile) {
       forceContentVisibility();
+      applyStairsBlurEffect();
     }
     
     moveGlowingBall(index);
@@ -287,6 +329,9 @@ document.addEventListener("DOMContentLoaded", () => {
       
       // Setup blur effect for text scrolling
       setupBlurEffect();
+      
+      // Apply initial blur for text behind stairs
+      applyStairsBlurEffect();
     }
     
     penroseContainer.offsetWidth; // Force reflow
@@ -312,6 +357,7 @@ document.addEventListener("DOMContentLoaded", () => {
             
             // Force visibility again after scrolling
             forceContentVisibility();
+            applyStairsBlurEffect();
           }, 100);
         }
       }
@@ -338,6 +384,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // Add scrolling handler to update blur effect
   stepsContainer.addEventListener('scroll', () => {
     if (isMobile) {
+      // Apply stairs blur effect during scroll
+      applyStairsBlurEffect();
+      
       // Update blur effect based on scroll position
       stepSections.forEach(section => {
         const content = section.querySelector('.step-content');
@@ -353,8 +402,16 @@ document.addEventListener("DOMContentLoaded", () => {
         // Calculate blur amount (0 when centered, up to 3px when far away)
         const blurAmount = Math.min(3, (distanceFromCenter / maxDistance) * 3);
         
-        // Apply blur
-        content.style.filter = `blur(${blurAmount}px)`;
+        // Apply blur based on scrolling distance
+        // Don't apply this to content that's behind the stairs (that's handled by applyStairsBlurEffect)
+        const penroseHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mobile-staircase-height'));
+        const headerHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mobile-header-height'));
+        const indicatorHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mobile-indicator-height'));
+        const stairsBottom = headerHeight + indicatorHeight + penroseHeight;
+        
+        if (rect.top >= stairsBottom) {
+          content.style.filter = `blur(${blurAmount}px)`;
+        }
       });
     }
     
@@ -377,6 +434,11 @@ document.addEventListener("DOMContentLoaded", () => {
       if (mostVisibleSection !== activeSection) {
         updateActiveSection(mostVisibleSection);
       }
+      
+      // Apply stairs blur after scrolling settles
+      if (isMobile) {
+        applyStairsBlurEffect();
+      }
     }, isMobile ? 30 : 100); // Reduced timeout for more responsive mobile experience
   }, { passive: true });
   
@@ -392,6 +454,7 @@ document.addEventListener("DOMContentLoaded", () => {
       
       // Ensure content visibility on any touch
       forceContentVisibility();
+      applyStairsBlurEffect();
     }, { passive: true });
     
     stepsContainer.addEventListener('touchend', (e) => {
@@ -424,6 +487,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
         // Force visibility again after touch
         forceContentVisibility();
+        applyStairsBlurEffect();
         
         const mostVisibleSection = getMostVisibleSection();
         updateActiveSection(mostVisibleSection);
@@ -436,6 +500,8 @@ document.addEventListener("DOMContentLoaded", () => {
       forceContentVisibility();
       
       // Update blur effect during touch movement
+      applyStairsBlurEffect();
+      
       stepSections.forEach(section => {
         const content = section.querySelector('.step-content');
         if (!content) return;
@@ -450,8 +516,15 @@ document.addEventListener("DOMContentLoaded", () => {
         // Calculate blur amount
         const blurAmount = Math.min(3, (distanceFromCenter / maxDistance) * 3);
         
-        // Apply blur with transition
-        content.style.filter = `blur(${blurAmount}px)`;
+        // Apply blur with transition - but not to content behind stairs, that's handled separately
+        const penroseHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mobile-staircase-height'));
+        const headerHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mobile-header-height'));
+        const indicatorHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--mobile-indicator-height'));
+        const stairsBottom = headerHeight + indicatorHeight + penroseHeight;
+        
+        if (rect.top >= stairsBottom) {
+          content.style.filter = `blur(${blurAmount}px)`;
+        }
       });
     }, { passive: true });
   }
@@ -494,6 +567,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!wasJustMobile) {
         forceContentVisibility();
         setupBlurEffect();
+        applyStairsBlurEffect();
       }
     } else if (wasJustMobile) {
       // If switching from mobile to desktop, reload the page to reset everything
@@ -550,6 +624,9 @@ document.addEventListener("DOMContentLoaded", () => {
       // Setup blur effect
       setupBlurEffect();
       
+      // Apply stairs blur effect
+      applyStairsBlurEffect();
+      
       // Fix specific issues with Safari/iOS
       if (isIOS) {
         setTimeout(() => {
@@ -558,6 +635,7 @@ document.addEventListener("DOMContentLoaded", () => {
           
           // Force visibility of all sections
           forceContentVisibility();
+          applyStairsBlurEffect();
           
           // First section special handling
           const firstSection = document.querySelector('.step-section[data-step="1"]');
@@ -566,6 +644,11 @@ document.addEventListener("DOMContentLoaded", () => {
               block: 'start',
               behavior: 'auto'
             });
+            
+            // Reapply blur after scrolling
+            setTimeout(() => {
+              applyStairsBlurEffect();
+            }, 100);
           }
         }, 300);
       }
