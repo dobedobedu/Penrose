@@ -425,7 +425,7 @@ body {
     width: 100%;
     height: var(--mobile-header-height);
     padding: 0.1rem 20px;
-    padding-top: 12px; /* Increased top padding */
+    padding-top: 15px; /* Increased top padding */
     background-color: var(--background-color);
     display: flex;
     flex-direction: row;
@@ -436,12 +436,14 @@ body {
   
   /* Sign up button at the top */
   .sign-up-button {
-    font-size: 0.9rem;
+    font-family: 'Akira Expanded', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 0.75rem; /* Reduced font size */
     margin-bottom: 0;
     padding: 0.1rem 0.8rem;
     margin-top: 0; /* Removed margin completely for perfect alignment */
     align-self: center; /* Changed to center to match title */
     order: 2; /* Move to right side */
+    white-space: nowrap; /* Keep text on one line */
   }
   
   /* Ensure header content is visible and left-aligned */
@@ -510,15 +512,15 @@ body {
   /* Step indicator moved above staircase */
   .step-indicator {
     position: fixed;
-    top: calc(var(--mobile-header-height) + 10px); /* Positioned just below header with spacing */
+    top: calc(var(--mobile-header-height) + 5px); /* Positioned just below header with spacing */
     left: 0;
     width: 100%;
     height: auto;
-    padding: 5px 0;
+    padding: 2px 0;
     background-color: transparent;
     z-index: 105;
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -529,7 +531,7 @@ body {
   .penrose-image-container {
     transform: scale(0.5);
     margin: 0;
-    margin-top: 35px; /* Increased margin-top for the staircase */
+    margin-top: 40px; /* Adjusted spacing for staircase positioning */
     position: relative;
     z-index: 105;
   }
@@ -641,8 +643,9 @@ body {
   
   .sign-up-button {
     font-family: 'Akira Expanded', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 0.9rem;
-    padding: 0.12rem 0.7rem;
+    font-size: 0.7rem; /* Even smaller font for small screens */
+    padding: 0.1rem 0.6rem;
+    white-space: nowrap;
   }
   
   .penrose-title h2 {
