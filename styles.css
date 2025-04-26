@@ -8,7 +8,7 @@
   --ball-size: 16px;
   --mobile-header-height: 65px;
   --mobile-footer-height: 40px;
-  --mobile-staircase-height: 270px;
+  --mobile-staircase-height: 240px;
   --mobile-indicator-height: 50px;
   --blur-intensity: 0;
   --blur-transition: 0.3s;
@@ -417,11 +417,11 @@ body {
   /* Title bar sticky at top */
   .penrose-title {
     position: fixed;
-    top: -20;
+    top: 0;
     left: 0;
     width: 100%;
     height: var(--mobile-header-height);
-    padding: 10px 20px;
+    padding: 0.1rem 20px;
     background-color: var(--background-color);
     display: flex;
     flex-direction: row;
@@ -434,7 +434,7 @@ body {
   .sign-up-button {
     font-size: 1rem;
     margin-bottom: 0;
-    padding: 0.15rem 0.8rem;
+    padding: 0.1rem 0.8rem;
     margin-top: 0;
     align-self: center;
     order: 2; /* Move to right side */
