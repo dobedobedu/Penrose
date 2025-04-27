@@ -83,7 +83,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // Set up snap alignment for sections
     stepSections.forEach(section => {
       section.style.scrollSnapAlign = "start";
-      section.style.scrollSnapStop = "always"; // Ensure snapping stops at each section
+      section.style.scrollSnapStop = "always"; // Ensure snapping always stops at each section
+      
+      // Add proper scroll margin to ensure sections snap at the right position
+      const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--mobile-header-height'));
+      const indicatorHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--mobile-indicator-height'));
+      const staircaseHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--mobile-staircase-height'));
+      
+      const scrollMargin = headerHeight + indicatorHeight + staircaseHeight;
+      section.style.scrollMarginTop = `${scrollMargin}px`;
     });
     
     // Initialize intersection observer to handle section visibility
@@ -107,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           // When section is out of view, add blur
           section.classList.remove('active');
-          content.style.filter = "blur(2px)";
+          content.style.filter = "blur(0.5px)"; // Reduced blur for better visibility
         }
       });
     }, {
@@ -152,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const top = parseFloat(marker.style.top) || 0;
     
     // Position the ball at the marker with a faster transition for mobile
-    const transitionSpeed = isMobile ? '0.4s' : '0.6s';
+    const transitionSpeed = isMobile ? '0.3s' : '0.6s'; // Even faster for mobile
     glowingBall.style.transition = `left ${transitionSpeed} ease-out, top ${transitionSpeed} ease-out`;
     glowingBall.style.left = `${left}px`;
     glowingBall.style.top = `${top}px`;
@@ -169,13 +177,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const content = section.querySelector('.step-content');
         if (content) {
           content.style.filter = "blur(0)";
+          content.style.opacity = "1"; // Ensure full opacity
         }
       } else {
         section.classList.remove('active');
         // Apply slight blur to non-active sections
         const content = section.querySelector('.step-content');
         if (content) {
-          content.style.filter = "blur(1px)";
+          // Use less blur for non-active sections on mobile
+          content.style.filter = isMobile ? "blur(0.5px)" : "blur(1px)";
         }
       }
     });
@@ -186,18 +196,22 @@ document.addEventListener("DOMContentLoaded", () => {
     if (isScrolling || index < 1 || index > totalSteps) return;
     
     isScrolling = true;
-    updateActiveSection(index);
     
     // Force all content to be visible on mobile
     if (isMobile) {
       forceContentVisibility();
     }
     
+    // Update active section before scrolling for smoother ball movement
+    updateActiveSection(index);
+    
     const targetSection = document.querySelector(`.step-section[data-step="${index}"]`);
     if (targetSection) {
       if (isIOS) {
         // iOS-specific scroll handling with adjusted offset to prevent content cutoff
         const offsetTop = targetSection.offsetTop - 40; // Apply offset to prevent content cutoff
+        
+        // Use auto behavior for better iOS performance
         stepsContainer.scrollTo({
           top: offsetTop,
           behavior: 'auto' // Use 'auto' instead of 'smooth' for more reliable iOS behavior
@@ -206,21 +220,27 @@ document.addEventListener("DOMContentLoaded", () => {
         // Force a reflow to ensure the scroll completes
         stepsContainer.offsetHeight;
         
-        // Set a flag to prevent other scrolling during this operation
+        // After a short delay, update the ball position and clear flag
         setTimeout(() => {
           isScrolling = false;
+          // Force an additional ball movement to keep it synchronized
+          moveGlowingBall(index);
         }, 200); // Shorter timeout for iOS for better responsiveness
       } else if (isMobile) {
         // For non-iOS mobile devices - optimized approach with adjusted offset
         const offsetTop = targetSection.offsetTop - 40; // Apply offset to prevent content cutoff
+        
         stepsContainer.scrollTo({
           top: offsetTop,
           behavior: 'smooth'
         });
         
+        // Use a longer timeout for smooth scrolling completion
         setTimeout(() => {
           isScrolling = false;
-        }, 600);
+          // Force an additional ball movement after scrolling completes
+          moveGlowingBall(index);
+        }, 800);
       } else {
         // Desktop behavior
         const offset = targetSection.offsetTop;
@@ -268,38 +288,66 @@ document.addEventListener("DOMContentLoaded", () => {
     let maxVisibility = 0;
     let mostVisibleIndex = activeSection;
     
-    // Get the viewport height and scroll position for better calculations
-    const viewportHeight = window.innerHeight;
-    const scrollTop = stepsContainer.scrollTop;
-    
-    stepSections.forEach((section) => {
-      const rect = section.getBoundingClientRect();
-      const sectionStep = parseInt(section.dataset.step, 10);
+    // For mobile, determine a better way to calculate visibility
+    if (isMobile) {
+      // Get the viewport height and scroll position
+      const viewportHeight = window.innerHeight;
+      const scrollTop = stepsContainer.scrollTop;
       
-      // Calculate visibility with viewport adjustment for mobile
-      let visibleTop = Math.max(0, rect.top);
-      let visibleBottom = Math.min(viewportHeight, rect.bottom);
+      // Calculate the position of key elements
+      const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--mobile-header-height')) || 60;
+      const indicatorHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--mobile-indicator-height')) || 40;
+      const staircaseHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--mobile-staircase-height')) || 280;
       
-      // On mobile, adjust calculations to account for the sticky header
-      if (isMobile) {
-        // For iOS and small mobile screens, require more visibility to consider a section active
-        const headerHeight = isMobile ? viewportHeight * 0.2 : 0; // Reduced threshold for easier scrolling
-        visibleTop = Math.max(headerHeight, rect.top);
+      // Total offset from top
+      const topOffset = headerHeight + indicatorHeight + staircaseHeight;
+      
+      // Viewport area where we want to detect the most visible section
+      const visibilityStart = topOffset;
+      const visibilityEnd = viewportHeight;
+      const visibilityArea = visibilityEnd - visibilityStart;
+      
+      // Get all sections currently in the view
+      stepSections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        const sectionStep = parseInt(section.dataset.step, 10);
         
-        // Special case for step 1 on iOS for immediate visibility on load
-        if (sectionStep === 1 && isIOS && scrollTop < 50) {
-          return mostVisibleIndex = 1;
+        // Calculate how much of the section is visible in our target area
+        const sectionTopInView = Math.max(visibilityStart, rect.top);
+        const sectionBottomInView = Math.min(visibilityEnd, rect.bottom);
+        
+        // Calculate visible height
+        const visibleHeight = Math.max(0, sectionBottomInView - sectionTopInView);
+        
+        // Adjust visibility calculation to prefer sections at the top
+        // of the viewport after the fixed elements
+        let visibility = visibleHeight / rect.height;
+        
+        // Boost visibility for sections near the top of the viewing area
+        if (rect.top <= visibilityStart + 100 && rect.bottom >= visibilityStart) {
+          visibility += 0.5; // Boost sections positioned right at the top of the viewing area
         }
-      }
-      
-      const visibleHeight = Math.max(0, visibleBottom - visibleTop);
-      const visibility = visibleHeight / rect.height;
-      
-      if (visibility > maxVisibility) {
-        maxVisibility = visibility;
-        mostVisibleIndex = sectionStep; // Use the actual step number from dataset
-      }
-    });
+        
+        if (visibility > maxVisibility) {
+          maxVisibility = visibility;
+          mostVisibleIndex = sectionStep;
+        }
+      });
+    } else {
+      // Desktop calculation
+      stepSections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        const sectionStep = parseInt(section.dataset.step, 10);
+        
+        const visibleHeight = Math.min(window.innerHeight, rect.bottom) - Math.max(0, rect.top);
+        const visibility = visibleHeight / rect.height;
+        
+        if (visibility > maxVisibility) {
+          maxVisibility = visibility;
+          mostVisibleIndex = sectionStep;
+        }
+      });
+    }
     
     return mostVisibleIndex;
   }
@@ -336,13 +384,20 @@ document.addEventListener("DOMContentLoaded", () => {
         stepIndicator.style.cursor = 'pointer';
         stepIndicator.addEventListener('click', goToNextStep);
       }
+      
+      // Enforce scroll snap settings programmatically
+      if (stepsContainer) {
+        stepsContainer.style.scrollSnapType = "y mandatory";
+        stepsContainer.style.scrollBehavior = "smooth";
+        stepsContainer.style.WebkitOverflowScrolling = "touch";
+      }
     }
     
     penroseContainer.offsetWidth; // Force reflow
     
     // Re-enable transitions
     setTimeout(() => {
-      glowingBall.style.transition = isMobile ? 'left 0.4s ease-out, top 0.4s ease-out' : 'left 0.6s ease-out, top 0.6s ease-out';
+      glowingBall.style.transition = isMobile ? 'left 0.3s ease-out, top 0.3s ease-out' : 'left 0.6s ease-out, top 0.6s ease-out';
       updateActiveSection(1);
       
       // Force step 1 to be visible on page load for mobile
@@ -391,7 +446,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Add scrolling handler to update blur effect
+  // Add scrolling handler to update blur effect and ball position
   stepsContainer.addEventListener('scroll', () => {
     if (isMobile) {
       // Update blur effect based on scroll position
@@ -407,7 +462,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const maxDistance = viewportHeight / 2 + rect.height / 2;
         
         // Calculate blur amount (0 when centered, up to 2px when far away)
-        const blurAmount = Math.min(2, (distanceFromCenter / maxDistance) * 2);
+        const blurAmount = Math.min(1, (distanceFromCenter / maxDistance) * 2);
         
         // Apply blur with smooth transition
         content.style.filter = `blur(${blurAmount}px)`;
@@ -436,6 +491,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }, isMobile ? 30 : 100); // Reduced timeout for more responsive mobile experience
   }, { passive: true });
   
+  // Improved debounce function for better performance
+  function debounce(func, wait) {
+    let timeout;
+    return function() {
+      const context = this;
+      const args = arguments;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+  }
+  
   // Enhanced touch handling for mobile with reduced sensitivity for easier scrolling
   let touchStartY = 0;
   let touchEndY = 0;
@@ -460,7 +526,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const now = new Date().getTime();
       
       // Only process swipes that are significant enough but with lower threshold for easier navigation
-      if (Math.abs(touchDistance) > 50) { // Increased threshold to make it less sensitive
+      if (Math.abs(touchDistance) > 50) { // Threshold to make it less sensitive
         const direction = touchDistance > 0 ? 1 : -1; // 1 = up, -1 = down
         
         // Only navigate if sufficient time has passed since last swipe to prevent accidental triggers
@@ -483,33 +549,23 @@ document.addEventListener("DOMContentLoaded", () => {
         
         const mostVisibleSection = getMostVisibleSection();
         updateActiveSection(mostVisibleSection);
+        
+        // Force ball to follow to current section after a touch event completes
+        moveGlowingBall(activeSection);
       }, 100);
     }, { passive: true });
     
     // Add touch move handler to keep content visible while dragging and update blur
-    stepsContainer.addEventListener('touchmove', (e) => {
+    stepsContainer.addEventListener('touchmove', debounce((e) => {
       // Keep content visible during touch movement
       forceContentVisibility();
       
-      // Update blur effect during touch movement
-      stepSections.forEach(section => {
-        const content = section.querySelector('.step-content');
-        if (!content) return;
-        
-        const rect = section.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-        
-        // Calculate how far the section is from the center of viewport
-        const distanceFromCenter = Math.abs((rect.top + rect.height / 2) - (viewportHeight / 2));
-        const maxDistance = viewportHeight / 2 + rect.height / 2;
-        
-        // Calculate blur amount
-        const blurAmount = Math.min(2, (distanceFromCenter / maxDistance) * 2);
-        
-        // Apply blur with transition
-        content.style.filter = `blur(${blurAmount}px)`;
-      });
-    }, { passive: true });
+      // Get current scroll position during touch move to synchronize ball position
+      const mostVisibleSection = getMostVisibleSection();
+      if (mostVisibleSection !== activeSection) {
+        updateActiveSection(mostVisibleSection);
+      }
+    }, 50), { passive: true });
   }
   
   // Reset to first step when clicking total steps
@@ -533,6 +589,14 @@ document.addEventListener("DOMContentLoaded", () => {
       // Adjust container size
       adjustPenroseContainerForMobile();
       
+      // Setup enhanced snapping
+      if (!wasJustMobile) {
+        if (stepsContainer) {
+          stepsContainer.style.scrollSnapType = "y mandatory";
+          stepsContainer.style.scrollBehavior = "smooth";
+        }
+      }
+      
       // Force content visibility if switching to mobile
       if (!wasJustMobile) {
         forceContentVisibility();
@@ -551,7 +615,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Re-enable transitions after a short delay
     setTimeout(() => {
-      const transitionSpeed = isMobile ? '0.4s' : '0.6s';
+      const transitionSpeed = isMobile ? '0.3s' : '0.6s';
       glowingBall.style.transition = `left ${transitionSpeed} ease-out, top ${transitionSpeed} ease-out`;
     }, 50);
   });
@@ -593,6 +657,25 @@ document.addEventListener("DOMContentLoaded", () => {
       // Setup blur effect
       setupBlurEffect();
       
+      // Setup proper snapping
+      if (stepsContainer) {
+        stepsContainer.style.scrollSnapType = "y mandatory";
+        stepsContainer.style.scrollBehavior = "smooth";
+        
+        // Add scroll margin to all step sections
+        stepSections.forEach(section => {
+          // Calculate proper scroll margin from CSS variables
+          const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--mobile-header-height'));
+          const indicatorHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--mobile-indicator-height'));
+          const staircaseHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--mobile-staircase-height'));
+          
+          const scrollMargin = headerHeight + indicatorHeight + staircaseHeight;
+          section.style.scrollMarginTop = `${scrollMargin}px`;
+          section.style.scrollSnapAlign = "start";
+          section.style.scrollSnapStop = "always";
+        });
+      }
+      
       // Fix specific issues with Safari/iOS
       if (isIOS) {
         setTimeout(() => {
@@ -619,6 +702,9 @@ document.addEventListener("DOMContentLoaded", () => {
               if (content) {
                 content.style.filter = "blur(0)";
               }
+              
+              // Force ball position update
+              moveGlowingBall(1);
             }, 100);
           }
         }, 300);
