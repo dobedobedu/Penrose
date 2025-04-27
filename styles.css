@@ -6,10 +6,11 @@
   --accent-color: #FF6B00;
   --section-height: 100vh;
   --ball-size: 16px;
-  --mobile-header-height: 65px; /* Further increased header height to prevent text cut-off */
+  --mobile-header-height: 70px; /* Further increased header height */
   --mobile-footer-height: 40px;
   --mobile-staircase-height: 180px; /* Reduced staircase height */
   --mobile-indicator-height: 30px; /* Indicator height */
+  --mobile-indicator-padding: 12px; /* Add padding for indicator */
   --blur-intensity: 0;
   --blur-transition: 0.3s;
   --glow-color: rgba(255, 107, 0, 0.7);
@@ -473,10 +474,10 @@ body {
     text-align: left;
   }
   
-  /* Step indicator positioned directly below the header - no gap */
+  /* Step indicator positioned below the header with significant gap */
   .step-indicator {
     position: fixed;
-    top: var(--mobile-header-height); /* Removed the gap */
+    top: calc(var(--mobile-header-height) + var(--mobile-indicator-padding)); /* Added padding for more space */
     left: 0;
     width: 100%;
     height: var(--mobile-indicator-height);
@@ -495,7 +496,7 @@ body {
   /* Penrose container with transparent background */
   .penrose-container {
     position: fixed;
-    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height)); /* Removed the gap */
+    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-indicator-padding)); /* Added gap between indicator and content */
     left: 0;
     width: 100%;
     height: var(--mobile-staircase-height);
@@ -513,7 +514,7 @@ body {
   /* Blur gradient layer for smooth transition */
   .penrose-blur-layer {
     position: fixed;
-    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height)); /* Removed the gap */
+    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-indicator-padding)); /* Added gap */
     left: 0;
     width: 100%;
     height: var(--mobile-staircase-height);
@@ -552,7 +553,7 @@ body {
     padding-bottom: 90px;
     overflow-y: visible;
     scroll-snap-type: y proximity;
-    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height)); /* Removed the gap */
+    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-indicator-padding) + var(--mobile-staircase-height)); /* Added gap */
     position: relative;
     z-index: 99;
     -webkit-overflow-scrolling: touch;
@@ -635,8 +636,9 @@ body {
 @media (max-width: 480px) {
   :root {
     --mobile-staircase-height: 180px;
-    --mobile-header-height: 65px; /* Increased header height for very small screens too */
+    --mobile-header-height: 70px; /* Increased header height for very small screens too */
     --mobile-indicator-height: 30px; /* Increase indicator height for better visibility */
+    --mobile-indicator-padding: 14px; /* Increase padding for even more space on small screens */
   }
   
   /* Adjust for smaller phones */
@@ -656,7 +658,7 @@ body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     font-size: 0.95rem;
     color: #000000;
-    margin-top: 4px; /* Add some top margin to prevent title from being cut off */
+    margin-top: 6px; /* Add some top margin to prevent title from being cut off */
   }
   
   .step-content h2 {
