@@ -507,7 +507,6 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 104;
-    background-color: var(--background-color); /* Solid background */
   }
   
   /* Blur gradient layer for smooth transition */
