@@ -41,25 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
     "Reflect and Connect the Dots"
   ];
   
-  // Function to ensure the mobile barrier exists and is positioned correctly
-  function ensureMobileBarrier() {
-    if (!isMobile) return;
-    
-    // Check if barrier already exists
-    let barrier = document.querySelector('.mobile-barrier');
-    if (!barrier) {
-      // Create barrier if it doesn't exist
-      barrier = document.createElement('div');
-      barrier.className = 'mobile-barrier';
-      // Insert it between the title and indicator
-      const titleElement = document.querySelector('.penrose-title');
-      const indicatorElement = document.querySelector('.step-indicator');
-      if (titleElement && indicatorElement && titleElement.parentNode) {
-        titleElement.parentNode.insertBefore(barrier, indicatorElement);
-      }
-    }
-  }
-  
   // Function to ensure all step content is visible for mobile
   function forceContentVisibility() {
     // Only needed on mobile
@@ -69,9 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
     stepSections.forEach(section => {
       section.style.opacity = "1";
     });
-    
-    // Ensure mobile barrier exists and is correctly positioned
-    ensureMobileBarrier();
   }
   
   // Create the dedicated blur gradient layer for smooth transitions
@@ -84,9 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const blurLayer = document.createElement('div');
     blurLayer.className = 'penrose-blur-layer';
     document.body.appendChild(blurLayer);
-    
-    // Ensure mobile barrier exists
-    ensureMobileBarrier();
   }
   
   // Enable blur effect for text that's scrolling out of view
@@ -155,9 +130,6 @@ document.addEventListener("DOMContentLoaded", () => {
       containerElement.style.height = window.innerWidth <= 480 ? '260px' : '280px';
       containerElement.style.minHeight = window.innerWidth <= 480 ? '260px' : '280px';
     }
-    
-    // Ensure mobile barrier exists
-    ensureMobileBarrier();
   }
   
   // Function to move the glowing ball to a step marker with verification
