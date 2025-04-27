@@ -10,7 +10,7 @@
   --mobile-footer-height: 40px;
   --mobile-staircase-height: 180px; /* Reduced staircase height */
   --mobile-indicator-height: 30px; /* Indicator height */
-  --mobile-indicator-padding: 12px; /* Add padding for indicator */
+  --mobile-indicator-padding: 20px; /* Increased padding for indicator for more space */
   --blur-intensity: 0;
   --blur-transition: 0.3s;
   --glow-color: rgba(255, 107, 0, 0.7);
@@ -496,7 +496,7 @@ body {
   /* Penrose container with transparent background */
   .penrose-container {
     position: fixed;
-    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-indicator-padding)); /* Added gap between indicator and content */
+    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-indicator-padding)); /* Added gap */
     left: 0;
     width: 100%;
     height: var(--mobile-staircase-height);
@@ -638,7 +638,7 @@ body {
     --mobile-staircase-height: 180px;
     --mobile-header-height: 70px; /* Increased header height for very small screens too */
     --mobile-indicator-height: 30px; /* Increase indicator height for better visibility */
-    --mobile-indicator-padding: 14px; /* Increase padding for even more space on small screens */
+    --mobile-indicator-padding: 20px; /* Increase padding for even more space on small screens */
   }
   
   /* Adjust for smaller phones */
