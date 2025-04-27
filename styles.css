@@ -6,10 +6,10 @@
   --accent-color: #FF6B00;
   --section-height: 100vh;
   --ball-size: 16px;
-  --mobile-header-height: 60px; /* Increased header height to prevent text cut-off */
+  --mobile-header-height: 65px; /* Further increased header height to prevent text cut-off */
   --mobile-footer-height: 40px;
   --mobile-staircase-height: 180px; /* Reduced staircase height */
-  --mobile-indicator-height: 30px; /* Reduced indicator height */
+  --mobile-indicator-height: 30px; /* Indicator height */
   --blur-intensity: 0;
   --blur-transition: 0.3s;
   --glow-color: rgba(255, 107, 0, 0.7);
@@ -425,8 +425,8 @@ body {
     width: 100%;
     height: var(--mobile-header-height);
     padding: 0.3rem 20px;
-    padding-top: 18px; /* Increased top padding to prevent text cut-off */
-    padding-bottom: 10px; /* Added bottom padding */
+    padding-top: 22px; /* Increased top padding to prevent text cut-off */
+    padding-bottom: 0; /* Removed bottom padding to close the gap */
     background-color: var(--background-color);
     display: flex;
     flex-direction: row;
@@ -473,10 +473,10 @@ body {
     text-align: left;
   }
   
-  /* Step indicator positioned above staircase, below header */
+  /* Step indicator positioned directly below the header - no gap */
   .step-indicator {
     position: fixed;
-    top: calc(var(--mobile-header-height) + 5px); /* Added 5px gap between title and indicator */
+    top: var(--mobile-header-height); /* Removed the gap */
     left: 0;
     width: 100%;
     height: var(--mobile-indicator-height);
@@ -495,7 +495,7 @@ body {
   /* Penrose container with transparent background */
   .penrose-container {
     position: fixed;
-    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + 5px); /* Adjusted for the added gap */
+    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height)); /* Removed the gap */
     left: 0;
     width: 100%;
     height: var(--mobile-staircase-height);
@@ -513,7 +513,7 @@ body {
   /* Blur gradient layer for smooth transition */
   .penrose-blur-layer {
     position: fixed;
-    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + 5px); /* Adjusted for the added gap */
+    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height)); /* Removed the gap */
     left: 0;
     width: 100%;
     height: var(--mobile-staircase-height);
@@ -552,7 +552,7 @@ body {
     padding-bottom: 90px;
     overflow-y: visible;
     scroll-snap-type: y proximity;
-    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height) + 5px); /* Adjusted for the added gap */
+    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height)); /* Removed the gap */
     position: relative;
     z-index: 99;
     -webkit-overflow-scrolling: touch;
@@ -622,6 +622,7 @@ body {
     line-height: 1.3;
     margin-bottom: 0;
     text-shadow: none;
+    margin-top: 10px; /* Add more space between heading and paragraph */
   }
 
   /* Special handling for the last section */
@@ -634,8 +635,8 @@ body {
 @media (max-width: 480px) {
   :root {
     --mobile-staircase-height: 180px;
-    --mobile-header-height: 60px; /* Increased header height for very small screens too */
-    --mobile-indicator-height: 25px; /* Even smaller for very small screens */
+    --mobile-header-height: 65px; /* Increased header height for very small screens too */
+    --mobile-indicator-height: 30px; /* Increase indicator height for better visibility */
   }
   
   /* Adjust for smaller phones */
@@ -653,8 +654,9 @@ body {
   
   .penrose-title h2 {
     font-family: 'Helvetica Neue', Arial, sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: #000000;
+    margin-top: 4px; /* Add some top margin to prevent title from being cut off */
   }
   
   .step-content h2 {
@@ -669,9 +671,10 @@ body {
   }
   
   .step-indicator {
-    font-size: 1rem;
+    font-size: 1.1rem;
     height: var(--mobile-indicator-height);
     padding: 3px 0;
+    font-weight: 500; /* Make the indicator text slightly bolder */
   }
   
   /* Enhanced glow for small phones */
