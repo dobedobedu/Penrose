@@ -8,7 +8,7 @@
   --ball-size: 18px;
   --mobile-header-height: 100px; /* Increased header height to close the gap */
   --mobile-footer-height: 40px;
-  --mobile-staircase-height: 140px; /* Reduced staircase height */
+  --mobile-staircase-height: 160px; /* Increased staircase height to prevent content cutoff */
   --mobile-indicator-height: 30px; /* Indicator height */
   --mobile-indicator-padding: 0px; /* Removed gap/padding between header and indicator */
   --blur-intensity: 0;
@@ -551,7 +551,7 @@ body {
     padding-bottom: 90px;
     overflow-y: visible;
     scroll-snap-type: y proximity;
-    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height)); /* Position below staircase */
+    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height) + 10px); /* Added extra 10px margin to prevent content cutoff */
     position: relative;
     z-index: 99;
     -webkit-overflow-scrolling: touch;
@@ -563,7 +563,7 @@ body {
     scroll-snap-align: start;
     scroll-snap-stop: normal;
     padding: 30px 20px 90px 20px;
-    margin: 0 0 15px 0;
+    margin: 20px 0 15px 0; /* Added top margin to ensure content isn't cut off */
     display: block;
     position: relative;
     z-index: 98;
