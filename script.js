@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const penroseContainer = document.querySelector('.penrose-image-container');
   const navUp = document.querySelector('.nav-up');
   const navDown = document.querySelector('.nav-down');
+  const stepIndicator = document.querySelector('.step-indicator');
   
   // Enhanced mobile detection with improved iOS detection
   let isMobile = window.innerWidth <= 768;
@@ -82,6 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Set up snap alignment for sections
     stepSections.forEach(section => {
       section.style.scrollSnapAlign = "start";
+      section.style.scrollSnapStop = "always"; // Ensure snapping stops at each section
     });
     
     // Initialize intersection observer to handle section visibility
@@ -302,6 +304,16 @@ document.addEventListener("DOMContentLoaded", () => {
     return mostVisibleIndex;
   }
   
+  // Function to advance to next step
+  function goToNextStep() {
+    if (activeSection < totalSteps) {
+      scrollToSection(activeSection + 1);
+    } else {
+      // If on last step, loop back to first step
+      scrollToSection(1);
+    }
+  }
+  
   // Initialize the page
   setTimeout(() => {
     // Initial setup
@@ -318,6 +330,12 @@ document.addEventListener("DOMContentLoaded", () => {
       
       // Setup blur effect for text scrolling
       setupBlurEffect();
+      
+      // Make step indicator clickable for mobile - entire indicator area
+      if (stepIndicator) {
+        stepIndicator.style.cursor = 'pointer';
+        stepIndicator.addEventListener('click', goToNextStep);
+      }
     }
     
     penroseContainer.offsetWidth; // Force reflow
@@ -501,20 +519,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Allow clicking current step to navigate
   currentStepElem.addEventListener('click', () => {
-    if (isMobile) {
-      // On mobile, clicking the step indicator moves to the next step
-      if (activeSection < totalSteps) {
-        scrollToSection(activeSection + 1);
-      } else {
-        // If at the last step, go back to step 1
-        scrollToSection(1);
-      }
-    } else {
-      // On desktop, clicking step indicator moves to previous step
-      if (activeSection > 1) {
-        scrollToSection(activeSection - 1);
-      }
-    }
+    goToNextStep();
   });
   
   // Handle window resize with improved iOS detection
