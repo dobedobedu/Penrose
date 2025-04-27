@@ -556,8 +556,14 @@ body {
     margin-left: 0;
     padding-bottom: 90px;
     overflow-y: visible;
-    scroll-snap-type: y mandatory !important; /* Enforce stronger snapping */
-    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height) + 20px); /* Increased margin to prevent content cutoff */
+    scroll-snap-type: y proximity; /* Easier scroll snapping */
+    /* Keep content below header, indicator, and staircase */
+    margin-top: calc(
+      var(--mobile-header-height)
+      + var(--mobile-indicator-height)
+      + var(--mobile-staircase-height)
+      + 30px
+    );
     position: relative;
     z-index: 99;
     -webkit-overflow-scrolling: touch;
