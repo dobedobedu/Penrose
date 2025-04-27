@@ -434,6 +434,7 @@ body {
     justify-content: space-between;
     align-items: center; /* Changed to center for better alignment */
     z-index: 110; /* Increased z-index to ensure it's above everything */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Add subtle shadow for separation */
   }
   
   /* Sign up button at the top */
@@ -474,7 +475,7 @@ body {
     text-align: left;
   }
   
-  /* Step indicator positioned below the header with significant gap */
+  /* Step indicator positioned below the header with significant gap - now with barrier */
   .step-indicator {
     position: fixed;
     top: calc(var(--mobile-header-height) + var(--mobile-indicator-padding)); /* Added padding for more space */
@@ -491,6 +492,19 @@ body {
     align-items: center;
     margin: 0;
     border-bottom: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Add subtle shadow */
+  }
+  
+  /* Add barrier element to cover the gap */
+  .mobile-barrier {
+    position: fixed;
+    top: var(--mobile-header-height);
+    left: 0;
+    width: 100%;
+    height: var(--mobile-indicator-padding);
+    background-color: var(--background-color);
+    z-index: 109; /* Above content but below indicator */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   }
   
   /* Penrose container with transparent background */
@@ -508,7 +522,7 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 104;
-    background-color: transparent;
+    background-color: var(--background-color); /* Changed to solid background */
   }
   
   /* Blur gradient layer for smooth transition */
