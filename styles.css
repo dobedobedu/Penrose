@@ -5,8 +5,8 @@
   --muted-color: #666666;
   --accent-color: #FF6B00;
   --section-height: 100vh;
-  --ball-size: 16px;
-  --mobile-header-height: 90px; /* Increased header height to close the gap */
+  --ball-size: 18px;
+  --mobile-header-height: 100px; /* Increased header height to close the gap */
   --mobile-footer-height: 40px;
   --mobile-staircase-height: 180px; /* Reduced staircase height */
   --mobile-indicator-height: 30px; /* Indicator height */
@@ -426,15 +426,14 @@ body {
     width: 100%;
     height: var(--mobile-header-height);
     padding: 0.3rem 20px;
-    padding-top: 22px; /* Increased top padding to prevent text cut-off */
-    padding-bottom: 30px; /* Added bottom padding to extend header down */
+    padding-top: 20px; /* Increased top padding to prevent text cut-off */
+    padding-bottom: 50px; /* Added bottom padding to extend header down */
     background-color: var(--background-color);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start; /* Changed to flex-start for better alignment with extended height */
     z-index: 110; /* Increased z-index to ensure it's above everything */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Add subtle shadow for separation */
   }
   
   /* Sign up button at the top */
@@ -442,7 +441,7 @@ body {
     font-family: 'Akira Expanded', 'Helvetica Neue', Arial, sans-serif;
     font-size: 0.7rem; /* Further reduced font size */
     margin-bottom: 0;
-    padding: 0.1rem 0.6rem;
+    padding: 0.3rem 0.6rem;
     margin-top: 0; /* Removed margin completely for perfect alignment */
     align-self: flex-start; /* Changed to flex-start to align at top */
     order: 2; /* Move to right side */
@@ -482,7 +481,7 @@ body {
     left: 0;
     width: 100%;
     height: var(--mobile-indicator-height);
-    padding: 5px 0;
+    padding: 0px 20px;
     background-color: var(--background-color);
     z-index: 108; /* High z-index to stay above staircase */
     text-align: center;
@@ -491,8 +490,6 @@ body {
     justify-content: center;
     align-items: center;
     margin: 0;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Add subtle shadow */
   }
   
   /* Penrose container with solid background */
