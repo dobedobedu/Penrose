@@ -397,6 +397,11 @@ body {
 }
 
 @media (max-width: 768px) {
+  /* Enable scroll snapping on the root container for mobile scrolling */
+  html, body {
+    scroll-snap-type: y proximity;
+    -webkit-overflow-scrolling: touch;
+  }
   /* Hide navigation arrows on mobile */
   .navigation-arrows {
     display: none;
