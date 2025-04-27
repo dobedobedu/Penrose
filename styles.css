@@ -490,6 +490,7 @@ body {
     justify-content: center;
     align-items: center;
     margin: 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05); /* Adding subtle border for visual separation */
   }
   
   /* Penrose container with solid background */
@@ -501,12 +502,14 @@ body {
     height: var(--mobile-staircase-height);
     min-height: var(--mobile-staircase-height);
     padding: 0;
-    padding-top: 0;
+    padding-top: 5px; /* Added small padding to ensure staircase is properly positioned */
+    padding-bottom: 5px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     z-index: 104;
+    border-bottom: 1px solid rgba(0,0,0,0.05); /* Adding subtle border for visual separation */
   }
   
   /* Blur gradient layer for smooth transition */
@@ -551,7 +554,7 @@ body {
     padding-bottom: 90px;
     overflow-y: visible;
     scroll-snap-type: y proximity;
-    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height) + 10px); /* Added extra 10px margin to prevent content cutoff */
+    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height) + 20px); /* Increased margin to prevent content cutoff */
     position: relative;
     z-index: 99;
     -webkit-overflow-scrolling: touch;
@@ -562,8 +565,8 @@ body {
     height: auto;
     scroll-snap-align: start;
     scroll-snap-stop: normal;
-    padding: 30px 20px 90px 20px;
-    margin: 20px 0 15px 0; /* Added top margin to ensure content isn't cut off */
+    padding: 50px 20px 90px 20px; /* Increased top padding for better spacing */
+    margin: 30px 0 25px 0; /* Increased margins to prevent content cutoff */
     display: block;
     position: relative;
     z-index: 98;
