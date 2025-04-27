@@ -8,7 +8,7 @@
   --ball-size: 18px;
   --mobile-header-height: 100px; /* Increased header height to close the gap */
   --mobile-footer-height: 40px;
-  --mobile-staircase-height: 180px; /* Reduced staircase height */
+  --mobile-staircase-height: 140px; /* Reduced staircase height */
   --mobile-indicator-height: 30px; /* Indicator height */
   --mobile-indicator-padding: 0px; /* Removed gap/padding between header and indicator */
   --blur-intensity: 0;
