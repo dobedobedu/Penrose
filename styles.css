@@ -208,6 +208,7 @@ body {
 .step-section {
   height: 100vh;
   scroll-snap-align: start;
+  scroll-snap-stop: always;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -481,7 +482,7 @@ body {
     left: 0;
     width: 100%;
     height: var(--mobile-indicator-height);
-    padding: 20px;
+    padding: 2px 0;
     background-color: var(--background-color);
     z-index: 108; /* High z-index to stay above staircase */
     text-align: center;
@@ -510,6 +511,7 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 104;
+    background-color: var(--background-color);
     border-bottom: 1px solid rgba(0,0,0,0.05); /* Adding subtle border for visual separation */
   }
   
@@ -554,11 +556,12 @@ body {
     margin-left: 0;
     padding-bottom: 90px;
     overflow-y: visible;
-    scroll-snap-type: y mandatory; /* Bring back strong snapping */
+    scroll-snap-type: y mandatory !important; /* Enforce stronger snapping */
     margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height) + 20px); /* Increased margin to prevent content cutoff */
     position: relative;
     z-index: 99;
     -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
   
   .step-section {
@@ -572,6 +575,7 @@ body {
     position: relative;
     z-index: 98;
     transition: filter 0.3s ease;
+    scroll-margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height)); /* Add proper scroll margin */
   }
   
   /* Text scroll blur effect for sections */
@@ -595,6 +599,7 @@ body {
   /* Add blur transition for better scrolling experience */
   .step-section {
     scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
   
   /* Active section should be crisp and clear */
@@ -604,7 +609,7 @@ body {
   
   /* Adjacent sections are slightly blurred */
   .step-section:not(.active) .step-content {
-    filter: blur(1px);
+    filter: blur(0.5px); /* Reduced blur for better readability */
   }
   
   .blur-content::after {
