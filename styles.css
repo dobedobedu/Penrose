@@ -6,11 +6,11 @@
   --accent-color: #FF6B00;
   --section-height: 100vh;
   --ball-size: 16px;
-  --mobile-header-height: 70px; /* Further increased header height */
+  --mobile-header-height: 90px; /* Increased header height to close the gap */
   --mobile-footer-height: 40px;
   --mobile-staircase-height: 180px; /* Reduced staircase height */
   --mobile-indicator-height: 30px; /* Indicator height */
-  --mobile-indicator-padding: 20px; /* Increased padding for indicator for more space */
+  --mobile-indicator-padding: 0px; /* Removed gap/padding between header and indicator */
   --blur-intensity: 0;
   --blur-transition: 0.3s;
   --glow-color: rgba(255, 107, 0, 0.7);
@@ -418,7 +418,7 @@ body {
   
   /* Layer structure for elements */
   
-  /* Title bar sticky at top */
+  /* Title bar sticky at top - Extended to close gap */
   .penrose-title {
     position: fixed;
     top: 0;
@@ -427,12 +427,12 @@ body {
     height: var(--mobile-header-height);
     padding: 0.3rem 20px;
     padding-top: 22px; /* Increased top padding to prevent text cut-off */
-    padding-bottom: 0; /* Removed bottom padding to close the gap */
+    padding-bottom: 30px; /* Added bottom padding to extend header down */
     background-color: var(--background-color);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center; /* Changed to center for better alignment */
+    align-items: flex-start; /* Changed to flex-start for better alignment with extended height */
     z-index: 110; /* Increased z-index to ensure it's above everything */
     box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Add subtle shadow for separation */
   }
@@ -444,7 +444,7 @@ body {
     margin-bottom: 0;
     padding: 0.1rem 0.6rem;
     margin-top: 0; /* Removed margin completely for perfect alignment */
-    align-self: center; /* Changed to center to match title */
+    align-self: flex-start; /* Changed to flex-start to align at top */
     order: 2; /* Move to right side */
     white-space: nowrap; /* Keep text on one line */
   }
@@ -475,10 +475,10 @@ body {
     text-align: left;
   }
   
-  /* Step indicator positioned below the header with significant gap - now with barrier */
+  /* Step indicator positioned directly below the extended header */
   .step-indicator {
     position: fixed;
-    top: calc(var(--mobile-header-height) + var(--mobile-indicator-padding)); /* Added padding for more space */
+    top: var(--mobile-header-height); /* Position directly below the extended header */
     left: 0;
     width: 100%;
     height: var(--mobile-indicator-height);
@@ -495,22 +495,10 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Add subtle shadow */
   }
   
-  /* Add barrier element to cover the gap */
-  .mobile-barrier {
-    position: fixed;
-    top: var(--mobile-header-height);
-    left: 0;
-    width: 100%;
-    height: var(--mobile-indicator-padding);
-    background-color: var(--background-color);
-    z-index: 109; /* Above content but below indicator */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  }
-  
-  /* Penrose container with transparent background */
+  /* Penrose container with solid background */
   .penrose-container {
     position: fixed;
-    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-indicator-padding)); /* Added gap */
+    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height)); /* Position directly below indicator */
     left: 0;
     width: 100%;
     height: var(--mobile-staircase-height);
@@ -522,13 +510,13 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 104;
-    background-color: var(--background-color); /* Changed to solid background */
+    background-color: var(--background-color); /* Solid background */
   }
   
   /* Blur gradient layer for smooth transition */
   .penrose-blur-layer {
     position: fixed;
-    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-indicator-padding)); /* Added gap */
+    top: calc(var(--mobile-header-height) + var(--mobile-indicator-height)); /* Position directly below indicator */
     left: 0;
     width: 100%;
     height: var(--mobile-staircase-height);
@@ -560,14 +548,14 @@ body {
     box-shadow: 0 0 25px 8px var(--glow-color);
   }
   
-  /* Content sections - adjusted to account for new step indicator position */
+  /* Content sections - adjusted to account for header and indicator */
   .steps-container {
     width: 100%;
     margin-left: 0;
     padding-bottom: 90px;
     overflow-y: visible;
     scroll-snap-type: y proximity;
-    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-indicator-padding) + var(--mobile-staircase-height)); /* Added gap */
+    margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height)); /* Position below staircase */
     position: relative;
     z-index: 99;
     -webkit-overflow-scrolling: touch;
@@ -650,9 +638,8 @@ body {
 @media (max-width: 480px) {
   :root {
     --mobile-staircase-height: 180px;
-    --mobile-header-height: 70px; /* Increased header height for very small screens too */
+    --mobile-header-height: 90px; /* Maintain increased header height */
     --mobile-indicator-height: 30px; /* Increase indicator height for better visibility */
-    --mobile-indicator-padding: 20px; /* Increase padding for even more space on small screens */
   }
   
   /* Adjust for smaller phones */
