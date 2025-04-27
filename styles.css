@@ -426,7 +426,7 @@ body {
     width: 100%;
     height: var(--mobile-header-height);
     padding: 0.3rem 20px;
-    padding-top: 20px; /* Increased top padding to prevent text cut-off */
+    padding-top: 10px; /* Increased top padding to prevent text cut-off */
     padding-bottom: 50px; /* Added bottom padding to extend header down */
     background-color: var(--background-color);
     display: flex;
@@ -481,7 +481,7 @@ body {
     left: 0;
     width: 100%;
     height: var(--mobile-indicator-height);
-    padding: 0px 20px;
+    padding: 20px;
     background-color: var(--background-color);
     z-index: 108; /* High z-index to stay above staircase */
     text-align: center;
@@ -501,7 +501,7 @@ body {
     height: var(--mobile-staircase-height);
     min-height: var(--mobile-staircase-height);
     padding: 0;
-    padding-top: 10px;
+    padding-top: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
