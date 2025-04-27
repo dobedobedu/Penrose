@@ -194,10 +194,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const targetSection = document.querySelector(`.step-section[data-step="${index}"]`);
     if (targetSection) {
       if (isIOS) {
-        // iOS-specific scroll handling with easier scrolling
-        targetSection.scrollIntoView({
-          behavior: 'auto', // Use 'auto' instead of 'smooth' for more reliable iOS behavior
-          block: 'start'
+        // iOS-specific scroll handling with adjusted offset to prevent content cutoff
+        const offsetTop = targetSection.offsetTop - 40; // Apply offset to prevent content cutoff
+        stepsContainer.scrollTo({
+          top: offsetTop,
+          behavior: 'auto' // Use 'auto' instead of 'smooth' for more reliable iOS behavior
         });
         
         // Force a reflow to ensure the scroll completes
@@ -208,10 +209,11 @@ document.addEventListener("DOMContentLoaded", () => {
           isScrolling = false;
         }, 200); // Shorter timeout for iOS for better responsiveness
       } else if (isMobile) {
-        // For non-iOS mobile devices - optimized approach with easier scrolling
-        targetSection.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
+        // For non-iOS mobile devices - optimized approach with adjusted offset
+        const offsetTop = targetSection.offsetTop - 40; // Apply offset to prevent content cutoff
+        stepsContainer.scrollTo({
+          top: offsetTop,
+          behavior: 'smooth'
         });
         
         setTimeout(() => {
@@ -334,8 +336,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const firstSection = document.querySelector('.step-section[data-step="1"]');
         if (firstSection) {
           setTimeout(() => {
-            firstSection.scrollIntoView({
-              block: 'start',
+            // Adjust scroll position with offset to prevent content cutoff
+            const offsetTop = firstSection.offsetTop - 40;
+            stepsContainer.scrollTo({
+              top: offsetTop,
               behavior: 'auto'
             });
             
@@ -596,8 +600,10 @@ document.addEventListener("DOMContentLoaded", () => {
           // First section special handling
           const firstSection = document.querySelector('.step-section[data-step="1"]');
           if (firstSection) {
-            firstSection.scrollIntoView({
-              block: 'start',
+            // Adjust scroll position with offset to prevent content cutoff
+            const offsetTop = firstSection.offsetTop - 40;
+            stepsContainer.scrollTo({
+              top: offsetTop,
               behavior: 'auto'
             });
             
