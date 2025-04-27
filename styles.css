@@ -8,7 +8,7 @@
   --ball-size: 18px;
   --mobile-header-height: 100px; /* Increased header height to close the gap */
   --mobile-footer-height: 40px;
-  --mobile-staircase-height: 120px; /* Increased staircase height to prevent content cutoff */
+  --mobile-staircase-height: 160px; /* Reduced staircase height to fully reveal step titles */
   --mobile-indicator-height: 30px; /* Indicator height */
   --mobile-indicator-padding: 0px; /* Removed gap/padding between header and indicator */
   --blur-intensity: 0;
@@ -342,8 +342,8 @@ body {
     position: sticky;
     top: 0;
     width: 100%;
-    height: 45vh;
-    min-height: 350px;
+    height: 35vh; /* Reduced height to showcase staircase without over-blocking content */
+    min-height: 260px; /* Ensure staircase fully visible */
     padding: 1rem;
     z-index: 5;
     background-color: var(--background-color);
@@ -354,21 +354,18 @@ body {
     margin-left: 0;
     height: auto;
     min-height: 60vh;
-    padding-top: 5vh;
+    padding-top: 35vh; /* Push content below staircase container */
   }
   
   .step-section {
-    min-height: 75vh;
+    min-height: auto;
     height: auto;
     padding: 2rem 1rem 4rem 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    scroll-margin-top: 45vh;
-    scroll-snap-align: center;
+    scroll-snap-align: start; /* Align section top below staircase */
     scroll-snap-stop: always;
-    margin-top: 5vh;
+    margin: 1rem 0; /* Space between sections */
+    display: block;
+    position: relative;
   }
   
   .penrose-title {
@@ -562,7 +559,7 @@ body {
       var(--mobile-header-height)
       + var(--mobile-indicator-height)
       + var(--mobile-staircase-height)
-      + 30px
+    + 10px
     );
     position: relative;
     z-index: 99;
@@ -575,13 +572,17 @@ body {
     height: auto;
     scroll-snap-align: start; /* Strong snap to start */
     scroll-snap-stop: always; /* Ensure snapping always stops at each section */
-    padding: 50px 20px 90px 20px; /* Increased top padding for better spacing */
-    margin: 30px 0 25px 0; /* Increased margins to prevent content cutoff */
+    padding: 20px 20px 60px 20px; /* Reduced top padding for better content visibility */
+    margin: 10px 0 15px 0; /* Tighter margins to prevent cutoff */
     display: block;
     position: relative;
     z-index: 98;
     transition: filter 0.3s ease;
-    scroll-margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height)); /* Add proper scroll margin */
+    scroll-margin-top: calc(
+      var(--mobile-header-height)
+      + var(--mobile-indicator-height)
+      + var(--mobile-staircase-height)
+    ); /* Add proper scroll margin */
   }
   
   /* Text scroll blur effect for sections */
@@ -648,9 +649,9 @@ body {
 
 @media (max-width: 480px) {
   :root {
-    --mobile-staircase-height: 180px;
+    --mobile-staircase-height: 160px; /* Reduced staircase height to fully reveal step titles */
     --mobile-header-height: 90px; /* Maintain increased header height */
-    --mobile-indicator-height: 30px; /* Increase indicator height for better visibility */
+    --mobile-indicator-height: 30px; /* Indicator height */
   }
   
   /* Adjust for smaller phones */
