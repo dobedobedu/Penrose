@@ -491,6 +491,7 @@ body {
     align-items: center;
     margin: 0;
     border-bottom: 1px solid rgba(0,0,0,0.05); /* Adding subtle border for visual separation */
+    cursor: pointer; /* Make the entire indicator clickable */
   }
   
   /* Penrose container with solid background */
@@ -553,7 +554,7 @@ body {
     margin-left: 0;
     padding-bottom: 90px;
     overflow-y: visible;
-    scroll-snap-type: y proximity;
+    scroll-snap-type: y mandatory; /* Bring back strong snapping */
     margin-top: calc(var(--mobile-header-height) + var(--mobile-indicator-height) + var(--mobile-staircase-height) + 20px); /* Increased margin to prevent content cutoff */
     position: relative;
     z-index: 99;
@@ -563,8 +564,8 @@ body {
   .step-section {
     min-height: auto;
     height: auto;
-    scroll-snap-align: start;
-    scroll-snap-stop: normal;
+    scroll-snap-align: start; /* Strong snap to start */
+    scroll-snap-stop: always; /* Ensure snapping always stops at each section */
     padding: 50px 20px 90px 20px; /* Increased top padding for better spacing */
     margin: 30px 0 25px 0; /* Increased margins to prevent content cutoff */
     display: block;
