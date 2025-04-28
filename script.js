@@ -137,8 +137,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const containerElement = document.querySelector('.penrose-container');
     if (containerElement) {
       // Set mobile-friendly height with more space for the stairs
-      containerElement.style.height = window.innerWidth <= 480 ? '260px' : '280px';
-      containerElement.style.minHeight = window.innerWidth <= 480 ? '260px' : '280px';
+      containerElement.style.height = window.innerWidth <= 480 ? '100px' : '110px';
+      containerElement.style.minHeight = window.innerWidth <= 480 ? '100px' : '110px';
     }
   }
   
@@ -297,7 +297,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Calculate the position of key elements
       const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--mobile-header-height')) || 60;
       const indicatorHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--mobile-indicator-height')) || 40;
-      const staircaseHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--mobile-staircase-height')) || 280;
+      const staircaseHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--mobile-staircase-height')) || 100;
       
       // Total offset from top
       const topOffset = headerHeight + indicatorHeight + staircaseHeight;
@@ -354,6 +354,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Function to advance to next step with improved handling for step 14 -> step 1 cycling
   function goToNextStep() {
+    console.log('goToNextStep called, current section:', activeSection);
     if (activeSection < totalSteps) {
       scrollToSection(activeSection + 1);
     } else {
@@ -401,6 +402,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Make step indicator clickable for mobile - entire indicator area for better touch targets
       if (stepIndicator) {
         stepIndicator.style.cursor = 'pointer';
+        stepIndicator.removeEventListener('click', goToNextStep); // Remove any existing listener first
         stepIndicator.addEventListener('click', goToNextStep);
         
         // Add visual feedback for better UX
@@ -409,6 +411,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         stepIndicator.addEventListener('touchend', () => {
           stepIndicator.style.opacity = '1';
+          // Force go to next step on touch end to ensure it works on all devices
+          goToNextStep();
         });
       }
       
@@ -609,10 +613,23 @@ document.addEventListener("DOMContentLoaded", () => {
     scrollToSection(1);
   });
   
-  // Allow clicking current step to navigate to next step
+  // Allow clicking current step to navigate
   currentStepElem.addEventListener('click', () => {
     goToNextStep();
   });
+  
+  // Make sure the entire step indicator is clickable, not just the numbers
+  if (stepIndicator) {
+    stepIndicator.style.cursor = 'pointer';
+    stepIndicator.addEventListener('click', (e) => {
+      // Prevent default behavior
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Navigate to next step
+      goToNextStep();
+    });
+  }
   
   // Handle window resize with improved iOS detection
   window.addEventListener('resize', () => {
