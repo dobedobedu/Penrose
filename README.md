@@ -61,16 +61,16 @@ An immortal monkey hitting random keys will eventually type Shakespeare's works.
 
 
 ## 🎙️ Additional Podcast Episodes (10)
-**Complexity** - "Emergence and Complex Systems" with Stuart Kauffman
-**Infinite Loops** - "Mental Models" with Shane Parrish
-**Design Better** - "Design Thinking and AI Interface Design"
-**99% Invisible** - "Norman Doors" on Don Norman's principles
-**The Ezra Klein Show** - "Ted Chiang on Science Fiction and Technology"
-**80,000 Hours Podcast** - "Demis Hassabis on DeepMind's AI Breakthroughs"
-**The Joy of Why** - "Quantum Computing Explained" with Scott Aaronson
-**Sean Carroll's Mindscape** - "Carlo Rovelli on the Nature of Time"
-**Not Investment Advice** - "Naval Ravikant: Building Wealth Through Knowledge"
-**How I Built This** - "NVIDIA: Jensen Huang"
+1. **Complexity** - "Emergence and Complex Systems" with Stuart Kauffman
+2. **Infinite Loops** - "Mental Models" with Shane Parrish
+3. **Design Better** - "Design Thinking and AI Interface Design"
+4. **99% Invisible** - "Norman Doors" on Don Norman's principles
+5. **The Ezra Klein Show** - "Ted Chiang on Science Fiction and Technology"
+6. **80,000 Hours Podcast** - "Demis Hassabis on DeepMind's AI Breakthroughs"
+7. **The Joy of Why** - "Quantum Computing Explained" with Scott Aaronson
+8. **Sean Carroll's Mindscape** - "Carlo Rovelli on the Nature of Time"
+9. **Not Investment Advice** - "Naval Ravikant: Building Wealth Through Knowledge"
+10. **How I Built This** - "NVIDIA: Jensen Huang"
 
 
 
