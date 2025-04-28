@@ -8,7 +8,7 @@
   --ball-size: 18px;
   --mobile-header-height: 100px; /* Increased header height to close the gap */
   --mobile-footer-height: 40px;
-  --mobile-staircase-height: 160px; /* Reduced staircase height to fully reveal step titles */
+  --mobile-staircase-height: 120px; /* Further reduce staircase height to fully reveal step titles */
   --mobile-indicator-height: 30px; /* Indicator height */
   --mobile-indicator-padding: 0px; /* Removed gap/padding between header and indicator */
   --blur-intensity: 0;
@@ -538,7 +538,7 @@ body {
   
   /* Larger staircase and ball */
   .penrose-image-container {
-    transform: scale(0.5);
+    transform: scale(0.35); /* Shrink staircase to fit smaller container */
     margin: 0;
     margin-top: 5px; /* Reduced margin since we now have indicator above */
     position: relative;
@@ -560,11 +560,12 @@ body {
     overflow-y: visible;
     scroll-snap-type: y proximity; /* Easier scroll snapping */
     /* Keep content below header, indicator, and staircase */
+    /* Position content directly below staircase without extra offset */
     margin-top: calc(
       var(--mobile-header-height)
       + var(--mobile-indicator-height)
       + var(--mobile-staircase-height)
-    + 10px
+      + 0px
     );
     position: relative;
     z-index: 99;
@@ -654,7 +655,7 @@ body {
 
 @media (max-width: 480px) {
   :root {
-    --mobile-staircase-height: 160px; /* Reduced staircase height to fully reveal step titles */
+    --mobile-staircase-height: 120px; /* Further reduce staircase height for small screens */
     --mobile-header-height: 90px; /* Maintain increased header height */
     --mobile-indicator-height: 30px; /* Indicator height */
   }
