@@ -127,8 +127,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const containerElement = document.querySelector('.penrose-container');
     if (containerElement) {
       // Set mobile-friendly height with more space for the stairs
-      containerElement.style.height = window.innerWidth <= 480 ? '260px' : '280px';
-      containerElement.style.minHeight = window.innerWidth <= 480 ? '260px' : '280px';
+      containerElement.style.height = window.innerWidth <= 480 ? '280px' : '320px';
+      containerElement.style.minHeight = window.innerWidth <= 480 ? '280px' : '320px';
     }
   }
   
@@ -161,19 +161,51 @@ document.addEventListener("DOMContentLoaded", () => {
     // Add active class to current section and remove from others
     stepSections.forEach((section) => {
       const sectionStep = parseInt(section.dataset.step, 10);
-      if (sectionStep === index) {
-        section.classList.add('active');
-        // Make active section content clear
-        const content = section.querySelector('.step-content');
-        if (content) {
-          content.style.filter = "blur(0)";
+      
+      // For mobile view, also mark "next step" for showing only two steps
+      if (isMobile) {
+        // Handle active section (current step)
+        if (sectionStep === index) {
+          section.classList.add('active');
+          section.classList.remove('next-step');
+          // Make active section content clear
+          const content = section.querySelector('.step-content');
+          if (content) {
+            content.style.filter = "blur(0)";
+          }
+        } 
+        // Handle next step (show but blur)
+        else if (sectionStep === index + 1) {
+          section.classList.remove('active');
+          section.classList.add('next-step');
+          // Apply stronger blur to next section
+          const content = section.querySelector('.step-content');
+          if (content) {
+            const blurIntensity = window.innerWidth <= 480 ? '4px' : '3px';
+            content.style.filter = `blur(${blurIntensity})`;
+          }
+        } 
+        // Hide all other steps
+        else {
+          section.classList.remove('active');
+          section.classList.remove('next-step');
         }
       } else {
-        section.classList.remove('active');
-        // Apply slight blur to non-active sections
-        const content = section.querySelector('.step-content');
-        if (content) {
-          content.style.filter = "blur(1px)";
+        // Desktop behavior
+        if (sectionStep === index) {
+          section.classList.add('active');
+          // Make active section content clear
+          const content = section.querySelector('.step-content');
+          if (content) {
+            content.style.filter = "blur(0)";
+          }
+        } else {
+          section.classList.remove('active');
+          // Apply slight blur to non-active sections
+          const content = section.querySelector('.step-content');
+          if (content) {
+            content.style.filter = "blur(1px)";
+          }
         }
       }
     });
@@ -346,6 +378,17 @@ document.addEventListener("DOMContentLoaded", () => {
             if (content) {
               content.style.filter = "blur(0)";
             }
+            
+            // Also set the next step as visible but blurred
+            const secondSection = document.querySelector('.step-section[data-step="2"]');
+            if (secondSection) {
+              secondSection.classList.add('next-step');
+              const nextContent = secondSection.querySelector('.step-content');
+              if (nextContent) {
+                const blurIntensity = window.innerWidth <= 480 ? '4px' : '3px';
+                nextContent.style.filter = `blur(${blurIntensity})`;
+              }
+            }
           }, 100);
         }
       }
@@ -389,6 +432,25 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // Apply blur with smooth transition
         content.style.filter = `blur(${blurAmount}px)`;
+        
+        // Show only active and next section in mobile view
+        const sectionStep = parseInt(section.dataset.step, 10);
+        if (sectionStep === activeSection) {
+          section.classList.add('active');
+          section.classList.remove('next-step');
+          section.style.display = 'block';
+          content.style.filter = "blur(0)";
+        } else if (sectionStep === activeSection + 1) {
+          section.classList.remove('active');
+          section.classList.add('next-step');
+          section.style.display = 'block';
+          const blurIntensity = window.innerWidth <= 480 ? '4px' : '3px';
+          content.style.filter = `blur(${blurIntensity})`;
+        } else {
+          section.classList.remove('active');
+          section.classList.remove('next-step');
+          section.style.display = 'none';
+        }
       });
     }
     
@@ -495,7 +557,7 @@ document.addEventListener("DOMContentLoaded", () => {
     scrollToSection(1);
   });
   
-  // Allow clicking current step to navigate
+  // Allow clicking current step to navigate - Modified for mobile to advance to next step
   currentStepElem.addEventListener('click', () => {
     if (isMobile) {
       // On mobile, clicking the step indicator moves to the next step
@@ -512,6 +574,21 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
+
+  // Step indicator is also clickable as a whole in mobile (additional click target)
+  if (isMobile) {
+    const stepIndicator = document.querySelector('.step-indicator');
+    if (stepIndicator) {
+      stepIndicator.addEventListener('click', () => {
+        if (activeSection < totalSteps) {
+          scrollToSection(activeSection + 1);
+        } else {
+          // If at the last step, go back to step 1
+          scrollToSection(1);
+        }
+      });
+    }
+  }
   
   // Handle window resize with improved iOS detection
   window.addEventListener('resize', () => {
@@ -547,31 +624,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 50);
   });
   
-  // Keyboard navigation for desktop only
-  if (!isMobile) {
-    document.addEventListener('keydown', (e) => {
-      if (isScrolling) return;
-      
-      let targetSection = activeSection;
-      
-      if (e.key === 'ArrowDown' || e.key === 'PageDown') {
-        targetSection = Math.min(activeSection + 1, totalSteps);
-      } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-        targetSection = Math.max(activeSection - 1, 1);
-      } else if (e.key === 'Home') {
-        targetSection = 1;
-      } else if (e.key === 'End') {
-        targetSection = totalSteps;
-      } else {
-        return;
-      }
-      
-      if (targetSection !== activeSection) {
-        scrollToSection(targetSection);
-      }
-    });
-  }
-
   // Handle document load event to ensure all content is visible after full page load
   window.addEventListener('load', () => {
     if (isMobile) {
@@ -583,6 +635,33 @@ document.addEventListener("DOMContentLoaded", () => {
       
       // Setup blur effect
       setupBlurEffect();
+      
+      // Apply initial mobile view settings - show only first two sections
+      stepSections.forEach((section) => {
+        const sectionStep = parseInt(section.dataset.step, 10);
+        if (sectionStep === 1) {
+          section.classList.add('active');
+          section.classList.remove('next-step');
+          section.style.display = 'block';
+          const content = section.querySelector('.step-content');
+          if (content) {
+            content.style.filter = "blur(0)";
+          }
+        } else if (sectionStep === 2) {
+          section.classList.remove('active');
+          section.classList.add('next-step');
+          section.style.display = 'block';
+          const content = section.querySelector('.step-content');
+          if (content) {
+            const blurIntensity = window.innerWidth <= 480 ? '4px' : '3px';
+            content.style.filter = `blur(${blurIntensity})`;
+          }
+        } else {
+          section.classList.remove('active');
+          section.classList.remove('next-step');
+          section.style.display = 'none';
+        }
+      });
       
       // Fix specific issues with Safari/iOS
       if (isIOS) {
@@ -614,4 +693,26 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
+
+  // Enable keyboard accessibility for step indicator in mobile
+  if (isMobile) {
+    const stepIndicator = document.querySelector('.step-indicator');
+    if (stepIndicator) {
+      stepIndicator.setAttribute('role', 'button');
+      stepIndicator.setAttribute('tabindex', '0');
+      stepIndicator.setAttribute('aria-label', 'Go to next step');
+      
+      // Add keyboard support
+      stepIndicator.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (activeSection < totalSteps) {
+            scrollToSection(activeSection + 1);
+          } else {
+            scrollToSection(1);
+          }
+        }
+      });
+    }
+  }
 });
