@@ -6,10 +6,10 @@
   --accent-color: #FF6B00;
   --section-height: 100vh;
   --ball-size: 18px;
-  --mobile-header-height: 100px; /* Increased header height to close the gap */
+  --mobile-header-height: 80px; /* Reduced header height */
   --mobile-footer-height: 40px;
-  --mobile-staircase-height: 120px; /* Further reduce staircase height to fully reveal step titles */
-  --mobile-indicator-height: 30px; /* Indicator height */
+  --mobile-staircase-height: 110px; /* Further reduce staircase height */
+  --mobile-indicator-height: 40px; /* Increased indicator height for better touch target */
   --mobile-indicator-padding: 0px; /* Removed gap/padding between header and indicator */
   --blur-intensity: 0;
   --blur-transition: 0.3s;
@@ -430,7 +430,7 @@ body {
     height: var(--mobile-header-height);
     padding: 0.3rem 20px;
     padding-top: 10px; /* Increased top padding to prevent text cut-off */
-    padding-bottom: 50px; /* Added bottom padding to extend header down */
+    padding-bottom: 10px; /* Reduced bottom padding */
     background-color: var(--background-color);
     display: flex;
     flex-direction: row;
@@ -445,7 +445,7 @@ body {
     font-size: 0.7rem; /* Further reduced font size */
     margin-bottom: 0;
     padding: 0.3rem 0.6rem;
-    margin-top: 0; /* Removed margin completely for perfect alignment */
+    margin-top: 5px; /* Added small margin for better alignment */
     align-self: flex-start; /* Changed to flex-start to align at top */
     order: 2; /* Move to right side */
     white-space: nowrap; /* Keep text on one line */
@@ -459,7 +459,7 @@ body {
     width: auto;
     max-width: 65%;
     order: 1;
-    margin-top: 0;
+    margin-top: 10px; /* Small margin to better position content */
   }
   
   .penrose-title h2 {
@@ -477,16 +477,16 @@ body {
     text-align: left;
   }
   
-  /* Step indicator positioned directly below the extended header */
+  /* Step indicator positioned directly below header */
   .step-indicator {
     position: fixed;
-    top: var(--mobile-header-height); /* Position directly below the extended header */
+    top: var(--mobile-header-height); /* Position directly below the header */
     left: 0;
     width: 100%;
     height: var(--mobile-indicator-height);
     padding: 2px 0;
     background-color: var(--background-color);
-    z-index: 108; /* High z-index to stay above staircase */
+    z-index: 109; /* High z-index to stay above staircase */
     text-align: center;
     font-size: 1.1rem;
     display: flex;
@@ -506,8 +506,6 @@ body {
     height: var(--mobile-staircase-height);
     min-height: var(--mobile-staircase-height);
     padding: 0;
-    padding-top: 5px; /* Added small padding to ensure staircase is properly positioned */
-    padding-bottom: 5px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -540,7 +538,6 @@ body {
   .penrose-image-container {
     transform: scale(0.35); /* Shrink staircase to fit smaller container */
     margin: 0;
-    margin-top: 5px; /* Reduced margin since we now have indicator above */
     position: relative;
     z-index: 105;
   }
@@ -579,7 +576,7 @@ body {
     scroll-snap-align: start; /* Strong snap to start */
     scroll-snap-stop: always; /* Ensure snapping always stops at each section */
     padding: 20px 20px 60px 20px; /* Reduced top padding for better content visibility */
-    margin: 10px 0 15px 0; /* Tighter margins to prevent cutoff */
+    margin: 0 0 15px 0; /* Tighter margins to prevent cutoff */
     display: block;
     position: relative;
     z-index: 98;
@@ -655,15 +652,15 @@ body {
 
 @media (max-width: 480px) {
   :root {
-    --mobile-staircase-height: 120px; /* Further reduce staircase height for small screens */
-    --mobile-header-height: 90px; /* Maintain increased header height */
-    --mobile-indicator-height: 30px; /* Indicator height */
+    --mobile-staircase-height: 100px; /* Further reduce staircase height for small screens */
+    --mobile-header-height: 80px; /* Adjusted header height */
+    --mobile-indicator-height: 40px; /* Larger indicator height for better touch target */
   }
   
   /* Adjust for smaller phones */
   .penrose-image-container {
-    transform: scale(0.45);
-    margin-top: 5px; /* Reduced margin for smaller screens */
+    transform: scale(0.3);
+    margin-top: 0; /* Remove margin for better positioning */
   }
   
   .sign-up-button {
@@ -671,6 +668,7 @@ body {
     font-size: 0.65rem; /* Even smaller font for small screens */
     padding: 0.1rem 0.5rem;
     white-space: nowrap;
+    margin-top: 10px; /* Added margin for better spacing */
   }
   
   .penrose-title h2 {
@@ -687,6 +685,7 @@ body {
   }
   
   .step-content p {
+    font-family: Arial, 'Helvetica Neue', sans-serif;
     font-size: 0.9rem;
     line-height: 1.25;
   }
@@ -696,6 +695,10 @@ body {
     height: var(--mobile-indicator-height);
     padding: 3px 0;
     font-weight: 500; /* Make the indicator text slightly bolder */
+    line-height: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
   /* Enhanced glow for small phones */
