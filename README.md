@@ -1,35 +1,66 @@
-# Penrose AI Creator Senior Elective
+# Penrose Elective Recommendations: 
 
-An interactive scrollable experience featuring the famous Penrose staircase illusion with a glowing ball that tracks your progress through the course journey.
+📚 Books (10)
+# Man’s Search for Meaning — Viktor Frankl
+# Meditations — Marcus Aurelius (tr. Gregory Hays)
+# Surely You’re Joking, Mr. Feynman! — Richard Feynman
+# The Design of Everyday Things — Don Norman
+# Thinking in Systems — Donella Meadows
+# Gödel, Escher, Bach — Douglas Hofstadter
+# Antifragile — Nassim Nicholas Taleb
+# The Almanack of Naval Ravikant — Eric Jorgenson (ed.)
+# Invisible Cities — Italo Calvino
+# Build — Tony Fadell
 
-## Features
+✍️ Essays / Papers (10)
+# “As We May Think” — Vannevar Bush (1945)
+# “Life as a Continuous Learning Problem” — Michael I. Jordan (2018)
+# “Self-Reliance” — Ralph Waldo Emerson (1841)
+# “I, Pencil” — Leonard Read (1958)
+# “In Praise of Idleness” — Bertrand Russell (1932)
+# “The Bitter Lesson” — Richard Sutton (2019)
+# "How to Do Great Work" - Paul Graham
+# “The Moral Philosopher and the Moral Life” — William James (1891)
+# “The Unreasonable Effectiveness of Mathematics in the Natural Sciences” — Eugene Wigner (1960)
+# “Computing Machinery and Intelligence” — Alan Turing (1950)
 
-- **Impossible Staircase Visualization**: Displays the famous Penrose staircase with a glowing orange ball that traverses the steps
-- **Auto-Scrolling Content**: Right panel automatically scrolls through the course journey steps
-- **Interactive Navigation**: Control your journey with keyboard, mouse, or touch
-- **Responsive Design**: Works on desktop and mobile devices
+🎬 Films (8)
+# Powers of Ten (1977) - Charles & Ray Eames
+# Rivers and Tides (2001) - Thomas Riedelsheimer (Andy Goldsworthy documentary)
+# My Architect (2003) - Nathaniel Kahn
+# Le Quattro Volte (2010) - Michelangelo Frammartino
+# Arrival (2016) - Denis Villeneuve
+# The Iron Giant (1999) 
+# Her (2013) - Spike Jonze
+# The Mirror (1975) - Andrei Tarkovsky
 
-## Setup Instructions
+🎧 Music (7)
+# Kind of Blue — Miles Davis (1959)
+# Blue — Joni Mitchell (1971)
+# Graceland — Paul Simon (1986)
+# OK Computer — Radiohead (1997)
+# Bamboo Music / Bamboo Houses - Ryuichi Sakamoto & David Sylvian (1982)
+# Tabula Rasa - Arvo PÃ¤rt (1984) 
+# The Köln Concert - Keith Jarrett (1975)
 
-1. Upload the `Impossible_staircase.svg.png` image to the repository root
-2. Open the `index.html` file in a browser
 
-## Interaction Controls
 
-- **Auto-scroll**: Content scrolls automatically by default
-- **Manual Navigation**:
-  - Mouse wheel to scroll
-  - Arrow Up/Down keys to navigate between steps
-  - Touch swipe on mobile
-  - Press 'A' key to toggle auto-scroll
-- **Step Indication**: The glowing ball shows your current position on the staircase
 
-## Technology
 
-- Pure HTML, CSS, and JavaScript
-- No external libraries or dependencies required
 
-## Inspiration
+🧠 Thought Experiments (5)
 
-- Design inspired by OpenAI and tomorrow-happens.studio
-- Staircase visualization concept inspired by Penrose's impossible staircase
+# Veil of Ignorance
+Imagine designing a society without knowing your own future status, talents, or class. Rawls argues that rational self-interest behind the veil yields fair rules for all. It’s a lens for equitable AI policy and product-access decisions.
+
+# Maxwell’s Demon
+A tiny demon sorts fast and slow molecules, seemingly violating the second law of thermodynamics. The paradox probes the cost of information and the link between entropy and computation. It highlights why “free” data processing really isn’t free.
+
+# Chinese Room
+A person who understands no Chinese follows a rulebook to produce perfect Chinese replies, fooling outsiders. Does the room “understand” Chinese or merely simulate it? This challenges strong AI claims about consciousness and meaning.
+
+# Fermi Paradox
+The galaxy is vast and old, yet we see no evidence of extraterrestrial civilizations. Solutions span from self-destruction to simulation hypotheses, urging reflection on sustainability and observation bias.
+
+# Infinite Monkey Theorem
+An immortal monkey hitting random keys will eventually type Shakespeare’s works. It quantifies the power—and limits—of randomness, reinforcing why structured creativity and probability literacy matter in data science.
