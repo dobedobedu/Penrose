@@ -8,12 +8,13 @@
   --ball-size: 16px;
   --mobile-header-height: 60px;
   --mobile-footer-height: 40px;
-  --mobile-staircase-height: 280px;
+  --mobile-staircase-height: 320px; /* Increased from 280px for larger staircase */
   --mobile-indicator-height: 40px;
   --blur-intensity: 0;
   --blur-transition: 0.3s;
   --glow-color: rgba(255, 107, 0, 0.7);
   --staircase-blur-color: rgba(244, 244, 244, 0.85);
+  --next-step-blur: 3px; /* New variable for next step blur intensity */
 }
 
 @font-face {
@@ -457,7 +458,7 @@ body {
     text-align: left;
   }
   
-  /* Step indicator sticky below title */
+  /* Step indicator sticky below title - made more clickable */
   .step-indicator {
     position: fixed;
     top: var(--mobile-header-height);
@@ -471,8 +472,16 @@ body {
     font-size: 1.2rem;
     border-top: 1px solid rgba(0, 0, 0, 0.05);
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    cursor: pointer; /* Make it clear that the step indicator is clickable */
   }
   
+  /* Make current step more visually distinct */
+  #current-step {
+    color: var(--accent-color);
+    font-weight: 700;
+    font-size: 1.3rem; /* Slightly larger to make it clearer to tap */
+  }
+
   /* Blur gradient layer for smooth transition */
   .penrose-blur-layer {
     position: fixed;
@@ -523,7 +532,7 @@ body {
   
   /* Larger staircase and ball */
   .penrose-image-container {
-    transform: scale(0.65);
+    transform: scale(0.75); /* Increased from 0.65 for larger staircase */
     margin: 0;
     margin-top: 20px;
     position: relative;
@@ -531,12 +540,13 @@ body {
   }
   
   .glowing-ball {
-    width: 20px;
-    height: 20px;
+    width: 22px; /* Slightly larger ball */
+    height: 22px;
     z-index: 106; /* Ensure ball is on top of everything */
-    box-shadow: 0 0 25px 8px var(--glow-color); /* Enhanced glow for mobile */
+    box-shadow: 0 0 28px 10px var(--glow-color); /* Enhanced glow for mobile */
   }
   
+  /* Show only two step sections at a time (current and next) */
   .step-section {
     min-height: auto;
     height: auto;
@@ -547,7 +557,25 @@ body {
     display: block;
     position: relative;
     z-index: 98;
-    transition: filter 0.3s ease;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+    opacity: 0; /* Hide all sections by default */
+  }
+  
+  /* Only show active and next sections */
+  .step-section.active {
+    opacity: 1;
+    display: block;
+  }
+  
+  .step-section.next-step {
+    opacity: 0.8; /* Slightly dimmed for next step */
+    display: block;
+  }
+  
+  /* Hide all other steps */
+  .step-section:not(.active):not(.next-step) {
+    opacity: 0;
+    display: none; /* Complete hide non-active/next sections */
   }
   
   /* Text scroll blur effect for sections */
@@ -559,28 +587,14 @@ body {
     transition: filter 0.4s ease;
   }
 
-  .step-content.blur-out {
-    filter: blur(3px);
-  }
-  
-  /* No need for dynamic blur - the blur layer handles it */
-  .step-section .step-content {
-    filter: blur(0);
-  }
-  
-  /* Add blur transition for better scrolling experience */
-  .step-section {
-    scroll-snap-align: start;
-  }
-  
   /* Active section should be crisp and clear */
   .step-section.active .step-content {
     filter: blur(0);
   }
   
-  /* Adjacent sections are slightly blurred */
-  .step-section:not(.active) .step-content {
-    filter: blur(1px);
+  /* Next section is more blurred for better distinction */
+  .step-section.next-step .step-content {
+    filter: blur(var(--next-step-blur));
   }
   
   .blur-content::after {
@@ -610,12 +624,13 @@ body {
 
 @media (max-width: 480px) {
   :root {
-    --mobile-staircase-height: 260px;
+    --mobile-staircase-height: 280px; /* Increased from 260px */
+    --next-step-blur: 4px; /* Stronger blur for smaller screens */
   }
   
   /* Adjust for smaller phones */
   .penrose-image-container {
-    transform: scale(0.6);
+    transform: scale(0.7); /* Increased from 0.6 for larger staircase */
     margin-top: 15px;
   }
   
@@ -645,6 +660,6 @@ body {
   
   /* Enhanced glow for small phones */
   .glowing-ball {
-    box-shadow: 0 0 20px 6px var(--glow-color);
+    box-shadow: 0 0 25px 8px var(--glow-color);
   }
 }
