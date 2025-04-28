@@ -352,13 +352,32 @@ document.addEventListener("DOMContentLoaded", () => {
     return mostVisibleIndex;
   }
   
-  // Function to advance to next step
+  // Function to advance to next step with improved handling for step 14 -> step 1 cycling
   function goToNextStep() {
     if (activeSection < totalSteps) {
       scrollToSection(activeSection + 1);
     } else {
-      // If on last step, loop back to first step
+      // If on last step (step 14), loop back to first step (step 1)
       scrollToSection(1);
+      
+      // Add additional handling to ensure smooth transition to step 1
+      if (isMobile) {
+        // Force an immediate update to the ball position
+        setTimeout(() => {
+          moveGlowingBall(1);
+          forceContentVisibility();
+          
+          // Reset scroll position to top with adjusted offset for mobile
+          const firstSection = document.querySelector('.step-section[data-step="1"]');
+          if (firstSection) {
+            const offsetTop = firstSection.offsetTop - 40;
+            stepsContainer.scrollTo({
+              top: offsetTop,
+              behavior: isIOS ? 'auto' : 'smooth'
+            });
+          }
+        }, isIOS ? 100 : 300);
+      }
     }
   }
   
@@ -379,10 +398,18 @@ document.addEventListener("DOMContentLoaded", () => {
       // Setup blur effect for text scrolling
       setupBlurEffect();
       
-      // Make step indicator clickable for mobile - entire indicator area
+      // Make step indicator clickable for mobile - entire indicator area for better touch targets
       if (stepIndicator) {
         stepIndicator.style.cursor = 'pointer';
         stepIndicator.addEventListener('click', goToNextStep);
+        
+        // Add visual feedback for better UX
+        stepIndicator.addEventListener('touchstart', () => {
+          stepIndicator.style.opacity = '0.8';
+        });
+        stepIndicator.addEventListener('touchend', () => {
+          stepIndicator.style.opacity = '1';
+        });
       }
       
       // Enforce scroll snap settings programmatically
@@ -442,6 +469,9 @@ document.addEventListener("DOMContentLoaded", () => {
     navDown.addEventListener('click', () => {
       if (activeSection < totalSteps) {
         scrollToSection(activeSection + 1);
+      } else {
+        // If on last step, loop back to first step
+        scrollToSection(1);
       }
     });
   }
@@ -534,8 +564,14 @@ document.addEventListener("DOMContentLoaded", () => {
           lastSwipeTime = now;
           
           // If swiping up, go to next step; if swiping down, go to previous step
-          if (direction === 1 && activeSection < totalSteps) {
-            scrollToSection(activeSection + 1);
+          if (direction === 1) {
+            // Going to next step or looping back to first
+            if (activeSection < totalSteps) {
+              scrollToSection(activeSection + 1);
+            } else {
+              // If on last step, loop back to first step
+              scrollToSection(1);
+            }
           } else if (direction === -1 && activeSection > 1) {
             scrollToSection(activeSection - 1);
           }
@@ -573,7 +609,7 @@ document.addEventListener("DOMContentLoaded", () => {
     scrollToSection(1);
   });
   
-  // Allow clicking current step to navigate
+  // Allow clicking current step to navigate to next step
   currentStepElem.addEventListener('click', () => {
     goToNextStep();
   });
@@ -628,7 +664,12 @@ document.addEventListener("DOMContentLoaded", () => {
       let targetSection = activeSection;
       
       if (e.key === 'ArrowDown' || e.key === 'PageDown') {
-        targetSection = Math.min(activeSection + 1, totalSteps);
+        if (targetSection < totalSteps) {
+          targetSection = Math.min(activeSection + 1, totalSteps);
+        } else {
+          // If on last step, loop back to first step
+          targetSection = 1;
+        }
       } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
         targetSection = Math.max(activeSection - 1, 1);
       } else if (e.key === 'Home') {
