@@ -537,7 +537,7 @@ body {
   
   /* Larger staircase and ball */
   .penrose-image-container {
-    transform: scale(0.35); /* Shrink staircase to fit smaller container */
+    transform: scale(0.5); /* Increased staircase size on mobile */
     margin: 0;
     position: relative;
     z-index: 105;
@@ -660,7 +660,7 @@ body {
   
   /* Adjust for smaller phones */
   .penrose-image-container {
-    transform: scale(0.3);
+    transform: scale(0.45); /* Increased staircase size on small screens */
     margin-top: 0; /* Remove margin for better positioning */
   }
   
