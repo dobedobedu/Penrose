@@ -49,7 +49,7 @@ body {
 /* Left panel with fixed Penrose visualization */
 .penrose-container {
   width: 50%;
-  height: 100vh;
+  height: 90vh;
   position: fixed;
   top: 0;
   left: 0;
@@ -70,7 +70,7 @@ body {
   flex-direction: column;
   align-items: flex-start;
   padding-left: 20px;
-  padding-top: 35px;
+  padding-top: 20px;
 }
 
 .sign-up-button {
@@ -104,7 +104,7 @@ body {
 .penrose-title h2 {
   font-family: 'Helvetica Neue', Arial, sans-serif;
   font-size: 1.8rem;
-  margin-bottom: 0.3rem; /* Further reduced space between title and tagline */
+  margin-bottom: 0.2rem; /* Further reduced space between title and tagline */
   font-weight: 800; /* Heavy weight */
   color: #000000; /* Black color */
   text-shadow: none;
@@ -124,6 +124,7 @@ body {
   width: 500px;
   height: 381px;
   margin-bottom: 2rem;
+  margin-top: 1rem:
   transform-origin: center center;
 }
 
