@@ -5,6 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>JENSEN AI CREATOR ELECTIVE</title>
   <link rel="stylesheet" href="styles.css">
+  <!-- Desktop layout override: header 25vh, content and staircase 75vh -->
+  <style>
+    @media (min-width: 992px) {
+      .penrose-title {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 50% !important;
+        height: 25vh !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: flex-start !important;
+        padding-left: 20px !important;
+        background-color: var(--background-color) !important;
+        z-index: 200 !important;
+      }
+      .penrose-container {
+        position: fixed !important;
+        top: 25vh !important;
+        left: 0 !important;
+        width: 50% !important;
+        height: 75vh !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        padding: 2rem !important;
+        background-color: var(--background-color) !important;
+      }
+      .steps-container {
+        position: fixed !important;
+        top: 25vh !important;
+        left: 50% !important;
+        width: 50% !important;
+        height: 75vh !important;
+        margin: 0 !important;
+        overflow-y: auto !important;
+        scroll-snap-type: y mandatory !important;
+      }
+    }
+  </style>
   <link href="https://fonts.cdnfonts.com/css/akira-expanded" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <script src="script.js" defer></script>
