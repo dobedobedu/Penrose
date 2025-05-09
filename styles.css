@@ -4,7 +4,7 @@
   --text-color: #333333;
   --muted-color: #666666;
   --accent-color: #FF6B00;
-  --section-height: 100vh;
+  --section-height: 75vh;
   --ball-size: 18px;
   --mobile-header-height: 80px; /* Reduced header height */
   --mobile-footer-height: 40px;
@@ -43,7 +43,7 @@ body {
 .container {
   display: flex;
   width: 100%;
-  height: 100vh;
+  height: 75vh;
 }
 
 /* Left panel with fixed Penrose visualization */
@@ -124,7 +124,7 @@ body {
   width: 500px;
   height: 381px;
   margin-bottom: 2rem;
-  margin-top: 2rem:
+  margin-top: 2rem;
   transform-origin: center center;
 }
 
@@ -193,7 +193,8 @@ body {
 .steps-container {
   width: 50%;
   margin-left: 50%;
-  height: 100vh;
+  margin-top: 25vh;
+  height: 75vh;
   overflow-y: scroll;
   scroll-snap-type: y mandatory !important;
   -ms-overflow-style: none;
@@ -207,7 +208,7 @@ body {
 }
 
 .step-section {
-  height: 100vh;
+  height: 75vh;
   scroll-snap-align: start;
   scroll-snap-stop: always;
   display: flex;
