@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>JENSEN AI CREATOR ELECTIVE</title>
   <link rel="stylesheet" href="styles.css">
-  <!-- Desktop layout override: header 25vh, content and staircase 75vh -->
+  <!-- Desktop (tablet/desktop) two-column layout override -->
   <style>
+    @media (min-width: 768px) {
     /* Desktop layout overrides: header 25vh, content and staircase 75vh */
       .penrose-title {
         position: fixed !important;
@@ -45,6 +46,7 @@
         overflow-y: auto !important;
         scroll-snap-type: y mandatory !important;
       }
+    }
   </style>
   <link href="https://fonts.cdnfonts.com/css/akira-expanded" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
