@@ -8,7 +8,7 @@
   --ball-size: 18px;
   --mobile-header-height: 80px; /* Reduced header height */
   --mobile-footer-height: 40px;
-  --mobile-staircase-height: 165px; /* Further reduce staircase height */
+  --mobile-staircase-height: 30vh; /* Mobile staircase height (30% of viewport) */
   --mobile-indicator-height: 40px; /* Increased indicator height for better touch target */
   --mobile-indicator-padding: 0px; /* Removed gap/padding between header and indicator */
   --blur-intensity: 0;
@@ -657,7 +657,7 @@ body {
 
 @media (max-width: 480px) {
   :root {
-    --mobile-staircase-height: 150px; /* Further reduce staircase height for small screens */
+    --mobile-staircase-height: 35vh; /* Further reduce staircase height for small screens */
     --mobile-header-height: 80px; /* Adjusted header height */
     --mobile-indicator-height: 40px; /* Larger indicator height for better touch target */
   }
@@ -709,5 +709,25 @@ body {
   /* Enhanced glow for small phones */
   .glowing-ball {
     box-shadow: 0 0 20px 6px var(--glow-color);
+  }
+}
+
+/* Mobile image container full-fit override */
+@media (max-width: 768px) {
+  .penrose-image-container {
+    width: 100% !important;
+    height: 100% !important;
+    transform: none !important;
+    margin: 0 !important;
+    position: relative !important;
+    z-index: 105 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  .penrose-image-container img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
   }
 }
