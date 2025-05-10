@@ -8,7 +8,7 @@
   --ball-size: 18px;
   --mobile-header-height: 80px; /* Reduced header height */
   --mobile-footer-height: 40px;
-  --mobile-staircase-height: 110px; /* Further reduce staircase height */
+  --mobile-staircase-height: 165px; /* Further reduce staircase height */
   --mobile-indicator-height: 40px; /* Increased indicator height for better touch target */
   --mobile-indicator-padding: 0px; /* Removed gap/padding between header and indicator */
   --blur-intensity: 0;
@@ -657,7 +657,7 @@ body {
 
 @media (max-width: 480px) {
   :root {
-    --mobile-staircase-height: 100px; /* Further reduce staircase height for small screens */
+    --mobile-staircase-height: 150px; /* Further reduce staircase height for small screens */
     --mobile-header-height: 80px; /* Adjusted header height */
     --mobile-indicator-height: 40px; /* Larger indicator height for better touch target */
   }
